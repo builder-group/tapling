@@ -31,9 +31,10 @@ struct AutocompleteToolbarView: View {
     private var taplingSize: CGFloat {
         TaplingConfig.shared.baseSize * taplingScale
     }
+    private var userBottomOffset: CGFloat { 4 }  // TODO: User can override via UserDefaults/App Group
     private var taplingBottomOffset: CGFloat {
         TaplingConfig.shared.baseBodyBottomOffset
-            * (taplingSize / TaplingConfig.shared.baseSize) + 4
+            * (taplingSize / TaplingConfig.shared.baseSize) + userBottomOffset
     }
 
     var body: some View {
