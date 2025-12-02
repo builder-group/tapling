@@ -32,7 +32,6 @@ struct AutocompleteToolbarView: View {
             // Reserve width for Tapling (invisible)
             Color.clear
                 .frame(width: taplingSize)
-                .padding(.trailing, 4)
                 .overlay {
                     if debug {
                         Rectangle()
@@ -58,12 +57,11 @@ struct AutocompleteToolbarView: View {
                 .overlay {
                     if debug {
                         Rectangle()
-                            .stroke(.red, lineWidth: 2)
+                            .stroke(.red, lineWidth: 1)
                     }
                 }
             }
             .offset(y: taplingBottomOffset)
-            .zIndex(100)  // Ensure Tapling appears above keyboard keys
             .overlay {
                 if debug {
                     VStack {
@@ -81,6 +79,7 @@ struct AutocompleteToolbarView: View {
                     .stroke(.orange, lineWidth: 1)
             }
         }
+        .zIndex(100)  // Ensure toolbar and Tapling appear above keyboard keys
     }
 }
 
