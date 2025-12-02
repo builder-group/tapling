@@ -30,12 +30,10 @@ class KeyboardViewController: KeyboardInputViewController {
                 }
 
                 // Trigger initial autocomplete to show suggestions on keyboard launch
-                Task {
-                    try? await autocompleteService.autocomplete(
-                        "",
-                        updating: self.state.autocompleteContext
-                    )
-                }
+                autocompleteService.autocomplete(
+                    "",
+                    updating: self.state.autocompleteContext
+                )
             }
         }
     }

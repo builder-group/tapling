@@ -8,6 +8,7 @@
 import KeyboardKit
 import UIKit
 
+/// Autocomplete service using native iOS APIs (UILexicon and UITextChecker).
 class NativeAutocompleteService: AutocompleteService {
     var locale: Locale = .current
     var canIgnoreWords: Bool { false }
@@ -17,6 +18,8 @@ class NativeAutocompleteService: AutocompleteService {
 
     private var lexicon: UILexicon?
     private let textChecker = UITextChecker()
+
+    private static let maxSuggestions = 3
 
     func setLexicon(_ lexicon: UILexicon) {
         self.lexicon = lexicon
@@ -92,28 +95,28 @@ class NativeAutocompleteService: AutocompleteService {
             }
         }
 
-        // 2. Use UITextChecker for spell checking and corrections
+        // 2. Use UITextChecker for spell checking and word completions
         let range = NSRange(location: 0, length: text.utf16.count)
-        let language = locale.language.languageCode?.identifier ?? "en"
-        if let guesses = textChecker.completions(
+        let language = getLanguageCode()
+        if let completions = textChecker.completions(
             forPartialWordRange: range,
             in: text,
             language: language
         ) {
-            suggestions.append(contentsOf: guesses)
+            suggestions.append(contentsOf: completions)
         }
 
-        // Remove duplicates and sort by length (shorter = more common/desirable)
+        // Remove duplicates, filter out exact matches, and sort by length (shorter = more common)
+        let lowercasedText = text.lowercased()
         let uniqueSuggestions = Array(Set(suggestions))
+            .filter { $0.lowercased() != lowercasedText }
             .sorted { word1, word2 in
-                // Prioritize shorter words (more common)
                 if word1.count != word2.count {
                     return word1.count < word2.count
                 }
-                // If same length, sort alphabetically
                 return word1 < word2
             }
-            .prefix(3)
+            .prefix(Self.maxSuggestions)
 
         // If no suggestions found, show the current word as fallback (wrapped in quotes)
         if uniqueSuggestions.isEmpty && !text.isEmpty {
@@ -134,9 +137,8 @@ class NativeAutocompleteService: AutocompleteService {
     }
 
     private func getEmptyTextSuggestions() -> [Autocomplete.Suggestion] {
-        let languageCode = locale.language.languageCode?.identifier ?? "en"
+        let languageCode = getLanguageCode()
 
-        // Common sentence starters by language
         switch languageCode {
         case "es":  // Spanish
             return [
@@ -181,5 +183,9 @@ class NativeAutocompleteService: AutocompleteService {
                 Autocomplete.Suggestion(text: "You", title: "You"),
             ]
         }
+    }
+
+    private func getLanguageCode() -> String {
+        locale.language.languageCode?.identifier ?? "en"
     }
 }
