@@ -21,11 +21,19 @@ class NativeAutocompleteService: AutocompleteService {
 
     private static let maxSuggestions = 3
 
-    func setLexicon(_ lexicon: UILexicon) {
+    init(lexicon: UILexicon? = nil) {
+        self.lexicon = lexicon
+    }
+
+    /// Register a lexicon to improve autocomplete suggestions.
+    func registerLexicon(_ lexicon: UILexicon) {
         self.lexicon = lexicon
     }
 
     func autocomplete(_ text: String) async throws -> Autocomplete.Result {
+        // Note: `text` contains everything before cursor, stopping at sentence boundaries.
+        // Examples: "Hello world|" → "Hello world", "Jeff is| cool" → "Jeff is",
+        // "Hello. World|" → "World" (stops at period)
         let currentWord = extractCurrentWord(from: text)
         let suggestions = getSuggestions(for: currentWord)
         return Autocomplete.Result(

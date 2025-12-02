@@ -15,18 +15,15 @@ class KeyboardViewController: KeyboardInputViewController {
 
         // Set up the keyboard with the app we created above
         setup(for: .shared) { result in
-            // If `result` is `.success`, the setup did succeed.
-            // This is where you can setup custom services, etc.
-
             if case .success = result {
                 // Set up native autocomplete service using iOS APIs
                 let autocompleteService = NativeAutocompleteService()
                 autocompleteService.locale = self.state.keyboardContext.locale
                 self.services.autocompleteService = autocompleteService
 
-                // Request UILexicon and pass it to the service
+                // Request lexicon asynchronously and register it when ready
                 self.requestSupplementaryLexicon { lexicon in
-                    autocompleteService.setLexicon(lexicon)
+                    autocompleteService.registerLexicon(lexicon)
                 }
 
                 // Trigger initial autocomplete to show suggestions on keyboard launch
