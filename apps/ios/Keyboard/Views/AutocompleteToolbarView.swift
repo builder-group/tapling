@@ -42,7 +42,7 @@ struct AutocompleteToolbarView: View {
                 }
         }
         .background(alignment: .topTrailing) {
-            // Hitbox
+            // Hitbox (invisible)
             Button {
                 print("Tapling hitbox tapped")
             } label: {
@@ -71,9 +71,6 @@ struct AutocompleteToolbarView: View {
                     rightHand: TaplingConfig.Hand.down
                 )
             )
-            .frame(width: taplingSize, height: taplingSize)
-            .offset(y: taplingBottomOffset)
-            .allowsHitTesting(false)
             .overlay {
                 if debug {
                     Rectangle()
@@ -82,6 +79,9 @@ struct AutocompleteToolbarView: View {
                         .allowsHitTesting(false)
                 }
             }
+            .frame(width: taplingSize, height: taplingSize)
+            .offset(y: taplingBottomOffset)
+            .allowsHitTesting(false)
         }
         .overlay {
             if debug {
