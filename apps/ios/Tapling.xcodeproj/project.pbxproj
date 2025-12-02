@@ -6,20 +6,86 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D3769A462EDEDAD20048E728 /* Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D3769A3F2EDEDAD20048E728 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D3769A512EDEDBF00048E728 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3769A502EDEDBF00048E728 /* KeyboardKit */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D3769A442EDEDAD20048E728 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D31D7DF72EDEB86000A51CBE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D3769A3E2EDEDAD20048E728;
+			remoteInfo = Keyboard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D3769A472EDEDAD20048E728 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D3769A462EDEDAD20048E728 /* Keyboard.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D31D7DFF2EDEB86000A51CBE /* Tapling.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tapling.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3769A3F2EDEDAD20048E728 /* Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Keyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D3769A4A2EDEDAD20048E728 /* Exceptions for "Keyboard" folder in "Keyboard" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
+		};
+		D3769A532EDEDE880048E728 /* Exceptions for "Tapling" folder in "Keyboard" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"KeyboardApp+Extension.swift",
+			);
+			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D31D7E012EDEB86000A51CBE /* Tapling */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D3769A532EDEDE880048E728 /* Exceptions for "Tapling" folder in "Keyboard" target */,
+			);
 			path = Tapling;
+			sourceTree = "<group>";
+		};
+		D3769A402EDEDAD20048E728 /* Keyboard */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D3769A4A2EDEDAD20048E728 /* Exceptions for "Keyboard" folder in "Keyboard" target */,
+			);
+			path = Keyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D31D7DFC2EDEB86000A51CBE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3769A512EDEDBF00048E728 /* KeyboardKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3769A3C2EDEDAD20048E728 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				D31D7E012EDEB86000A51CBE /* Tapling */,
+				D3769A402EDEDAD20048E728 /* Keyboard */,
 				D31D7E002EDEB86000A51CBE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				D31D7DFF2EDEB86000A51CBE /* Tapling.app */,
+				D3769A3F2EDEDAD20048E728 /* Keyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,20 +123,45 @@
 				D31D7DFB2EDEB86000A51CBE /* Sources */,
 				D31D7DFC2EDEB86000A51CBE /* Frameworks */,
 				D31D7DFD2EDEB86000A51CBE /* Resources */,
+				D3769A472EDEDAD20048E728 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D3769A452EDEDAD20048E728 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D31D7E012EDEB86000A51CBE /* Tapling */,
 			);
 			name = Tapling;
 			packageProductDependencies = (
+				D3769A502EDEDBF00048E728 /* KeyboardKit */,
 			);
 			productName = Tapling;
 			productReference = D31D7DFF2EDEB86000A51CBE /* Tapling.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D3769A3E2EDEDAD20048E728 /* Keyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D3769A4B2EDEDAD20048E728 /* Build configuration list for PBXNativeTarget "Keyboard" */;
+			buildPhases = (
+				D3769A3B2EDEDAD20048E728 /* Sources */,
+				D3769A3C2EDEDAD20048E728 /* Frameworks */,
+				D3769A3D2EDEDAD20048E728 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D3769A402EDEDAD20048E728 /* Keyboard */,
+			);
+			name = Keyboard;
+			packageProductDependencies = (
+			);
+			productName = Keyboard;
+			productReference = D3769A3F2EDEDAD20048E728 /* Keyboard.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -83,6 +176,9 @@
 					D31D7DFE2EDEB86000A51CBE = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
+					D3769A3E2EDEDAD20048E728 = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
 				};
 			};
 			buildConfigurationList = D31D7DFA2EDEB86000A51CBE /* Build configuration list for PBXProject "Tapling" */;
@@ -94,18 +190,29 @@
 			);
 			mainGroup = D31D7DF62EDEB86000A51CBE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D3769A4F2EDEDBF00048E728 /* XCRemoteSwiftPackageReference "KeyboardKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D31D7E002EDEB86000A51CBE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				D31D7DFE2EDEB86000A51CBE /* Tapling */,
+				D3769A3E2EDEDAD20048E728 /* Keyboard */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D31D7DFD2EDEB86000A51CBE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3769A3D2EDEDAD20048E728 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +229,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D3769A3B2EDEDAD20048E728 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D3769A452EDEDAD20048E728 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
+			targetProxy = D3769A442EDEDAD20048E728 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D31D7E082EDEB86200A51CBE /* Debug */ = {
@@ -308,6 +430,62 @@
 			};
 			name = Release;
 		};
+		D3769A482EDEDAD20048E728 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9RQRHCCMVL;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Keyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Keyboard;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.buildergroup.Tapling.Keyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D3769A492EDEDAD20048E728 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9RQRHCCMVL;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Keyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Keyboard;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.buildergroup.Tapling.Keyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -329,7 +507,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		D3769A4B2EDEDAD20048E728 /* Build configuration list for PBXNativeTarget "Keyboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D3769A482EDEDAD20048E728 /* Debug */,
+				D3769A492EDEDAD20048E728 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D3769A4F2EDEDBF00048E728 /* XCRemoteSwiftPackageReference "KeyboardKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/KeyboardKit/KeyboardKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D3769A502EDEDBF00048E728 /* KeyboardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3769A4F2EDEDBF00048E728 /* XCRemoteSwiftPackageReference "KeyboardKit" */;
+			productName = KeyboardKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D31D7DF72EDEB86000A51CBE /* Project object */;
 }
