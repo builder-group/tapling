@@ -17,8 +17,20 @@ struct AutocompleteToolbarView: View {
 
     private var debug: Bool { true }
 
-    private var taplingScale: CGFloat { 1.0 }  // Scale: 1x = 128px. TODO: Read from shared group (UserDefaults/App Group)
-    private var taplingSize: CGFloat { 128 * taplingScale }
+    private var baseScale: CGFloat {
+        // Base scale: upper part (baseSize - baseBodyBottomOffset) fits toolbar height
+        let baseVisibleHeight =
+            TaplingConfig.shared.baseSize
+            - TaplingConfig.shared.baseBodyBottomOffset
+        let toolbarHeight = Keyboard.ToolbarStyle.standardHeight
+        return toolbarHeight / baseVisibleHeight
+    }
+    private var userScale: CGFloat { 1.5 }  // TODO: User can override via UserDefaults/App Group
+    private var taplingScale: CGFloat { baseScale * userScale }
+
+    private var taplingSize: CGFloat {
+        TaplingConfig.shared.baseSize * taplingScale
+    }
     private var taplingBottomOffset: CGFloat {
         TaplingConfig.shared.baseBodyBottomOffset
             * (taplingSize / TaplingConfig.shared.baseSize) + 4
@@ -46,7 +58,7 @@ struct AutocompleteToolbarView: View {
             Button {
                 print("Tapling hitbox tapped")
             } label: {
-                Color.white // Note: White with 0.01 opacity (Color.clear doesn't seem to register hits)
+                Color.white  // Note: White with 0.01 opacity (Color.clear doesn't seem to register hits)
                     .opacity(0.01)
                     .frame(width: taplingSize)
                     .frame(height: Keyboard.ToolbarStyle.standardHeight)
