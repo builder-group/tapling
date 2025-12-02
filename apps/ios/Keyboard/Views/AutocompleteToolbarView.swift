@@ -21,7 +21,7 @@ struct AutocompleteToolbarView: View {
     private var taplingSize: CGFloat { 128 * taplingScale }
     private var taplingBottomOffset: CGFloat {
         TaplingConfig.shared.baseBodyBottomOffset
-            * (taplingSize / TaplingConfig.shared.baseSize)
+            * (taplingSize / TaplingConfig.shared.baseSize) + 4
     }
 
     var body: some View {
@@ -35,48 +35,60 @@ struct AutocompleteToolbarView: View {
                 .overlay {
                     if debug {
                         Rectangle()
+                            .fill(Color.blue.opacity(0.1))
                             .stroke(.blue, lineWidth: 1)
+                            .allowsHitTesting(false)
                     }
                 }
         }
+        .background(alignment: .topTrailing) {
+            // Hitbox
+            Button {
+                print("Tapling hitbox tapped")
+            } label: {
+                Color.white // Note: White with 0.01 opacity (Color.clear doesn't seem to register hits)
+                    .opacity(0.01)
+                    .frame(width: taplingSize)
+                    .frame(height: Keyboard.ToolbarStyle.standardHeight)
+                    .overlay {
+                        if debug {
+                            Rectangle()
+                                .fill(Color.purple.opacity(0.1))
+                                .stroke(.purple, lineWidth: 1)
+                                .allowsHitTesting(false)
+                        }
+                    }
+            }
+        }
         .overlay(alignment: .bottomTrailing) {
             // Tapling
-            Button {
-                // TODO: Add action here
-            } label: {
-                TaplingView(
-                    tapling: Tapling(
-                        fur: TaplingConfig.Fur.white,
-                        hat: TaplingConfig.Hat.lilDuck,
-                        face: TaplingConfig.Face.cute,
-                        leftHand: TaplingConfig.Hand.up,
-                        rightHand: TaplingConfig.Hand.down
-                    )
+            TaplingView(
+                tapling: Tapling(
+                    fur: TaplingConfig.Fur.white,
+                    hat: TaplingConfig.Hat.lilDuck,
+                    face: TaplingConfig.Face.cute,
+                    leftHand: TaplingConfig.Hand.up,
+                    rightHand: TaplingConfig.Hand.down
                 )
-                .frame(width: taplingSize, height: taplingSize)
-                .overlay {
-                    if debug {
-                        Rectangle()
-                            .stroke(.red, lineWidth: 1)
-                    }
-                }
-            }
+            )
+            .frame(width: taplingSize, height: taplingSize)
             .offset(y: taplingBottomOffset)
+            .allowsHitTesting(false)
             .overlay {
                 if debug {
-                    VStack {
-                        Spacer()
-                        Rectangle()
-                            .fill(.green.opacity(0.3))
-                            .frame(height: 1)
-                    }
+                    Rectangle()
+                        .fill(Color.red.opacity(0.1))
+                        .stroke(.red, lineWidth: 1)
+                        .allowsHitTesting(false)
                 }
             }
         }
         .overlay {
             if debug {
                 Rectangle()
+                    .fill(Color.orange.opacity(0.1))
                     .stroke(.orange, lineWidth: 1)
+                    .allowsHitTesting(false)
             }
         }
         .zIndex(100)  // Ensure toolbar and Tapling appear above keyboard keys
