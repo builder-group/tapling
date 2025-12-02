@@ -51,7 +51,10 @@
 		D3769A532EDEDE880048E728 /* Exceptions for "Tapling" folder in "Keyboard" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Environment/KeyboardApp+Shared.swift",
+				Assets.xcassets,
+				Environment/Configs/TaplingConfig.swift,
+				"Environment/KeyboardApp+Extension.swift",
+				Views/TaplingView.swift,
 			);
 			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
 		};

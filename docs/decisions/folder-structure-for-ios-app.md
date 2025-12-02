@@ -5,7 +5,7 @@
 ```
 Sources/
 ├─ Environment/           # Static shared instances, singleton-like objects, and environment configs
-│  ├─ App+Shared.swift    # Example: static shared instance of App or CoreManager
+│  ├─ App+Extension.swift # Example: extension adding shared instance or configuration
 │  ├─ Configs/             # Static environment configuration values (API keys, feature flags, URLs, etc.)
 │  │  ├─ AppConfig.swift
 │  │  └─ OtherConfigs/
@@ -51,7 +51,9 @@ Sources/
 
 ## Naming Conventions
 
-* **Extensions with specific purpose:** `App+Shared.swift`
+* **Extension Files:** Use `+Category` suffix for extension files (e.g., `KeyboardApp+Extension.swift`, `UIView+Helpers.swift`). The `+` indicates it's an extension file, helping organize multiple extensions of the same type.
 * **Static instance:** `App.shared`
+* **SwiftUI Views:** Always use `View` suffix (e.g., `TaplingView`, `AutocompleteToolbarView`).
+* **Shared Files:** No suffix/prefix needed. Manage sharing via Xcode target membership. Name files by what they do, not where they're used.
 * **Feature-specific logic:** Keep inside feature folder unless needed globally.
 * **Screen-specific logic:** Keep inside screen/route folder.

@@ -21,10 +21,10 @@ export const Tapling: React.FC<TTaplingProps> = (props) => {
 
 	return (
 		<div className={cn('relative inline-block', className)} {...divProps}>
-			{/* Base layer */}
+			{/* Fur base layer */}
 			<img src={basePath} alt="Tapling base" className="absolute inset-0 h-full w-full" />
 
-			{/* Left hand layer */}
+			{/* Fur left hand layer */}
 			<img src={leftHandPath} alt="Tapling left hand" className="absolute inset-0 h-full w-full" />
 
 			{/* Face layer */}
@@ -39,7 +39,7 @@ export const Tapling: React.FC<TTaplingProps> = (props) => {
 				<img src={hatPath} alt={`Tapling hat: ${hat}`} className="absolute inset-0 h-full w-full" />
 			)}
 
-			{/* Right hand layer */}
+			{/* Fur right hand layer */}
 			<img
 				src={rightHandPath}
 				alt="Tapling right hand"

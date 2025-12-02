@@ -6,6 +6,7 @@
 //
 
 import KeyboardKit
+import SwiftUI
 import UIKit
 
 class KeyboardViewController: KeyboardInputViewController {
@@ -30,6 +31,27 @@ class KeyboardViewController: KeyboardInputViewController {
                 autocompleteService.autocomplete(
                     "",
                     updating: self.state.autocompleteContext
+                )
+            }
+        }
+    }
+
+    override func viewWillSetupKeyboardView() {
+        super.viewWillSetupKeyboardView()
+
+        setupKeyboardView { controller in
+            KeyboardView(services: controller.services) { params in
+                params.view
+            } buttonView: { params in
+                params.view
+            } collapsedView: { params in
+                params.view
+            } emojiKeyboard: { params in
+                params.view
+            } toolbar: { params in
+                AutocompleteToolbarView(
+                    standardToolbar: params.view,
+                    autocompleteAction: params.autocompleteAction
                 )
             }
         }
