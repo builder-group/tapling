@@ -1,4 +1,4 @@
-# Why Native Swift for Keyboard Extension App
+# Why Native Swift for Keyboard Extension for iOS app
 
 ## Decision
 
