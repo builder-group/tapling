@@ -78,7 +78,7 @@ struct AutocompleteToolbarView: View {
         }
         .onReceive(
             NotificationCenter.default.publisher(
-                for: .keyboardCharacterInserted
+                for: .keyboardActionTriggered
             )
         ) { _ in
             toggleHands()
