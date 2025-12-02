@@ -14,7 +14,12 @@ class KeyboardViewController: KeyboardInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Set up the keyboard with the app we created above
+        // Set up custom action handler
+        self.services.actionHandler = KeyboardActionHandler(
+            controller: self
+        )
+
+        // Set up keyboard with the shared keyboard app instance
         setup(for: .shared) { result in
             if case .success = result {
                 // Set up native autocomplete service using iOS APIs

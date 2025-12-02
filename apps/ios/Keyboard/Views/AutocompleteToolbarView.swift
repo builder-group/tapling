@@ -15,6 +15,9 @@ struct AutocompleteToolbarView: View {
         >
     let autocompleteAction: (Autocomplete.Suggestion) -> Void
 
+    @State private var leftHand: TaplingConfig.Hand = .up
+    @State private var rightHand: TaplingConfig.Hand = .down
+
     private var debug: Bool { true }
 
     private var baseScale: CGFloat {
@@ -73,6 +76,13 @@ struct AutocompleteToolbarView: View {
                     }
             }
         }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: .keyboardCharacterInserted
+            )
+        ) { _ in
+            toggleHands()
+        }
         .overlay(alignment: .bottomTrailing) {
             // Tapling
             TaplingView(
@@ -80,8 +90,8 @@ struct AutocompleteToolbarView: View {
                     fur: TaplingConfig.Fur.white,
                     hat: TaplingConfig.Hat.lilDuck,
                     face: TaplingConfig.Face.cute,
-                    leftHand: TaplingConfig.Hand.up,
-                    rightHand: TaplingConfig.Hand.down
+                    leftHand: leftHand,
+                    rightHand: rightHand
                 )
             )
             .overlay {
@@ -105,6 +115,11 @@ struct AutocompleteToolbarView: View {
             }
         }
         .zIndex(100)  // Ensure toolbar and Tapling appear above keyboard keys
+    }
+
+    private func toggleHands() {
+        leftHand = leftHand == .down ? .up : .down
+        rightHand = rightHand == .down ? .up : .down
     }
 }
 
