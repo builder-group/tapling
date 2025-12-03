@@ -18,7 +18,9 @@ struct AutocompleteToolbarView: View {
     @State private var leftHand: TaplingConfig.Hand = .up
     @State private var rightHand: TaplingConfig.Hand = .down
 
-    private var debug: Bool { true }
+    private var debug: Bool {
+        AppGroup.Keyboard.debug
+    }
 
     private var baseScale: CGFloat {
         // Base scale: upper part (baseSize - baseBodyBottomOffset) fits toolbar height
@@ -28,13 +30,17 @@ struct AutocompleteToolbarView: View {
         let toolbarHeight = Keyboard.ToolbarStyle.standardHeight
         return toolbarHeight / baseVisibleHeight
     }
-    private var userScale: CGFloat { 1.5 }  // TODO: User can override via UserDefaults/App Group
+    private var userScale: CGFloat {
+        AppGroup.Tapling.userScale
+    }
     private var taplingScale: CGFloat { baseScale * userScale }
 
     private var taplingSize: CGFloat {
         TaplingConfig.shared.baseSize * taplingScale
     }
-    private var userBottomOffset: CGFloat { 4 }  // TODO: User can override via UserDefaults/App Group
+    private var userBottomOffset: CGFloat {
+        AppGroup.Tapling.userBottomOffset
+    }
     private var taplingBottomOffset: CGFloat {
         TaplingConfig.shared.baseBodyBottomOffset
             * (taplingSize / TaplingConfig.shared.baseSize) + userBottomOffset
