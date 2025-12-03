@@ -6,6 +6,7 @@
 //
 
 import KeyboardKit
+import SwiftData
 import SwiftUI
 
 struct AutocompleteToolbarView: View {
@@ -15,12 +16,19 @@ struct AutocompleteToolbarView: View {
         >
     let autocompleteAction: (Autocomplete.Suggestion) -> Void
 
+    @Query
+    private var queriedTaplingSettings: [TaplingSettings]
+    private var taplingSettings: TaplingSettings {
+        queriedTaplingSettings.first!
+    }
+    @Query
+    private var queriedKeyboardSettings: [KeyboardSettings]
+    private var keyboardSettings: KeyboardSettings {
+        queriedKeyboardSettings.first!
+    }
+
     @State private var leftHand: TaplingConfig.Hand = .up
     @State private var rightHand: TaplingConfig.Hand = .down
-
-    private var debug: Bool {
-        AppGroup.Keyboard.debug
-    }
 
     private var baseScale: CGFloat {
         // Base scale: upper part (baseSize - baseBodyBottomOffset) fits toolbar height
@@ -31,7 +39,7 @@ struct AutocompleteToolbarView: View {
         return toolbarHeight / baseVisibleHeight
     }
     private var userScale: CGFloat {
-        AppGroup.Tapling.userScale
+        CGFloat(taplingSettings.userScale)
     }
     private var taplingScale: CGFloat { baseScale * userScale }
 
@@ -39,7 +47,7 @@ struct AutocompleteToolbarView: View {
         TaplingConfig.shared.baseSize * taplingScale
     }
     private var userBottomOffset: CGFloat {
-        AppGroup.Tapling.userBottomOffset
+        CGFloat(taplingSettings.userBottomOffset)
     }
     private var taplingBottomOffset: CGFloat {
         TaplingConfig.shared.baseBodyBottomOffset
@@ -55,7 +63,7 @@ struct AutocompleteToolbarView: View {
             Color.clear
                 .frame(width: taplingSize)
                 .overlay {
-                    if debug {
+                    if keyboardSettings.debug {
                         Rectangle()
                             .fill(Color.blue.opacity(0.1))
                             .stroke(.blue, lineWidth: 1)
@@ -73,7 +81,7 @@ struct AutocompleteToolbarView: View {
                     .frame(width: taplingSize)
                     .frame(height: Keyboard.ToolbarStyle.standardHeight)
                     .overlay {
-                        if debug {
+                        if keyboardSettings.debug {
                             Rectangle()
                                 .fill(Color.purple.opacity(0.1))
                                 .stroke(.purple, lineWidth: 1)
@@ -101,7 +109,7 @@ struct AutocompleteToolbarView: View {
                 )
             )
             .overlay {
-                if debug {
+                if keyboardSettings.debug {
                     Rectangle()
                         .fill(Color.red.opacity(0.1))
                         .stroke(.red, lineWidth: 1)
@@ -113,7 +121,7 @@ struct AutocompleteToolbarView: View {
             .allowsHitTesting(false)
         }
         .overlay {
-            if debug {
+            if keyboardSettings.debug {
                 Rectangle()
                     .fill(Color.orange.opacity(0.1))
                     .stroke(.orange, lineWidth: 1)
