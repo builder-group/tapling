@@ -5,6 +5,7 @@
 //  Created by Benno on 02.12.25.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +14,6 @@ struct TaplingApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(DataContainer.shared.modelContainer)
     }
 }

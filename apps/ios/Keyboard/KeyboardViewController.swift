@@ -6,6 +6,7 @@
 //
 
 import KeyboardKit
+import SwiftData
 import SwiftUI
 import UIKit
 
@@ -59,6 +60,7 @@ class KeyboardViewController: KeyboardInputViewController {
                     autocompleteAction: params.autocompleteAction
                 )
             }
+            .modelContainer(DataContainer.shared.modelContainer)
         }
     }
 }

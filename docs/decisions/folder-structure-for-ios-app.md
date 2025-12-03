@@ -51,9 +51,9 @@ Sources/
 
 ## Naming Conventions
 
-* **Extension Files:** Use `+Category` suffix for extension files (e.g., `KeyboardApp+Extension.swift`, `UIView+Helpers.swift`). The `+` indicates it's an extension file, helping organize multiple extensions of the same type.
-* **Static instance:** `App.shared`
-* **SwiftUI Views:** Always use `View` suffix (e.g., `TaplingView`, `AutocompleteToolbarView`).
-* **Shared Files:** No suffix/prefix needed. Manage sharing via Xcode target membership. Name files by what they do, not where they're used.
-* **Feature-specific logic:** Keep inside feature folder unless needed globally.
-* **Screen-specific logic:** Keep inside screen/route folder.
+- **Extension Files:** Use `+Category` suffix for extension files (e.g., `KeyboardApp+Extension.swift`, `UIView+Helpers.swift`). The `+` indicates it's an extension file, helping organize multiple extensions of the same type.
+- **Static instance:** `App.shared`
+- **SwiftUI Views:** Always use `View` suffix (e.g., `TaplingView`, `AutocompleteToolbarView`).
+- **Shared Files:** No suffix/prefix needed. Manage sharing via Xcode target membership. Name files by what they do, not where they're used.
+- **Feature-specific logic:** Keep inside feature folder unless needed globally.
+- **Screen-specific logic:** Keep inside screen/route folder.
