@@ -42,14 +42,14 @@ class DataContainer {
                 configurations: [configuration]
             )
 
-            ensureDefaultSettings()
+            ensureSingletons()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }
 
-    /// Ensures default settings exist in the store
-    private func ensureDefaultSettings() {
+    /// Ensures singleton models exist in the store
+    private func ensureSingletons() {
         _ = TaplingSettings.instance(with: modelContext)
         _ = KeyboardSettings.instance(with: modelContext)
     }

@@ -9,9 +9,8 @@ import SwiftData
 import SwiftUI
 
 /// Property wrapper for querying singleton SwiftData models.
-/// Automatically unwraps the first result from a query or falls back to the default instance.
+/// Returns the first instance from the store, or falls back to `Model.default` if not found.
 ///
-/// Usage:
 /// ```swift
 /// @QuerySingleton private var settings: KeyboardSettings
 /// ```
