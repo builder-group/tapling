@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class TaplingSettings {
+final class TaplingSettings: SingletonModel {
     var userScale: Double
     var userBottomOffset: Double
 
@@ -20,18 +20,8 @@ final class TaplingSettings {
         self.userScale = userScale
         self.userBottomOffset = userBottomOffset
     }
-
-    /// Fetches or creates the singleton TaplingSettings instance.
-    /// Note: For reactive access in SwiftUI views, use `@Query` instead.
-    static func instance(with modelContext: ModelContext) -> TaplingSettings {
-        let descriptor = FetchDescriptor<TaplingSettings>()
-        if let result = try? modelContext.fetch(descriptor).first {
-            return result
-        } else {
-            let instance = TaplingSettings()
-            modelContext.insert(instance)
-            try? modelContext.save()
-            return instance
-        }
+    
+    static var `default`: TaplingSettings {
+        TaplingSettings()
     }
 }

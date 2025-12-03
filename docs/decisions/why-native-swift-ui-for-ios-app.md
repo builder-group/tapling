@@ -15,11 +15,13 @@ The keyboard extension is the primary feature of the app. Native Swift provides 
 Initial exploration attempted to use React Native with Expo's `@bacons/apple-targets` plugin to create the keyboard extension.
 
 **What worked:**
+
 - `@bacons/apple-targets` can generate keyboard extension targets using Continuous Native Generation (CNG)
 - The plugin successfully creates the target structure outside the generated `ios/` directory
 - Basic keyboard extension template is generated correctly
 
 **Blockers encountered:**
+
 - `@bacons/apple-targets` is highly experimental and not officially supported
 - Unable to add Swift Package Manager dependencies (KeyboardKit) to the keyboard extension target
 - SPM dependencies must be added to the main app target, but configuration is lost when `ios/` folder is regenerated (gitignored in CNG mode)
@@ -28,11 +30,13 @@ Initial exploration attempted to use React Native with Expo's `@bacons/apple-tar
 **Alternative considered: Custom Config Plugin**
 
 Technically, it's possible to create a custom [Expo config plugin](https://docs.expo.dev/config-plugins/introduction/) that programmatically:
+
 - Adds the keyboard extension target to the Xcode project
 - Adds Swift Package Manager dependencies (KeyboardKit) to the main app target
 - Links Swift files from a committed `targets/` directory
 
 However, this approach requires:
+
 - Deep understanding of Xcode project file format (`.pbxproj`)
 - Complex manipulation of `XCRemoteSwiftPackageReference` and `XCSwiftPackageProductDependency` objects
 - Significant development and maintenance overhead

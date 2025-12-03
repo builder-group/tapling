@@ -9,14 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
-    @Query private var queriedTaplingSettings: [TaplingSettings]
-    private var taplingSettings: TaplingSettings {
-        queriedTaplingSettings.first!
-    }
-    @Query private var queriedKeyboardSettings: [KeyboardSettings]
-    private var keyboardSettings: KeyboardSettings {
-        queriedKeyboardSettings.first!
-    }
+    @QuerySingleton private var taplingSettings: TaplingSettings
+    @QuerySingleton private var keyboardSettings: KeyboardSettings
     @Environment(\.modelContext) private var modelContext
 
     @State private var testText: String = ""

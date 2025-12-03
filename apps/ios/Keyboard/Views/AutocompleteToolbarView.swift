@@ -16,16 +16,8 @@ struct AutocompleteToolbarView: View {
         >
     let autocompleteAction: (Autocomplete.Suggestion) -> Void
 
-    @Query
-    private var queriedTaplingSettings: [TaplingSettings]
-    private var taplingSettings: TaplingSettings {
-        queriedTaplingSettings.first!
-    }
-    @Query
-    private var queriedKeyboardSettings: [KeyboardSettings]
-    private var keyboardSettings: KeyboardSettings {
-        queriedKeyboardSettings.first!
-    }
+    @QuerySingleton private var taplingSettings: TaplingSettings
+    @QuerySingleton private var keyboardSettings: KeyboardSettings
 
     @State private var leftHand: TaplingConfig.Hand = .up
     @State private var rightHand: TaplingConfig.Hand = .down

@@ -57,6 +57,8 @@
 				"Environment/KeyboardApp+Extension.swift",
 				Environment/Models/KeyboardSettings.swift,
 				Environment/Models/TaplingSettings.swift,
+				Lib/QuerySingleton.swift,
+				Lib/SingletonModel.swift,
 				Views/TaplingView.swift,
 			);
 			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
