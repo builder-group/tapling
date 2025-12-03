@@ -5,8 +5,8 @@
 //  Created by Benno on 03.12.25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct SettingsView: View {
     @QuerySingleton private var taplingSettings: TaplingSettings
@@ -25,9 +25,11 @@ struct SettingsView: View {
 
                 Section("Tapling") {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Scale: \(taplingSettings.userScale, specifier: "%.2f")")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Text(
+                            "Scale: \(taplingSettings.userScale, specifier: "%.2f")"
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
 
                         Slider(
                             value: Binding(
@@ -43,9 +45,11 @@ struct SettingsView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Bottom Offset: \(taplingSettings.userBottomOffset, specifier: "%.1f")")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Text(
+                            "Bottom Offset: \(taplingSettings.userBottomOffset, specifier: "%.1f")"
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
 
                         Slider(
                             value: Binding(
@@ -83,4 +87,3 @@ struct SettingsView: View {
     SettingsView()
         .modelContainer(DataContainer.shared.modelContainer)
 }
-

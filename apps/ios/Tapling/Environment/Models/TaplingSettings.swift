@@ -20,7 +20,7 @@ final class TaplingSettings: SingletonModel {
         self.userScale = userScale
         self.userBottomOffset = userBottomOffset
     }
-    
+
     static var `default`: TaplingSettings {
         TaplingSettings()
     }

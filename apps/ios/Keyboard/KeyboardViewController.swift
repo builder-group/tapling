@@ -6,9 +6,9 @@
 //
 
 import KeyboardKit
+import SwiftData
 import SwiftUI
 import UIKit
-import SwiftData
 
 class KeyboardViewController: KeyboardInputViewController {
 

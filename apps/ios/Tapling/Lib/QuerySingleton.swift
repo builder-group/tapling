@@ -17,13 +17,12 @@ import SwiftUI
 @propertyWrapper
 struct QuerySingleton<Model: SingletonModel>: DynamicProperty {
     @Query private var queried: [Model]
-    
+
     var wrappedValue: Model {
         queried.first ?? Model.default
     }
-    
+
     init() {
         _queried = Query()
     }
 }
-

@@ -15,7 +15,7 @@ final class KeyboardSettings: SingletonModel {
     init(debug: Bool = false) {
         self.debug = debug
     }
-    
+
     static var `default`: KeyboardSettings {
         KeyboardSettings()
     }

@@ -20,9 +20,11 @@ struct TaplingView: View {
                 .scaledToFit()
 
             // Fur left hand layer
-            Image(config.furLeftHandName(fur: tapling.fur, hand: tapling.leftHand))
-                .resizable()
-                .scaledToFit()
+            Image(
+                config.furLeftHandName(fur: tapling.fur, hand: tapling.leftHand)
+            )
+            .resizable()
+            .scaledToFit()
 
             // Face layer
             Image(config.faceName(face: tapling.face))
@@ -37,9 +39,14 @@ struct TaplingView: View {
             }
 
             // Fur right hand layer
-            Image(config.furRightHandName(fur: tapling.fur, hand: tapling.rightHand))
-                .resizable()
-                .scaledToFit()
+            Image(
+                config.furRightHandName(
+                    fur: tapling.fur,
+                    hand: tapling.rightHand
+                )
+            )
+            .resizable()
+            .scaledToFit()
         }
         .aspectRatio(1, contentMode: .fit)
     }
@@ -55,7 +62,9 @@ struct TaplingView: View {
             rightHand: TaplingConfig.Hand.down
         )
     )
-    .frame(width: TaplingConfig.shared.baseSize, height: TaplingConfig.shared.baseSize)
+    .frame(
+        width: TaplingConfig.shared.baseSize,
+        height: TaplingConfig.shared.baseSize
+    )
     .padding()
 }
-

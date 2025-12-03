@@ -12,7 +12,7 @@ import SwiftData
 protocol SingletonModel: PersistentModel {
     /// Default instance used when creating new singleton instances.
     static var `default`: Self { get }
-    
+
     /// Fetches existing instance or creates one from `default` if not found.
     static func instance(with modelContext: ModelContext) -> Self
 }
@@ -30,4 +30,3 @@ extension SingletonModel {
         }
     }
 }
-

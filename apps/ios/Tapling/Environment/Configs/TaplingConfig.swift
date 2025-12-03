@@ -12,7 +12,7 @@ struct TaplingConfig {
 
     /// Base size of the Tapling asset (width and height, since it's square).
     let baseSize: CGFloat = 248
-    
+
     /// Base bottom offset of the body from the bottom of the image (in pixels at base size).
     let baseBodyBottomOffset: CGFloat = 83
 
@@ -77,4 +77,3 @@ struct Tapling {
     let leftHand: TaplingConfig.Hand
     let rightHand: TaplingConfig.Hand
 }
-
