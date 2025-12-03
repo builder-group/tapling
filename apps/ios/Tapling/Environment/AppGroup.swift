@@ -7,6 +7,11 @@
 
 import Foundation
 
+/// Notification posted when AppGroup values change
+extension Notification.Name {
+    static let appGroupDidChange = Notification.Name("appGroupDidChange")
+}
+
 /// App Group UserDefaults for syncing data between the main app and keyboard extension.
 struct AppGroup {
     static let shared = AppGroup()
@@ -18,6 +23,8 @@ struct AppGroup {
 
     private init() {
         userDefaults = UserDefaults(suiteName: Self.appGroupId)
+        // Synchronize changes immediately for real-time updates
+        userDefaults?.synchronize()
     }
 
     // MARK: - Keys (organized by domain)
@@ -54,6 +61,13 @@ struct AppGroup {
                     newValue,
                     forKey: Keys.Tapling.userScale
                 )
+                AppGroup.shared.userDefaults?.synchronize()
+                // Post notification for real-time updates
+                NotificationCenter.default.post(
+                    name: .appGroupDidChange,
+                    object: nil,
+                    userInfo: ["key": Keys.Tapling.userScale]
+                )
             }
         }
 
@@ -77,6 +91,12 @@ struct AppGroup {
                     newValue,
                     forKey: Keys.Tapling.userBottomOffset
                 )
+                AppGroup.shared.userDefaults?.synchronize()
+                NotificationCenter.default.post(
+                    name: .appGroupDidChange,
+                    object: nil,
+                    userInfo: ["key": Keys.Tapling.userBottomOffset]
+                )
             }
         }
     }
@@ -99,6 +119,12 @@ struct AppGroup {
                 AppGroup.shared.userDefaults?.set(
                     newValue,
                     forKey: Keys.Keyboard.debug
+                )
+                AppGroup.shared.userDefaults?.synchronize()
+                NotificationCenter.default.post(
+                    name: .appGroupDidChange,
+                    object: nil,
+                    userInfo: ["key": Keys.Keyboard.debug]
                 )
             }
         }
