@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		D3769A462EDEDAD20048E728 /* Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D3769A3F2EDEDAD20048E728 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D3769A512EDEDBF00048E728 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3769A502EDEDBF00048E728 /* KeyboardKit */; };
+		D3769D762EE15FF80048E728 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = D3769D752EE15FF80048E728 /* AppIcon.icon */; };
+		D3769D772EE15FF80048E728 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = D3769D752EE15FF80048E728 /* AppIcon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,7 @@
 /* Begin PBXFileReference section */
 		D31D7DFF2EDEB86000A51CBE /* Tapling.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tapling.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3769A3F2EDEDAD20048E728 /* Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Keyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3769D752EE15FF80048E728 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -109,6 +112,7 @@
 				D31D7E012EDEB86000A51CBE /* Tapling */,
 				D3769A402EDEDAD20048E728 /* Keyboard */,
 				D31D7E002EDEB86000A51CBE /* Products */,
+				D3769D752EE15FF80048E728 /* AppIcon.icon */,
 			);
 			sourceTree = "<group>";
 		};
@@ -217,6 +221,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3769D762EE15FF80048E728 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +229,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3769D772EE15FF80048E728 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
