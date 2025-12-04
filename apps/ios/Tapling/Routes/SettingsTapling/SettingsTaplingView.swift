@@ -31,11 +31,11 @@ struct SettingsTaplingView: View {
     }
 
     private var bannerMessage: Text {
-        Text(
-            "Full Keyboard Access required for live preview. Settings work without it—just reopen ("
+        let keyboardIcon = Text(Image(systemName: "keyboard.fill"))
+            .foregroundStyle(.blue)
+        return Text(
+            "Full Keyboard Access required for live preview. Settings work without it—just reopen (\(keyboardIcon)) to see changes."
         )
-            + Text(Image(systemName: "keyboard.fill")).foregroundStyle(.blue)
-            + Text(") to see changes.")
     }
 
     var body: some View {

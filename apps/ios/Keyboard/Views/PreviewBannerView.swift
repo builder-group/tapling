@@ -42,11 +42,11 @@ struct PreviewBannerView: View {
         if keyboardStatus.isFullAccessEnabled {
             return Text("Live Preview")
         } else {
-            return Text("Preview • Reopen keyboard for changes (")
-                + Text(Image(systemName: "keyboard.fill")).foregroundStyle(
-                    .blue
-                )
-                + Text(")")
+            let keyboardIcon = Text(Image(systemName: "keyboard.fill"))
+                .foregroundStyle(.blue)
+            return Text(
+                "Preview • Reopen keyboard for changes (\(keyboardIcon))"
+            )
         }
     }
 
