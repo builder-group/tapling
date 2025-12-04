@@ -5,12 +5,18 @@
 //  Created by Benno on 03.12.25.
 //
 
+import KeyboardKit
 import SwiftData
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @State private var isKeyboardEnabled = false
     @State private var isFullAccessEnabled = false
+
+    private let keyboardStatus = KeyboardStatusContext(
+        bundleId: "com.buildergroup.Tapling.Keyboard"
+    )
 
     var body: some View {
         NavigationStack {
@@ -22,6 +28,11 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .onAppear {
                 checkKeyboardStatus()
+            }
+            .onChange(of: scenePhase) { oldPhase, newPhase in
+                if newPhase == .active {
+                    checkKeyboardStatus()
+                }
             }
         }
     }
@@ -79,23 +90,10 @@ struct SettingsView: View {
     // MARK: - Actions
 
     private func checkKeyboardStatus() {
-        isKeyboardEnabled = checkIsKeyboardEnabled()
-        isFullAccessEnabled = checkIsFullAccessEnabled()
-    }
-
-    private func checkIsKeyboardEnabled() -> Bool {
-        guard
-            let keyboards = UserDefaults.standard.object(
-                forKey: "AppleKeyboards"
-            ) as? [String]
-        else {
-            return false
-        }
-        return keyboards.contains { $0.contains("Tapling") }
-    }
-
-    private func checkIsFullAccessEnabled() -> Bool {
-        UIPasteboard.general.hasStrings || UIPasteboard.general.hasImages
+        keyboardStatus.refresh()
+        isKeyboardEnabled = keyboardStatus.isKeyboardEnabled
+        isFullAccessEnabled =
+            isKeyboardEnabled && keyboardStatus.isFullAccessEnabled
     }
 
     private func openSystemSettings() {
