@@ -11,9 +11,11 @@ import SwiftData
 @Model
 final class KeyboardSettings: SingletonModel {
     var debug: Bool
+    var isPreviewMode: Bool
 
-    init(debug: Bool = false) {
+    init(debug: Bool = false, isPreviewMode: Bool = false) {
         self.debug = debug
+        self.isPreviewMode = isPreviewMode
     }
 
     static var `default`: KeyboardSettings {

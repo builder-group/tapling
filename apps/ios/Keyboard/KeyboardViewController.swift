@@ -46,19 +46,23 @@ class KeyboardViewController: KeyboardInputViewController {
         super.viewWillSetupKeyboardView()
 
         setupKeyboardView { controller in
-            KeyboardView(services: controller.services) { params in
-                params.view
-            } buttonView: { params in
-                params.view
-            } collapsedView: { params in
-                params.view
-            } emojiKeyboard: { params in
-                params.view
-            } toolbar: { params in
-                AutocompleteToolbarView(
-                    standardToolbar: params.view,
-                    autocompleteAction: params.autocompleteAction
-                )
+            VStack(spacing: 0) {
+                PreviewBannerView()
+
+                KeyboardView(services: controller.services) { params in
+                    params.view
+                } buttonView: { params in
+                    params.view
+                } collapsedView: { params in
+                    params.view
+                } emojiKeyboard: { params in
+                    params.view
+                } toolbar: { params in
+                    AutocompleteToolbarView(
+                        standardToolbar: params.view,
+                        autocompleteAction: params.autocompleteAction
+                    )
+                }
             }
             .modelContainer(DataContainer.shared.modelContainer)
         }

@@ -5,14 +5,18 @@
 //  Created by Benno on 04.12.25.
 //
 
+import KeyboardKit
 import SwiftData
 import SwiftUI
 
 struct SettingsTaplingView: View {
     @QuerySingleton private var taplingSettings: TaplingSettings
+    @QuerySingleton private var keyboardSettings: KeyboardSettings
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @FocusState private var isTextFieldFocused: Bool
     @State private var showKeyboard = true
+    @State private var hasFullAccess = false
 
     private enum SliderRange {
         static let scale = 0.5...3.0
@@ -33,32 +37,57 @@ struct SettingsTaplingView: View {
                 keyboardTriggerTextField
             }
         }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase != .active {
+                setKeyboard(false)
+            } else {
+                checkFullAccess()
+                setKeyboard(true)
+            }
+        }
+        .onAppear {
+            checkFullAccess()
+        }
+        .onDisappear {
+            setKeyboard(false)
+        }
     }
 
     // MARK: - Components
 
     private var settingsForm: some View {
-        Form {
-            Section {
-                LabeledSliderView(
-                    label: "Scale",
-                    value: taplingSettings.userScale,
-                    format: "%.2f",
-                    binding: scaleBinding,
-                    range: SliderRange.scale,
-                    step: SliderRange.scaleStep
+        VStack(spacing: 0) {
+            if !hasFullAccess {
+                BannerView(
+                    icon: "exclamationmark.triangle.fill",
+                    message: bannerMessage,
+                    style: .warning
                 )
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+                .background(Color(.systemGroupedBackground))
+            }
 
-                LabeledSliderView(
-                    label: "Bottom Offset",
-                    value: taplingSettings.userBottomOffset,
-                    format: "%.1f",
-                    binding: offsetBinding,
-                    range: SliderRange.offset,
-                    step: SliderRange.offsetStep
-                )
-            } footer: {
-                Text("Changes will be reflected in the keyboard immediately.")
+            Form {
+                Section {
+                    LabeledSliderView(
+                        label: "Scale",
+                        value: taplingSettings.userScale,
+                        format: "%.2f",
+                        binding: scaleBinding,
+                        range: SliderRange.scale,
+                        step: SliderRange.scaleStep
+                    )
+
+                    LabeledSliderView(
+                        label: "Bottom Offset",
+                        value: taplingSettings.userBottomOffset,
+                        format: "%.1f",
+                        binding: offsetBinding,
+                        range: SliderRange.offset,
+                        step: SliderRange.offsetStep
+                    )
+                }
             }
         }
         .navigationTitle("Tapling")
@@ -111,21 +140,56 @@ struct SettingsTaplingView: View {
         )
     }
 
+    private var bannerMessage: Text {
+        Text(
+            "Full Access required for live preview. Settings work without it—just reopen ("
+        )
+            + Text(Image(systemName: "keyboard.fill")).foregroundStyle(.blue)
+            + Text(") to see changes.")
+    }
+
     // MARK: - Actions
 
-    private func toggleKeyboard() {
-        showKeyboard.toggle()
-        if showKeyboard {
+    private func setKeyboard(_ enabled: Bool) {
+        guard showKeyboard != enabled else { return }
+        
+        showKeyboard = enabled
+        
+        if enabled {
+            enablePreviewMode()
             focusTextField(delay: FocusDelay.toggle)
         } else {
+            disablePreviewMode()
             isTextFieldFocused = false
         }
+    }
+
+    private func toggleKeyboard() {
+        setKeyboard(!showKeyboard)
     }
 
     private func focusTextField(delay: Double) {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             isTextFieldFocused = true
         }
+    }
+
+    private func enablePreviewMode() {
+        keyboardSettings.isPreviewMode = true
+        try? modelContext.save()
+    }
+
+    private func disablePreviewMode() {
+        keyboardSettings.isPreviewMode = false
+        try? modelContext.save()
+    }
+
+    private func checkFullAccess() {
+        let status = KeyboardStatusContext(
+            bundleId: "com.buildergroup.Tapling.Keyboard"
+        )
+        status.refresh()
+        hasFullAccess = status.isFullAccessEnabled
     }
 }
 
@@ -155,6 +219,23 @@ private struct LabeledSliderView: View {
 #Preview {
     NavigationStack {
         SettingsTaplingView()
-            .modelContainer(DataContainer.shared.modelContainer)
+            .modelContainer(previewContainer)
     }
+}
+
+@MainActor
+private var previewContainer: ModelContainer {
+    let schema = Schema([TaplingSettings.self, KeyboardSettings.self])
+    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(
+        for: schema,
+        configurations: [configuration]
+    )
+
+    // Initialize singletons
+    let context = container.mainContext
+    _ = TaplingSettings.instance(with: context)
+    _ = KeyboardSettings.instance(with: context)
+
+    return container
 }
