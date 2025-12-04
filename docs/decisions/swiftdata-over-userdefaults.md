@@ -1,8 +1,8 @@
-# SwiftData over UserDefaults for Settings
+# SwiftData over UserDefaults
 
 ## Decision
 
-We use **SwiftData** for storing and syncing settings between the main app and keyboard extension, instead of UserDefaults.
+Use SwiftData for storing and syncing settings between the main app and keyboard extension, instead of UserDefaults.
 
 ## Rationale
 
@@ -29,7 +29,7 @@ let debug = UserDefaults.shared.bool(forKey: "debug")  // Could be anything
 
 SwiftData provides a single model definition shared between both targets. UserDefaults requires maintaining parallel key strings and default values across the codebase.
 
-### Query-based Access
+### SwiftUI Integration
 
 SwiftData's `@Query` integrates natively with SwiftUI, automatically managing data fetching and view updates. UserDefaults requires manual `@State` or `@Published` properties and imperative updates.
 
@@ -38,6 +38,7 @@ SwiftData's `@Query` integrates natively with SwiftUI, automatically managing da
 ### Query-based Access Pattern
 
 SwiftData is relational/query-based, so accessing singleton settings requires:
+
 ```swift
 @Query private var queriedSettings: [KeyboardSettings]
 private var settings: KeyboardSettings {
@@ -46,6 +47,7 @@ private var settings: KeyboardSettings {
 ```
 
 This is slightly more verbose than UserDefaults' direct static property access. Can be abstracted with a `@QuerySingleton` property wrapper for cleaner syntax:
+
 ```swift
 @QuerySingleton private var settings: KeyboardSettings
 ```
