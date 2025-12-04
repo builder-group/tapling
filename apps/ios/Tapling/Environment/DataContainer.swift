@@ -23,7 +23,7 @@ class DataContainer {
         let schema = Schema([
             TaplingSettings.self,
             KeyboardSettings.self,
-            OwnedItem.self,
+            OwnedCollectible.self,
         ])
 
         let modelConfiguration: ModelConfiguration
@@ -67,15 +67,15 @@ class DataContainer {
         _ = KeyboardSettings.instance(with: context)
     }
 
-    /// Ensures default items are unlocked (white fur, cute face)
+    /// Ensures default collectibles are unlocked (white fur, cute face)
     static func ensureDefaultItems(in context: ModelContext) {
-        let defaultItemIds = ["fur_white", "face_cute"]
-        let registry = ItemRegistry.shared
+        let defaultCollectibleIds = ["fur_white", "face_cute"]
+        let registry = CollectibleRegistry.shared
 
-        for itemId in defaultItemIds {
+        for collectibleId in defaultCollectibleIds {
             // Check if already exists
-            let descriptor = FetchDescriptor<OwnedItem>(
-                predicate: #Predicate { $0.itemId == itemId }
+            let descriptor = FetchDescriptor<OwnedCollectible>(
+                predicate: #Predicate { $0.collectibleId == collectibleId }
             )
 
             if let existing = try? context.fetch(descriptor).first {
@@ -84,9 +84,9 @@ class DataContainer {
                     existing.unlockedAt = Date()
                 }
             } else {
-                // Create new unlocked item
-                let ownedItem = OwnedItem(itemId: itemId, unlockedAt: Date())
-                context.insert(ownedItem)
+                // Create new unlocked collectible
+                let ownedCollectible = OwnedCollectible(collectibleId: collectibleId, unlockedAt: Date())
+                context.insert(ownedCollectible)
             }
         }
 

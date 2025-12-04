@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CollectionItemDetailView: View {
-    let item: Item
+    let collectible: Collectible
     let isUnlocked: Bool
 
     @State private var leftHand: TaplingConfig.Hand = .up
@@ -40,7 +40,7 @@ struct CollectionItemDetailView: View {
                         }
                     }
                     .overlay {
-                        itemPreview
+                        collectiblePreview
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding(40)
                             .contentShape(Rectangle())
@@ -50,17 +50,17 @@ struct CollectionItemDetailView: View {
                     }
                     .padding(.horizontal)
 
-                // Item details
+                // Collectible details
                 VStack(spacing: 16) {
                     // Name and rarity
                     VStack(spacing: 8) {
-                        Text(item.name)
+                        Text(collectible.name)
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundStyle(isUnlocked ? .primary : .secondary)
 
                         // Rarity badge
-                        Text(item.rarity.rawValue.capitalized)
+                        Text(collectible.rarity.rawValue.capitalized)
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(rarityColor)
@@ -76,11 +76,11 @@ struct CollectionItemDetailView: View {
             }
             .padding(.vertical)
         }
-        .navigationTitle(item.name)
+        .navigationTitle(collectible.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private var itemPreview: some View {
+    private var collectiblePreview: some View {
         Group {
             if let tapling = previewTapling {
                 TaplingView(tapling: tapling)
@@ -96,9 +96,9 @@ struct CollectionItemDetailView: View {
         let defaultFur = TaplingConfig.Fur.white
         let defaultFace = TaplingConfig.Face.cute
 
-        switch item.type {
+        switch collectible.type {
         case .hat:
-            let rawValue = item.assetName.replacingOccurrences(
+            let rawValue = collectible.assetName.replacingOccurrences(
                 of: "hat_",
                 with: ""
             )
@@ -113,7 +113,7 @@ struct CollectionItemDetailView: View {
                 rightHand: rightHand
             )
         case .face:
-            let rawValue = item.assetName.replacingOccurrences(
+            let rawValue = collectible.assetName.replacingOccurrences(
                 of: "face_",
                 with: ""
             )
@@ -128,7 +128,7 @@ struct CollectionItemDetailView: View {
                 rightHand: rightHand
             )
         case .fur:
-            let rawValue = item.assetName.replacingOccurrences(
+            let rawValue = collectible.assetName.replacingOccurrences(
                 of: "fur_",
                 with: ""
             )
@@ -151,19 +151,14 @@ struct CollectionItemDetailView: View {
     }
 
     private var rarityColor: Color {
-        switch item.rarity {
-        case .common: return .gray
-        case .rare: return .blue
-        case .epic: return .purple
-        case .legendary: return .orange
-        }
+        collectible.rarity.color
     }
 }
 
 #Preview {
     NavigationStack {
         CollectionItemDetailView(
-            item: Item(
+            collectible: Collectible(
                 id: "test",
                 name: "Epic Hat",
                 type: .hat,

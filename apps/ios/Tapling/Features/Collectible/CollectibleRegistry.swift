@@ -1,5 +1,5 @@
 //
-//  ItemRegistry.swift
+//  CollectibleRegistry.swift
 //  Tapling
 //
 //  Created by Benno on 04.12.25.
@@ -7,44 +7,44 @@
 
 import Foundation
 
-/// Central registry of all available items in the game.
-struct ItemRegistry {
-    static let shared = ItemRegistry()
+/// Central registry of all available collectibles in the game.
+struct CollectibleRegistry {
+    static let shared = CollectibleRegistry()
 
-    /// All available items grouped by type.
-    let allItems: [Item.ItemType: [Item]]
+    /// All available collectibles grouped by type.
+    let allCollectibles: [Collectible.CollectibleType: [Collectible]]
 
-    /// All items as a flat array.
-    var items: [Item] {
-        allItems.values.flatMap { $0 }
+    /// All collectibles as a flat array.
+    var collectibles: [Collectible] {
+        allCollectibles.values.flatMap { $0 }
     }
 
     private init() {
-        allItems = [
-            .hat: ItemRegistry.hatItems,
-            .face: ItemRegistry.faceItems,
-            .fur: ItemRegistry.furItems,
+        allCollectibles = [
+            .hat: CollectibleRegistry.hatCollectibles,
+            .face: CollectibleRegistry.faceCollectibles,
+            .fur: CollectibleRegistry.furCollectibles,
         ]
     }
 
-    // MARK: - Item Definitions
+    // MARK: - Collectible Definitions
 
-    private static let hatItems: [Item] = [
-        Item(
+    private static let hatCollectibles: [Collectible] = [
+        Collectible(
             id: "hat_banana",
             name: "Banana",
             type: .hat,
             rarity: .common,
             assetName: "hat_banana"
         ),
-        Item(
+        Collectible(
             id: "hat_lil-duck",
             name: "Lil Duck",
             type: .hat,
             rarity: .common,
             assetName: "hat_lil-duck"
         ),
-        Item(
+        Collectible(
             id: "hat_propeller-hat",
             name: "Propeller Hat",
             type: .hat,
@@ -53,43 +53,43 @@ struct ItemRegistry {
         ),
     ]
 
-    private static let faceItems: [Item] = [
-        Item(
+    private static let faceCollectibles: [Collectible] = [
+        Collectible(
             id: "face_asia",
             name: "Asia",
             type: .face,
             rarity: .common,
             assetName: "face_asia"
         ),
-        Item(
+        Collectible(
             id: "face_cute",
             name: "Cute",
             type: .face,
             rarity: .common,
             assetName: "face_cute"
         ),
-        Item(
+        Collectible(
             id: "face_dead",
             name: "Dead",
             type: .face,
             rarity: .rare,
             assetName: "face_dead"
         ),
-        Item(
+        Collectible(
             id: "face_harry-potter",
             name: "Harry Potter",
             type: .face,
             rarity: .epic,
             assetName: "face_harry-potter"
         ),
-        Item(
+        Collectible(
             id: "face_pilot",
             name: "Pilot",
             type: .face,
             rarity: .rare,
             assetName: "face_pilot"
         ),
-        Item(
+        Collectible(
             id: "face_pixel-cool",
             name: "Pixel Cool",
             type: .face,
@@ -98,8 +98,8 @@ struct ItemRegistry {
         ),
     ]
 
-    private static let furItems: [Item] = [
-        Item(
+    private static let furCollectibles: [Collectible] = [
+        Collectible(
             id: "fur_white",
             name: "White",
             type: .fur,
@@ -110,11 +110,12 @@ struct ItemRegistry {
 
     // MARK: - Helpers
 
-    func item(id: String) -> Item? {
-        items.first { $0.id == id }
+    func collectible(id: String) -> Collectible? {
+        collectibles.first { $0.id == id }
     }
 
-    func items(ofType type: Item.ItemType) -> [Item] {
-        allItems[type] ?? []
+    func collectibles(ofType type: Collectible.CollectibleType) -> [Collectible] {
+        allCollectibles[type] ?? []
     }
 }
+

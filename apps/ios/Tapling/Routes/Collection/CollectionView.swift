@@ -9,18 +9,18 @@ import SwiftData
 import SwiftUI
 
 struct CollectionView: View {
-    @Query private var ownedItems: [OwnedItem]
+    @Query private var ownedCollectibles: [OwnedCollectible]
     @Environment(\.modelContext) private var modelContext
-    @State private var selectedType: Item.ItemType = .hat
+    @State private var selectedType: Collectible.CollectibleType = .hat
 
-    private let registry = ItemRegistry.shared
+    private let registry = CollectibleRegistry.shared
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 // Type tabs
-                Picker("Item Type", selection: $selectedType) {
-                    ForEach(Item.ItemType.allCases, id: \.self) { type in
+                Picker("Collectible Type", selection: $selectedType) {
+                    ForEach(Collectible.CollectibleType.allCases, id: \.self) { type in
                         Text(type.rawValue.capitalized)
                             .tag(type)
                     }
@@ -28,7 +28,7 @@ struct CollectionView: View {
                 .pickerStyle(.segmented)
                 .padding()
 
-                // Items grid
+                // Collectibles grid
                 ScrollView {
                     LazyVGrid(
                         columns: [
@@ -38,16 +38,16 @@ struct CollectionView: View {
                         ],
                         spacing: 12
                     ) {
-                        ForEach(sortedItems(for: selectedType)) { item in
+                        ForEach(sortedCollectibles(for: selectedType)) { collectible in
                             NavigationLink {
                                 CollectionItemDetailView(
-                                    item: item,
-                                    isUnlocked: isUnlocked(itemId: item.id)
+                                    collectible: collectible,
+                                    isUnlocked: isUnlocked(collectibleId: collectible.id)
                                 )
                             } label: {
-                                ItemCardView(
-                                    item: item,
-                                    isUnlocked: isUnlocked(itemId: item.id)
+                                CollectibleCardView(
+                                    collectible: collectible,
+                                    isUnlocked: isUnlocked(collectibleId: collectible.id)
                                 )
                             }
                             .buttonStyle(.plain)
@@ -62,23 +62,23 @@ struct CollectionView: View {
 
     // MARK: - Helpers
 
-    private func isUnlocked(itemId: String) -> Bool {
-        ownedItems.first { $0.itemId == itemId }?.isUnlocked ?? false
+    private func isUnlocked(collectibleId: String) -> Bool {
+        ownedCollectibles.first { $0.collectibleId == collectibleId }?.isUnlocked ?? false
     }
 
-    private func sortedItems(for type: Item.ItemType) -> [Item] {
-        let items = registry.items(ofType: type)
-        return items.sorted { item1, item2 in
-            let unlocked1 = isUnlocked(itemId: item1.id)
-            let unlocked2 = isUnlocked(itemId: item2.id)
+    private func sortedCollectibles(for type: Collectible.CollectibleType) -> [Collectible] {
+        let collectibles = registry.collectibles(ofType: type)
+        return collectibles.sorted { collectible1, collectible2 in
+            let unlocked1 = isUnlocked(collectibleId: collectible1.id)
+            let unlocked2 = isUnlocked(collectibleId: collectible2.id)
 
-            // Unlocked items first
+            // Unlocked collectibles first
             if unlocked1 != unlocked2 {
                 return unlocked1
             }
 
             // Then sort by rarity (higher rarity first)
-            return item1.rarity.sortOrder > item2.rarity.sortOrder
+            return collectible1.rarity.sortOrder > collectible2.rarity.sortOrder
         }
     }
 }

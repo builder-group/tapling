@@ -1,5 +1,5 @@
 //
-//  ItemCardView.swift
+//  CollectibleCardView.swift
 //  Tapling
 //
 //  Created by Benno on 04.12.25.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct ItemCardView: View {
-    let item: Item
+struct CollectibleCardView: View {
+    let collectible: Collectible
     let isUnlocked: Bool
 
     var body: some View {
         VStack(spacing: 8) {
-            // Item preview with rarity-colored border and background
+            // Collectible preview with rarity-colored border and background
             ZStack(alignment: .topTrailing) {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(rarityColor.opacity(0.15))
@@ -23,10 +23,10 @@ struct ItemCardView: View {
                             .stroke(rarityColor, lineWidth: 2)
                     )
 
-                itemPreview
+                collectiblePreview
 
                 if !isUnlocked {
-                    // Subtle overlay for locked items (lighter so preview is visible)
+                    // Subtle overlay for locked collectibles (lighter so preview is visible)
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(.black.opacity(0.3))
                 }
@@ -45,8 +45,8 @@ struct ItemCardView: View {
                 }
             }
 
-            // Item name
-            Text(item.name)
+            // Collectible name
+            Text(collectible.name)
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundStyle(isUnlocked ? .primary : .secondary)
@@ -55,7 +55,7 @@ struct ItemCardView: View {
         }
     }
 
-    private var itemPreview: some View {
+    private var collectiblePreview: some View {
         Group {
             if let tapling = previewTapling {
                 TaplingView(tapling: tapling)
@@ -74,9 +74,9 @@ struct ItemCardView: View {
         let defaultFace = TaplingConfig.Face.cute
         let defaultHand = TaplingConfig.Hand.down
 
-        switch item.type {
+        switch collectible.type {
         case .hat:
-            let rawValue = item.assetName.replacingOccurrences(
+            let rawValue = collectible.assetName.replacingOccurrences(
                 of: "hat_",
                 with: ""
             )
@@ -91,7 +91,7 @@ struct ItemCardView: View {
                 rightHand: defaultHand
             )
         case .face:
-            let rawValue = item.assetName.replacingOccurrences(
+            let rawValue = collectible.assetName.replacingOccurrences(
                 of: "face_",
                 with: ""
             )
@@ -106,7 +106,7 @@ struct ItemCardView: View {
                 rightHand: defaultHand
             )
         case .fur:
-            let rawValue = item.assetName.replacingOccurrences(
+            let rawValue = collectible.assetName.replacingOccurrences(
                 of: "fur_",
                 with: ""
             )
@@ -124,21 +124,16 @@ struct ItemCardView: View {
     }
 
     private var rarityColor: Color {
-        switch item.rarity {
-        case .common: return .gray
-        case .rare: return .blue
-        case .epic: return .purple
-        case .legendary: return .orange
-        }
+        collectible.rarity.color
     }
 }
 
 #Preview {
     HStack {
-        ItemCardView(
-            item: Item(
+        CollectibleCardView(
+            collectible: Collectible(
                 id: "test",
-                name: "Test Item",
+                name: "Test Collectible",
                 type: .hat,
                 rarity: .epic,
                 assetName: "test"
@@ -146,10 +141,10 @@ struct ItemCardView: View {
             isUnlocked: true
         )
 
-        ItemCardView(
-            item: Item(
+        CollectibleCardView(
+            collectible: Collectible(
                 id: "test2",
-                name: "Locked Item",
+                name: "Locked Collectible",
                 type: .face,
                 rarity: .legendary,
                 assetName: "test2"
@@ -159,3 +154,4 @@ struct ItemCardView: View {
     }
     .padding()
 }
+
