@@ -168,6 +168,6 @@ private struct SectionDivider: View {
 #Preview {
     NavigationStack {
         SettingsAboutView()
-            .modelContainer(DataContainer.shared.modelContainer)
+            .previewDataContainer()
     }
 }

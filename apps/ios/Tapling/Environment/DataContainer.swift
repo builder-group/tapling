@@ -19,38 +19,61 @@ class DataContainer {
         modelContainer.mainContext
     }
 
-    init() {
+    init(isStoredInMemoryOnly: Bool = false) {
         let schema = Schema([
             TaplingSettings.self,
             KeyboardSettings.self,
         ])
 
-        // Configure for App Group
-        let appGroupId = "group.com.buildergroup.Tapling"
-        let configuration = ModelConfiguration(
-            "TaplingData",
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            allowsSave: true,
-            groupContainer: .identifier(appGroupId),
-            cloudKitDatabase: .none
-        )
+        let modelConfiguration: ModelConfiguration
+        if isStoredInMemoryOnly {
+            // Configure for in-memory only
+            modelConfiguration = ModelConfiguration(
+                schema: schema,
+                isStoredInMemoryOnly: true
+            )
+        } else {
+            // Configure for App Group
+            modelConfiguration = ModelConfiguration(
+                "TaplingData",
+                schema: schema,
+                isStoredInMemoryOnly: false,
+                allowsSave: true,
+                groupContainer: .identifier("group.com.buildergroup.Tapling"),
+                cloudKitDatabase: .none
+            )
+        }
 
         do {
             modelContainer = try ModelContainer(
                 for: schema,
-                configurations: [configuration]
+                configurations: [modelConfiguration]
             )
 
-            ensureSingletons()
+            // Initialize singletons
+            DataContainer.ensureSingletons(in: modelContext)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }
 
-    /// Ensures singleton models exist in the store
-    private func ensureSingletons() {
-        _ = TaplingSettings.instance(with: modelContext)
-        _ = KeyboardSettings.instance(with: modelContext)
+    /// Ensures singleton models exist in the given context
+    static func ensureSingletons(in context: ModelContext) {
+        _ = TaplingSettings.instance(with: context)
+        _ = KeyboardSettings.instance(with: context)
+    }
+}
+
+// MARK: - Preview Support
+
+extension DataContainer {
+    /// In-memory container for SwiftUI previews
+    static let preview = DataContainer(isStoredInMemoryOnly: true)
+}
+
+extension View {
+    /// Applies preview data container for SwiftUI previews
+    func previewDataContainer() -> some View {
+        self.modelContainer(DataContainer.preview.modelContainer)
     }
 }

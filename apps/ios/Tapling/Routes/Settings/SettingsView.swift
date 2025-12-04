@@ -135,5 +135,5 @@ private struct StatusRowView: View {
 
 #Preview {
     SettingsView()
-        .modelContainer(DataContainer.shared.modelContainer)
+        .previewDataContainer()
 }

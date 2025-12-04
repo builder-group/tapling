@@ -22,6 +22,14 @@ struct SettingsKeyboardView: View {
         static let initial: Double = 0.5
     }
 
+    private var bannerMessage: Text {
+        Text(
+            "Full Keyboard Access required for live preview. Settings work without it—just reopen ("
+        )
+            + Text(Image(systemName: "keyboard.fill")).foregroundStyle(.blue)
+            + Text(") to see changes.")
+    }
+
     var body: some View {
         ZStack {
             settingsForm
@@ -109,14 +117,6 @@ struct SettingsKeyboardView: View {
         )
     }
 
-    private var bannerMessage: Text {
-        Text(
-            "Full Keyboard Access required for live preview. Settings work without it—just reopen ("
-        )
-            + Text(Image(systemName: "keyboard.fill")).foregroundStyle(.blue)
-            + Text(") to see changes.")
-    }
-
     // MARK: - Actions
 
     private func setKeyboard(_ enabled: Bool) {
@@ -165,23 +165,6 @@ struct SettingsKeyboardView: View {
 #Preview {
     NavigationStack {
         SettingsKeyboardView()
-            .modelContainer(previewContainer)
+            .previewDataContainer()
     }
-}
-
-@MainActor
-private var previewContainer: ModelContainer {
-    let schema = Schema([TaplingSettings.self, KeyboardSettings.self])
-    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(
-        for: schema,
-        configurations: [configuration]
-    )
-
-    // Initialize singletons
-    let context = container.mainContext
-    _ = TaplingSettings.instance(with: context)
-    _ = KeyboardSettings.instance(with: context)
-
-    return container
 }
