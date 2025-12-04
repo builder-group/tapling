@@ -30,15 +30,18 @@ struct SettingsKeyboardView: View {
             }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
-            if newPhase != .active {
-                setKeyboard(false)
-            } else {
+            if newPhase == .active {
                 checkFullAccess()
                 setKeyboard(true)
+            } else {
+                setKeyboard(false)
             }
         }
         .onAppear {
             checkFullAccess()
+            if showKeyboard {
+                setKeyboard(true)
+            }
         }
         .onDisappear {
             setKeyboard(false)
@@ -117,10 +120,8 @@ struct SettingsKeyboardView: View {
     // MARK: - Actions
 
     private func setKeyboard(_ enabled: Bool) {
-        guard showKeyboard != enabled else { return }
-        
         showKeyboard = enabled
-        
+
         if enabled {
             enablePreviewMode()
             focusTextField(delay: FocusDelay.toggle)
@@ -141,11 +142,13 @@ struct SettingsKeyboardView: View {
     }
 
     private func enablePreviewMode() {
+        guard !keyboardSettings.isPreviewMode else { return }
         keyboardSettings.isPreviewMode = true
         try? modelContext.save()
     }
 
     private func disablePreviewMode() {
+        guard keyboardSettings.isPreviewMode else { return }
         keyboardSettings.isPreviewMode = false
         try? modelContext.save()
     }

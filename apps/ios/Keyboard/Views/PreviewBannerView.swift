@@ -32,6 +32,9 @@ struct PreviewBannerView: View {
             .padding(.vertical, 6)
             .frame(maxWidth: .infinity)
             .background(bannerColor)
+            .onAppear {
+                keyboardStatus.refresh()
+            }
         }
     }
 
