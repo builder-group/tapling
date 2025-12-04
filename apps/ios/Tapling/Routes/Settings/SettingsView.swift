@@ -66,7 +66,7 @@ struct SettingsView: View {
             NavigationLink {
                 SettingsTaplingView()
             } label: {
-                Label("Tapling", systemImage: "face.smiling")
+                Label("Tapling", systemImage: "pawprint")
             }
         }
     }

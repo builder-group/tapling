@@ -145,7 +145,7 @@ struct SettingsTaplingView: View {
 
     private var bannerMessage: Text {
         Text(
-            "Full Access required for live preview. Settings work without it—just reopen ("
+            "Full Keyboard Access required for live preview. Settings work without it—just reopen ("
         )
             + Text(Image(systemName: "keyboard.fill")).foregroundStyle(.blue)
             + Text(") to see changes.")
