@@ -62,6 +62,12 @@ struct SettingsTaplingView: View {
         .onDisappear {
             setKeyboard(false)
         }
+        .onChange(of: isTextFieldFocused) { oldValue, newValue in
+            // Sync state when keyboard is dismissed by user (return/done button)
+            if !newValue && showKeyboard {
+                setKeyboard(false)
+            }
+        }
     }
 
     // MARK: - Components
