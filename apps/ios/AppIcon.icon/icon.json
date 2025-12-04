@@ -4,31 +4,18 @@
   },
   "groups" : [
     {
-      "blur-material" : null,
+      "hidden" : false,
       "layers" : [
         {
           "image-name" : "3-layer.svg",
           "name" : "3-layer"
-        }
-      ],
-      "lighting" : "individual",
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "specular" : true,
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
+        },
         {
           "image-name" : "2-layer.svg",
           "name" : "2-layer"
         },
         {
+          "glass" : true,
           "image-name" : "1-layer.svg",
           "name" : "1-layer"
         }
@@ -38,7 +25,7 @@
         "opacity" : 0.5
       },
       "translucency" : {
-        "enabled" : true,
+        "enabled" : false,
         "value" : 0.5
       }
     },
