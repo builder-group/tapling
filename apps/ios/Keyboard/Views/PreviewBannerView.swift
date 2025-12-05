@@ -15,6 +15,26 @@ struct PreviewBannerView: View {
         bundleId: "com.buildergroup.Tapling.Keyboard"
     )
 
+    private var bannerText: Text {
+        if keyboardStatus.isFullAccessEnabled {
+            return Text("Live Preview")
+        } else {
+            let keyboardIcon = Text(Image(systemName: "keyboard.fill"))
+                .foregroundStyle(.blue)
+            return Text(
+                "Preview • Reopen keyboard for changes (\(keyboardIcon))"
+            )
+        }
+    }
+
+    private var bannerColor: Color {
+        keyboardStatus.isFullAccessEnabled
+            ? .blue.opacity(0.8)
+            : .orange.opacity(0.8)
+    }
+
+    // MARK: - UI
+
     var body: some View {
         if keyboardSettings.isPreviewMode {
             HStack(spacing: 8) {
@@ -36,23 +56,5 @@ struct PreviewBannerView: View {
                 keyboardStatus.refresh()
             }
         }
-    }
-
-    private var bannerText: Text {
-        if keyboardStatus.isFullAccessEnabled {
-            return Text("Live Preview")
-        } else {
-            let keyboardIcon = Text(Image(systemName: "keyboard.fill"))
-                .foregroundStyle(.blue)
-            return Text(
-                "Preview • Reopen keyboard for changes (\(keyboardIcon))"
-            )
-        }
-    }
-
-    private var bannerColor: Color {
-        keyboardStatus.isFullAccessEnabled
-            ? .blue.opacity(0.8)
-            : .orange.opacity(0.8)
     }
 }

@@ -55,14 +55,22 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
-				Environment/Configs/TaplingConfig.swift,
 				Environment/DataContainer.swift,
 				"Environment/KeyboardApp+Extension.swift",
 				Environment/Models/KeyboardSettings.swift,
-				Environment/Models/TaplingSettings.swift,
+				Features/Collectible/Environment/CollectibleRegistry.swift,
+				Features/Collectible/Environment/Models/AnyCollectible.swift,
+				Features/Collectible/Environment/Models/Collectible.swift,
+				Features/Collectible/Environment/Models/OwnedCollectible.swift,
+				Features/Collectible/Environment/Models/Rarity.swift,
+				Features/Collectible/Environment/Models/SlotTypes.swift,
+				Features/Tapling/Environment/Models/HandPosition.swift,
+				Features/Tapling/Environment/Models/Tapling.swift,
+				Features/Tapling/Environment/Models/TaplingSettings.swift,
+				Features/Tapling/Environment/TaplingConfig.swift,
+				Features/Tapling/Views/TaplingView.swift,
 				Lib/QuerySingleton.swift,
 				Lib/SingletonModel.swift,
-				Views/TaplingView.swift,
 			);
 			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
 		};

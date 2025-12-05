@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-/// A reusable numbered step view for onboarding and guides.
 struct StepView: View {
     let number: Int
     let title: String
     let description: String
+
+    // MARK: - UI
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {

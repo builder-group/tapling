@@ -1,8 +1,9 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 # Project Rules Index
 
 This document serves as the central index for all active Cursor rules within this repository, organized by category. These rules define processes, structures, and guidelines for development.
@@ -14,6 +15,7 @@ This document serves as the central index for all active Cursor rules within thi
 ## Development Guidelines
 
 - [typescript.mdc](mdc:.cursor/rules/typescript.mdc): TypeScript coding standards and style guidelines
+- [swift.mdc](mdc:.cursor/rules/swift.mdc): Swift and SwiftUI coding standards and style guidelines
 - [vitest.mdc](mdc:.cursor/rules/vitest.mdc): Testing patterns and best practices with Vitest
 
 Each rule file contains comprehensive guidelines for its domain. We can split these into more specific rules as the project grows and patterns emerge.

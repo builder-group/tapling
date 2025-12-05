@@ -30,6 +30,18 @@ struct SettingsKeyboardView: View {
         )
     }
 
+    private var debugModeBinding: Binding<Bool> {
+        Binding(
+            get: { keyboardSettings.debug },
+            set: { newValue in
+                keyboardSettings.debug = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
+    // MARK: - UI
+
     var body: some View {
         ZStack {
             settingsForm
@@ -61,8 +73,6 @@ struct SettingsKeyboardView: View {
             }
         }
     }
-
-    // MARK: - Components
 
     private var settingsForm: some View {
         VStack(spacing: 0) {
@@ -109,18 +119,6 @@ struct SettingsKeyboardView: View {
             .onAppear {
                 focusTextField(delay: FocusDelay.initial)
             }
-    }
-
-    // MARK: - Bindings
-
-    private var debugModeBinding: Binding<Bool> {
-        Binding(
-            get: { keyboardSettings.debug },
-            set: { newValue in
-                keyboardSettings.debug = newValue
-                try? modelContext.save()
-            }
-        )
     }
 
     // MARK: - Actions

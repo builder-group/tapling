@@ -1,21 +1,20 @@
 //
-//  AnimatedTaplingLogoView.swift
+//  CreditsAnimatedLogoView.swift
 //  Tapling
 //
-//  Created by Benno on 04.12.25.
+//  Created by Benno on 05.12.25.
 //
 
 import SwiftUI
 
-/// An animated Tapling logo with tapping hands and rotating rainbow border.
-struct AnimatedTaplingLogoView: View {
+struct CreditsAnimatedLogoView: View {
     @State private var leftHandUp = true
     @State private var rotationDegrees: Double = 0
 
     private enum Animation {
         static let tapInterval = 0.6
         static let tapDuration = 0.3
-        static let rainbowDuration = 3.0
+        static let loveBorderDuration = 3.0
         static let glowOpacity = 0.15
         static let glowRadius = 12.0
     }
@@ -26,55 +25,74 @@ struct AnimatedTaplingLogoView: View {
         static let borderWidth: CGFloat = 3
     }
 
-    var body: some View {
-        TaplingView(tapling: currentTapling)
-            .frame(width: Layout.size, height: Layout.size)
-            .animation(
-                .easeInOut(duration: Animation.tapDuration),
-                value: leftHandUp
-            )
-            .background(logoBackground)
-            .overlay(rainbowBorder)
-            .onAppear {
-                startAnimations()
-            }
-    }
-
-    // MARK: - Components
-
     private var currentTapling: Tapling {
         Tapling(
-            fur: .white,
-            hat: .lilDuck,
-            face: .cute,
+            fur: .default,
+            hat: Hat.get("hat_heart"),
+            face: .default,
             leftHand: leftHandUp ? .up : .down,
             rightHand: leftHandUp ? .down : .up
         )
+    }
+
+    // MARK: - UI
+
+    var body: some View {
+        ZStack {
+            TaplingView(tapling: currentTapling)
+                .frame(width: Layout.size, height: Layout.size)
+                .animation(
+                    .easeInOut(duration: Animation.tapDuration),
+                    value: leftHandUp
+                )
+                .background(logoBackground)
+                .overlay(loveBorder)
+
+            heartRisingView
+        }
+        .onAppear {
+            startAnimations()
+        }
+    }
+
+    private var heartRisingView: some View {
+        HeartRisingView(
+            spawnSize: CGSize(width: 10, height: 10),
+            targetSize: CGSize(width: 80, height: 40),
+            riseDistance: 70,
+            riseDuration: 4.0,
+            spawnInterval: 0.8...1.5,
+            maxHearts: 4,
+            heartSize: 10,
+            // debug: true
+        )
+        .offset(x: -Layout.size / 5, y: -Layout.size / 10)
+        .allowsHitTesting(false)
     }
 
     private var logoBackground: some View {
         RoundedRectangle(cornerRadius: Layout.cornerRadius, style: .continuous)
             .fill(.white)
             .shadow(
-                color: .blue.opacity(Animation.glowOpacity),
+                color: .red.opacity(Animation.glowOpacity),
                 radius: Animation.glowRadius,
                 y: 0
             )
             .shadow(
-                color: .purple.opacity(Animation.glowOpacity),
+                color: .pink.opacity(Animation.glowOpacity),
                 radius: Animation.glowRadius,
                 y: 0
             )
             .shadow(color: .black.opacity(0.1), radius: 8, y: 4)
     }
 
-    private var rainbowBorder: some View {
+    private var loveBorder: some View {
         RoundedRectangle(cornerRadius: Layout.cornerRadius, style: .continuous)
             .strokeBorder(
                 AngularGradient(
                     colors: [
-                        .blue, .cyan, .green, .yellow, .orange, .red, .purple,
-                        .blue,
+                        .red, .pink, .red, .pink,
+                        .red,
                     ],
                     center: .center,
                     startAngle: .degrees(rotationDegrees),
@@ -84,11 +102,11 @@ struct AnimatedTaplingLogoView: View {
             )
     }
 
-    // MARK: - Animations
+    // MARK: - Actions
 
     private func startAnimations() {
         startTappingAnimation()
-        startRainbowAnimation()
+        startLoveBorderAnimation()
     }
 
     private func startTappingAnimation() {
@@ -100,9 +118,9 @@ struct AnimatedTaplingLogoView: View {
         }
     }
 
-    private func startRainbowAnimation() {
+    private func startLoveBorderAnimation() {
         withAnimation(
-            .linear(duration: Animation.rainbowDuration).repeatForever(
+            .linear(duration: Animation.loveBorderDuration).repeatForever(
                 autoreverses: false
             )
         ) {
@@ -112,6 +130,6 @@ struct AnimatedTaplingLogoView: View {
 }
 
 #Preview {
-    AnimatedTaplingLogoView()
+    CreditsAnimatedLogoView()
         .padding()
 }

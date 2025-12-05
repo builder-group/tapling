@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// A compact banner for displaying contextual information.
 struct BannerView: View {
     let icon: String
     let message: Text

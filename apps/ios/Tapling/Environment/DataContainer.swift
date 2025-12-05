@@ -23,6 +23,7 @@ class DataContainer {
         let schema = Schema([
             TaplingSettings.self,
             KeyboardSettings.self,
+            OwnedCollectible.self,
         ])
 
         let modelConfiguration: ModelConfiguration
@@ -52,6 +53,9 @@ class DataContainer {
 
             // Initialize singletons
             DataContainer.ensureSingletons(in: modelContext)
+
+            // Initialize default unlocked items
+            DataContainer.ensureDefaultItems(in: modelContext)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -61,6 +65,34 @@ class DataContainer {
     static func ensureSingletons(in context: ModelContext) {
         _ = TaplingSettings.instance(with: context)
         _ = KeyboardSettings.instance(with: context)
+    }
+
+    /// Ensures default collectibles are unlocked (white fur, cute face)
+    static func ensureDefaultItems(in context: ModelContext) {
+        let defaultCollectibleIds = ["fur_white", "face_cute"]
+
+        for collectibleId in defaultCollectibleIds {
+            // Check if already exists
+            let descriptor = FetchDescriptor<OwnedCollectible>(
+                predicate: #Predicate { $0.collectibleId == collectibleId }
+            )
+
+            if let existing = try? context.fetch(descriptor).first {
+                // If exists but not unlocked, unlock it
+                if existing.unlockedAt == nil {
+                    existing.unlockedAt = Date()
+                }
+            } else {
+                // Create new unlocked collectible
+                let ownedCollectible = OwnedCollectible(
+                    collectibleId: collectibleId,
+                    unlockedAt: Date()
+                )
+                context.insert(ownedCollectible)
+            }
+        }
+
+        try? context.save()
     }
 }
 

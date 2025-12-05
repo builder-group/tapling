@@ -18,6 +18,8 @@ struct SettingsView: View {
         bundleId: "com.buildergroup.Tapling.Keyboard"
     )
 
+    // MARK: - UI
+
     var body: some View {
         NavigationStack {
             Form {
@@ -36,8 +38,6 @@ struct SettingsView: View {
             }
         }
     }
-
-    // MARK: - Components
 
     private var keyboardStatusSection: some View {
         Section("KEYBOARD") {
@@ -83,6 +83,12 @@ struct SettingsView: View {
                 SettingsAboutView()
             } label: {
                 Label("About", systemImage: "info.circle")
+            }
+
+            NavigationLink {
+                SettingsCreditsView()
+            } label: {
+                Label("Credits", systemImage: "heart")
             }
         }
     }

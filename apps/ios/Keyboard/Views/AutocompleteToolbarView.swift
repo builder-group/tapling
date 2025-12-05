@@ -19,14 +19,14 @@ struct AutocompleteToolbarView: View {
     @QuerySingleton private var taplingSettings: TaplingSettings
     @QuerySingleton private var keyboardSettings: KeyboardSettings
 
-    @State private var leftHand: TaplingConfig.Hand = .up
-    @State private var rightHand: TaplingConfig.Hand = .down
+    @State private var leftHand: HandPosition = .up
+    @State private var rightHand: HandPosition = .down
 
     private var baseScale: CGFloat {
         // Base scale: upper part (baseSize - baseBodyBottomOffset) fits toolbar height
         let baseVisibleHeight =
-            TaplingConfig.shared.baseSize
-            - TaplingConfig.shared.baseBodyBottomOffset
+            TaplingConfig.baseSize
+            - TaplingConfig.baseBodyBottomOffset
         let toolbarHeight = Keyboard.ToolbarStyle.standardHeight
         return toolbarHeight / baseVisibleHeight
     }
@@ -36,15 +36,27 @@ struct AutocompleteToolbarView: View {
     private var taplingScale: CGFloat { baseScale * userScale }
 
     private var taplingSize: CGFloat {
-        TaplingConfig.shared.baseSize * taplingScale
+        TaplingConfig.baseSize * taplingScale
     }
     private var userBottomOffset: CGFloat {
         CGFloat(taplingSettings.userBottomOffset)
     }
     private var taplingBottomOffset: CGFloat {
-        TaplingConfig.shared.baseBodyBottomOffset
-            * (taplingSize / TaplingConfig.shared.baseSize) + userBottomOffset
+        TaplingConfig.baseBodyBottomOffset
+            * (taplingSize / TaplingConfig.baseSize) + userBottomOffset
     }
+
+    private var currentTapling: Tapling {
+        Tapling(
+            fur: taplingSettings.equippedFur,
+            hat: taplingSettings.equippedHat,
+            face: taplingSettings.equippedFace,
+            leftHand: leftHand,
+            rightHand: rightHand
+        )
+    }
+
+    // MARK: - UI
 
     var body: some View {
         HStack(spacing: 8) {
@@ -91,26 +103,18 @@ struct AutocompleteToolbarView: View {
         }
         .overlay(alignment: .bottomTrailing) {
             // Tapling
-            TaplingView(
-                tapling: Tapling(
-                    fur: TaplingConfig.Fur.white,
-                    hat: TaplingConfig.Hat.lilDuck,
-                    face: TaplingConfig.Face.cute,
-                    leftHand: leftHand,
-                    rightHand: rightHand
-                )
-            )
-            .overlay {
-                if keyboardSettings.debug {
-                    Rectangle()
-                        .fill(Color.red.opacity(0.1))
-                        .stroke(.red, lineWidth: 1)
-                        .allowsHitTesting(false)
+            TaplingView(tapling: currentTapling)
+                .overlay {
+                    if keyboardSettings.debug {
+                        Rectangle()
+                            .fill(Color.red.opacity(0.1))
+                            .stroke(.red, lineWidth: 1)
+                            .allowsHitTesting(false)
+                    }
                 }
-            }
-            .frame(width: taplingSize, height: taplingSize)
-            .offset(y: taplingBottomOffset)
-            .allowsHitTesting(false)
+                .frame(width: taplingSize, height: taplingSize)
+                .offset(y: taplingBottomOffset)
+                .allowsHitTesting(false)
         }
         .overlay {
             if keyboardSettings.debug {
@@ -122,6 +126,8 @@ struct AutocompleteToolbarView: View {
         }
         .zIndex(100)  // Ensure toolbar and Tapling appear above keyboard keys
     }
+
+    // MARK: - Actions
 
     private func toggleHands() {
         leftHand = leftHand == .down ? .up : .down

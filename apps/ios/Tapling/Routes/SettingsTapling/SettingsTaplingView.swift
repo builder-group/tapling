@@ -38,6 +38,28 @@ struct SettingsTaplingView: View {
         )
     }
 
+    private var scaleBinding: Binding<Double> {
+        Binding(
+            get: { taplingSettings.userScale },
+            set: { newValue in
+                taplingSettings.userScale = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
+    private var offsetBinding: Binding<Double> {
+        Binding(
+            get: { taplingSettings.userBottomOffset },
+            set: { newValue in
+                taplingSettings.userBottomOffset = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
+    // MARK: - UI
+
     var body: some View {
         ZStack {
             settingsForm
@@ -69,8 +91,6 @@ struct SettingsTaplingView: View {
             }
         }
     }
-
-    // MARK: - Components
 
     private var settingsForm: some View {
         VStack(spacing: 0) {
@@ -133,28 +153,6 @@ struct SettingsTaplingView: View {
             .onAppear {
                 focusTextField(delay: FocusDelay.initial)
             }
-    }
-
-    // MARK: - Bindings
-
-    private var scaleBinding: Binding<Double> {
-        Binding(
-            get: { taplingSettings.userScale },
-            set: { newValue in
-                taplingSettings.userScale = newValue
-                try? modelContext.save()
-            }
-        )
-    }
-
-    private var offsetBinding: Binding<Double> {
-        Binding(
-            get: { taplingSettings.userBottomOffset },
-            set: { newValue in
-                taplingSettings.userBottomOffset = newValue
-                try? modelContext.save()
-            }
-        )
     }
 
     // MARK: - Actions
