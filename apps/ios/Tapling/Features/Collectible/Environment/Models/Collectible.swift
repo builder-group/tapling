@@ -6,47 +6,64 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct Collectible: Identifiable, Hashable {
+/// A generic collectible parameterized by its slot type.
+/// The phantom type `Slot` provides compile-time type safety.
+struct Collectible<Slot>: Identifiable, Hashable, Codable {
     let id: String
     let name: String
-    let type: CollectibleType
     let rarity: Rarity
-    let assetName: String
+    let assetVariant: String
+}
 
-    enum CollectibleType: String, CaseIterable {
-        case hat
-        case face
-        case fur
+// MARK: - Hat
+
+extension Collectible where Slot == HatSlot {
+    static var all: [Hat] { CollectibleRegistry.shared.hats }
+
+    static func get(_ id: String) -> Hat? {
+        CollectibleRegistry.shared.hat(id: id)
     }
 
-    enum Rarity: String, CaseIterable, Comparable {
-        case common
-        case rare
-        case epic
-        case legendary
+    func assetName() -> String {
+        "hat_\(assetVariant)"
+    }
+}
 
-        var color: Color {
-            switch self {
-            case .common: return .gray
-            case .rare: return .blue
-            case .epic: return .purple
-            case .legendary: return .orange
-            }
-        }
+// MARK: - Face
 
-        var sortOrder: Int {
-            switch self {
-            case .common: return 0
-            case .rare: return 1
-            case .epic: return 2
-            case .legendary: return 3
-            }
-        }
+extension Collectible where Slot == FaceSlot {
+    static var all: [Face] { CollectibleRegistry.shared.faces }
+    static var `default`: Face { CollectibleRegistry.shared.defaultFace }
 
-        static func < (lhs: Rarity, rhs: Rarity) -> Bool {
-            lhs.sortOrder < rhs.sortOrder
-        }
+    static func get(_ id: String) -> Face? {
+        CollectibleRegistry.shared.face(id: id)
+    }
+
+    func assetName() -> String {
+        "face_\(assetVariant)"
+    }
+}
+
+// MARK: - Fur
+
+extension Collectible where Slot == FurSlot {
+    static var all: [Fur] { CollectibleRegistry.shared.furs }
+    static var `default`: Fur { CollectibleRegistry.shared.defaultFur }
+
+    static func get(_ id: String) -> Fur? {
+        CollectibleRegistry.shared.fur(id: id)
+    }
+
+    func baseAssetName() -> String {
+        "fur_\(assetVariant)_base"
+    }
+
+    func leftHandAssetName(_ position: HandPosition) -> String {
+        "fur_\(assetVariant)_left-\(position.rawValue)"
+    }
+
+    func rightHandAssetName(_ position: HandPosition) -> String {
+        "fur_\(assetVariant)_right-\(position.rawValue)"
     }
 }

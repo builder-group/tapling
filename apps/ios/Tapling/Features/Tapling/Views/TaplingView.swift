@@ -9,43 +9,35 @@ import SwiftUI
 
 struct TaplingView: View {
     let tapling: Tapling
-    let config = TaplingConfig.shared
 
     var body: some View {
         ZStack {
             // Fur base layer
-            Image(config.furBaseName(fur: tapling.fur))
+            Image(tapling.fur.baseAssetName())
                 .resizable()
                 .scaledToFit()
 
             // Fur left hand layer
-            Image(
-                config.furLeftHandName(fur: tapling.fur, hand: tapling.leftHand)
-            )
-            .resizable()
-            .scaledToFit()
+            Image(tapling.fur.leftHandAssetName(tapling.leftHand))
+                .resizable()
+                .scaledToFit()
 
             // Face layer
-            Image(config.faceName(face: tapling.face))
+            Image(tapling.face.assetName())
                 .resizable()
                 .scaledToFit()
 
             // Hat layer
             if let hat = tapling.hat {
-                Image(config.hatName(hat: hat))
+                Image(hat.assetName())
                     .resizable()
                     .scaledToFit()
             }
 
             // Fur right hand layer
-            Image(
-                config.furRightHandName(
-                    fur: tapling.fur,
-                    hand: tapling.rightHand
-                )
-            )
-            .resizable()
-            .scaledToFit()
+            Image(tapling.fur.rightHandAssetName(tapling.rightHand))
+                .resizable()
+                .scaledToFit()
         }
         .aspectRatio(1, contentMode: .fit)
     }
@@ -54,11 +46,11 @@ struct TaplingView: View {
 #Preview {
     TaplingView(
         tapling: Tapling(
-            fur: TaplingConfig.Fur.white,
-            hat: TaplingConfig.Hat.lilDuck,
-            face: TaplingConfig.Face.cute,
-            leftHand: TaplingConfig.Hand.up,
-            rightHand: TaplingConfig.Hand.down
+            fur: .default,
+            hat: Hat.get("hat_lil-duck"),
+            face: .default,
+            leftHand: .up,
+            rightHand: .down
         )
     )
     .frame(

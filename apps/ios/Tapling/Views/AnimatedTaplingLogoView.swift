@@ -27,9 +27,9 @@ struct AnimatedTaplingLogoView: View {
 
     private var currentTapling: Tapling {
         Tapling(
-            fur: .white,
-            hat: .lilDuck,
-            face: .cute,
+            fur: .default,
+            hat: Hat.get("hat_lil-duck"),
+            face: .default,
             leftHand: leftHandUp ? .up : .down,
             rightHand: leftHandUp ? .down : .up
         )

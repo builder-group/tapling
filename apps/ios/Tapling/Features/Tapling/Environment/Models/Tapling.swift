@@ -8,9 +8,9 @@
 import Foundation
 
 struct Tapling {
-    let fur: TaplingConfig.Fur
-    let hat: TaplingConfig.Hat?
-    let face: TaplingConfig.Face
-    let leftHand: TaplingConfig.Hand
-    let rightHand: TaplingConfig.Hand
+    let fur: Fur
+    let hat: Hat?
+    let face: Face
+    let leftHand: HandPosition
+    let rightHand: HandPosition
 }

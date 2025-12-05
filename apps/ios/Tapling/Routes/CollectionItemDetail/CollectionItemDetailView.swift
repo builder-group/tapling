@@ -8,47 +8,35 @@
 import SwiftUI
 
 struct CollectionItemDetailView: View {
-    let collectible: Collectible
+    let collectible: AnyCollectible
     let isUnlocked: Bool
 
-    @State private var leftHand: TaplingConfig.Hand = .up
-    @State private var rightHand: TaplingConfig.Hand = .down
+    @State private var leftHand: HandPosition = .up
+    @State private var rightHand: HandPosition = .down
 
-    private var previewTapling: Tapling? {
-        let defaultFur = TaplingConfig.Fur.white
-        let defaultFace = TaplingConfig.Face.cute
-
-        switch collectible.type {
-        case .hat:
-            guard let hat = extractHat(from: collectible.assetName) else {
-                return nil
-            }
+    private var previewTapling: Tapling {
+        switch collectible {
+        case .hat(let hat):
             return Tapling(
-                fur: defaultFur,
+                fur: .default,
                 hat: hat,
-                face: defaultFace,
+                face: .default,
                 leftHand: leftHand,
                 rightHand: rightHand
             )
-        case .face:
-            guard let face = extractFace(from: collectible.assetName) else {
-                return nil
-            }
+        case .face(let face):
             return Tapling(
-                fur: defaultFur,
+                fur: .default,
                 hat: nil,
                 face: face,
                 leftHand: leftHand,
                 rightHand: rightHand
             )
-        case .fur:
-            guard let fur = extractFur(from: collectible.assetName) else {
-                return nil
-            }
+        case .fur(let fur):
             return Tapling(
                 fur: fur,
                 hat: nil,
-                face: defaultFace,
+                face: .default,
                 leftHand: leftHand,
                 rightHand: rightHand
             )
@@ -87,7 +75,7 @@ struct CollectionItemDetailView: View {
                 }
             }
             .overlay {
-                collectiblePreview
+                TaplingView(tapling: previewTapling)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(40)
                     .contentShape(Rectangle())
@@ -96,18 +84,6 @@ struct CollectionItemDetailView: View {
                     }
             }
             .padding(.horizontal)
-    }
-
-    private var collectiblePreview: some View {
-        Group {
-            if let tapling = previewTapling {
-                TaplingView(tapling: tapling)
-            } else {
-                Text("Preview")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
     }
 
     private var lockBadge: some View {
@@ -155,32 +131,18 @@ struct CollectionItemDetailView: View {
         leftHand = leftHand == .down ? .up : .down
         rightHand = rightHand == .down ? .up : .down
     }
-
-    private func extractHat(from assetName: String) -> TaplingConfig.Hat? {
-        let rawValue = assetName.replacingOccurrences(of: "hat_", with: "")
-        return TaplingConfig.Hat(rawValue: rawValue)
-    }
-
-    private func extractFace(from assetName: String) -> TaplingConfig.Face? {
-        let rawValue = assetName.replacingOccurrences(of: "face_", with: "")
-        return TaplingConfig.Face(rawValue: rawValue)
-    }
-
-    private func extractFur(from assetName: String) -> TaplingConfig.Fur? {
-        let rawValue = assetName.replacingOccurrences(of: "fur_", with: "")
-        return TaplingConfig.Fur(rawValue: rawValue)
-    }
 }
 
 #Preview {
     NavigationStack {
         CollectionItemDetailView(
-            collectible: Collectible(
-                id: "test",
-                name: "Epic Hat",
-                type: .hat,
-                rarity: .epic,
-                assetName: "hat_propeller-hat"
+            collectible: .hat(
+                Hat(
+                    id: "hat_propeller-hat",
+                    name: "Propeller Hat",
+                    rarity: .epic,
+                    assetVariant: "propeller-hat"
+                )
             ),
             isUnlocked: false
         )

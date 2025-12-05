@@ -8,47 +8,34 @@
 import SwiftUI
 
 struct CollectibleCardView: View {
-    let collectible: Collectible
+    let collectible: AnyCollectible
     let isUnlocked: Bool
 
-    private var previewTapling: Tapling? {
-        let defaultFur = TaplingConfig.Fur.white
-        let defaultFace = TaplingConfig.Face.cute
-        let defaultHand = TaplingConfig.Hand.down
-
-        switch collectible.type {
-        case .hat:
-            guard let hat = extractHat(from: collectible.assetName) else {
-                return nil
-            }
+    private var previewTapling: Tapling {
+        switch collectible {
+        case .hat(let hat):
             return Tapling(
-                fur: defaultFur,
+                fur: .default,
                 hat: hat,
-                face: defaultFace,
-                leftHand: defaultHand,
-                rightHand: defaultHand
+                face: .default,
+                leftHand: .down,
+                rightHand: .down
             )
-        case .face:
-            guard let face = extractFace(from: collectible.assetName) else {
-                return nil
-            }
+        case .face(let face):
             return Tapling(
-                fur: defaultFur,
+                fur: .default,
                 hat: nil,
                 face: face,
-                leftHand: defaultHand,
-                rightHand: defaultHand
+                leftHand: .down,
+                rightHand: .down
             )
-        case .fur:
-            guard let fur = extractFur(from: collectible.assetName) else {
-                return nil
-            }
+        case .fur(let fur):
             return Tapling(
                 fur: fur,
                 hat: nil,
-                face: defaultFace,
-                leftHand: defaultHand,
-                rightHand: defaultHand
+                face: .default,
+                leftHand: .down,
+                rightHand: .down
             )
         }
     }
@@ -76,25 +63,13 @@ struct CollectibleCardView: View {
                         .stroke(rarityColor, lineWidth: 2)
                 )
 
-            collectiblePreview
+            TaplingView(tapling: previewTapling)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(8)
 
             if !isUnlocked {
                 lockedOverlay
                 lockBadge
-            }
-        }
-    }
-
-    private var collectiblePreview: some View {
-        Group {
-            if let tapling = previewTapling {
-                TaplingView(tapling: tapling)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(8)
-            } else {
-                Text("Preview")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -124,45 +99,30 @@ struct CollectibleCardView: View {
             .lineLimit(2)
             .multilineTextAlignment(.center)
     }
-
-    // MARK: - Actions
-
-    private func extractHat(from assetName: String) -> TaplingConfig.Hat? {
-        let rawValue = assetName.replacingOccurrences(of: "hat_", with: "")
-        return TaplingConfig.Hat(rawValue: rawValue)
-    }
-
-    private func extractFace(from assetName: String) -> TaplingConfig.Face? {
-        let rawValue = assetName.replacingOccurrences(of: "face_", with: "")
-        return TaplingConfig.Face(rawValue: rawValue)
-    }
-
-    private func extractFur(from assetName: String) -> TaplingConfig.Fur? {
-        let rawValue = assetName.replacingOccurrences(of: "fur_", with: "")
-        return TaplingConfig.Fur(rawValue: rawValue)
-    }
 }
 
 #Preview {
     HStack {
         CollectibleCardView(
-            collectible: Collectible(
-                id: "test",
-                name: "Test Collectible",
-                type: .hat,
-                rarity: .epic,
-                assetName: "hat_propeller-hat"
+            collectible: .hat(
+                Hat(
+                    id: "hat_propeller-hat",
+                    name: "Propeller Hat",
+                    rarity: .epic,
+                    assetVariant: "propeller-hat"
+                )
             ),
             isUnlocked: true
         )
 
         CollectibleCardView(
-            collectible: Collectible(
-                id: "test2",
-                name: "Locked Collectible",
-                type: .face,
-                rarity: .legendary,
-                assetName: "face_cute"
+            collectible: .face(
+                Face(
+                    id: "face_cute",
+                    name: "Cute",
+                    rarity: .legendary,
+                    assetVariant: "cute"
+                )
             ),
             isUnlocked: false
         )

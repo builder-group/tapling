@@ -7,108 +7,139 @@
 
 import Foundation
 
+/// Single source of truth for all collectibles.
+/// Access via static properties on types: `Hat.all`, `Face.default`, `Hat.get("id")`
 struct CollectibleRegistry {
     static let shared = CollectibleRegistry()
 
-    let allCollectibles: [Collectible.CollectibleType: [Collectible]]
+    // MARK: - Hats
 
-    var collectibles: [Collectible] {
-        allCollectibles.values.flatMap { $0 }
-    }
-
-    private static let hatCollectibles: [Collectible] = [
-        Collectible(
+    let hats: [Hat] = [
+        Hat(
             id: "hat_banana",
             name: "Banana",
-            type: .hat,
             rarity: .common,
-            assetName: "hat_banana"
+            assetVariant: "banana"
         ),
-        Collectible(
+        Hat(
             id: "hat_lil-duck",
             name: "Lil Duck",
-            type: .hat,
             rarity: .common,
-            assetName: "hat_lil-duck"
+            assetVariant: "lil-duck"
         ),
-        Collectible(
+        Hat(
             id: "hat_propeller-hat",
             name: "Propeller Hat",
-            type: .hat,
             rarity: .rare,
-            assetName: "hat_propeller-hat"
+            assetVariant: "propeller-hat"
         ),
     ]
 
-    private static let faceCollectibles: [Collectible] = [
-        Collectible(
+    // MARK: - Faces
+
+    let faces: [Face] = [
+        Face(
             id: "face_asia",
             name: "Asia",
-            type: .face,
             rarity: .common,
-            assetName: "face_asia"
+            assetVariant: "asia"
         ),
-        Collectible(
+        Face(
             id: "face_cute",
             name: "Cute",
-            type: .face,
             rarity: .common,
-            assetName: "face_cute"
+            assetVariant: "cute"
         ),
-        Collectible(
+        Face(
             id: "face_dead",
             name: "Dead",
-            type: .face,
             rarity: .rare,
-            assetName: "face_dead"
+            assetVariant: "dead"
         ),
-        Collectible(
+        Face(
             id: "face_harry-potter",
             name: "Harry Potter",
-            type: .face,
             rarity: .epic,
-            assetName: "face_harry-potter"
+            assetVariant: "harry-potter"
         ),
-        Collectible(
+        Face(
             id: "face_pilot",
             name: "Pilot",
-            type: .face,
             rarity: .rare,
-            assetName: "face_pilot"
+            assetVariant: "pilot"
         ),
-        Collectible(
+        Face(
             id: "face_pixel-cool",
             name: "Pixel Cool",
-            type: .face,
             rarity: .epic,
-            assetName: "face_pixel-cool"
+            assetVariant: "pixel-cool"
         ),
     ]
 
-    private static let furCollectibles: [Collectible] = [
-        Collectible(
+    // MARK: - Furs
+
+    let furs: [Fur] = [
+        Fur(
             id: "fur_white",
             name: "White",
-            type: .fur,
             rarity: .common,
-            assetName: "fur_white"
-        )
+            assetVariant: "white"
+        ),
+        Fur(
+            id: "fur_mask",
+            name: "Mask",
+            rarity: .legendary,
+            assetVariant: "mask"
+        ),
     ]
 
-    private init() {
-        allCollectibles = [
-            .hat: CollectibleRegistry.hatCollectibles,
-            .face: CollectibleRegistry.faceCollectibles,
-            .fur: CollectibleRegistry.furCollectibles,
-        ]
+    // MARK: - Defaults
+
+    var defaultFur: Fur {
+        furs.first { $0.id == "fur_white" } ?? furs[0]
     }
 
-    func collectible(id: String) -> Collectible? {
-        collectibles.first { $0.id == id }
+    var defaultFace: Face {
+        faces.first { $0.id == "face_cute" } ?? faces[0]
     }
 
-    func collectibles(ofType type: Collectible.CollectibleType) -> [Collectible]
+    // MARK: - Lookup
+
+    func hat(id: String) -> Hat? {
+        hats.first { $0.id == id }
+    }
+
+    func face(id: String) -> Face? {
+        faces.first { $0.id == id }
+    }
+
+    func fur(id: String) -> Fur? {
+        furs.first { $0.id == id }
+    }
+
+    // MARK: - Type-Erased (for UI lists)
+
+    var allCollectibles: [AnyCollectible] {
+        hats.map { .hat($0) }
+            + faces.map { .face($0) }
+            + furs.map { .fur($0) }
+    }
+
+    func collectibles(ofType type: AnyCollectible.SlotType) -> [AnyCollectible]
     {
-        allCollectibles[type] ?? []
+        switch type {
+        case .hat: return hats.map { .hat($0) }
+        case .face: return faces.map { .face($0) }
+        case .fur: return furs.map { .fur($0) }
+        }
     }
+
+    func collectible(id: String) -> AnyCollectible? {
+        if let hat = hat(id: id) { return .hat(hat) }
+        if let face = face(id: id) { return .face(face) }
+        if let fur = fur(id: id) { return .fur(fur) }
+        return nil
+    }
+
+    private init() {}
 }

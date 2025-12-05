@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CollectionView: View {
     @Query private var ownedCollectibles: [OwnedCollectible]
-    @State private var selectedType: Collectible.CollectibleType = .hat
+    @State private var selectedType: AnyCollectible.SlotType = .hat
 
     private let registry = CollectibleRegistry.shared
 
@@ -28,7 +28,7 @@ struct CollectionView: View {
 
     private var typePicker: some View {
         Picker("Collectible Type", selection: $selectedType) {
-            ForEach(Collectible.CollectibleType.allCases, id: \.self) { type in
+            ForEach(AnyCollectible.SlotType.allCases, id: \.self) { type in
                 Text(type.rawValue.capitalized)
                     .tag(type)
             }
@@ -77,8 +77,8 @@ struct CollectionView: View {
             .isUnlocked ?? false
     }
 
-    private func sortedCollectibles(for type: Collectible.CollectibleType)
-        -> [Collectible]
+    private func sortedCollectibles(for type: AnyCollectible.SlotType)
+        -> [AnyCollectible]
     {
         let collectibles = registry.collectibles(ofType: type)
         return collectibles.sorted { collectible1, collectible2 in

@@ -19,8 +19,8 @@ struct AutocompleteToolbarView: View {
     @QuerySingleton private var taplingSettings: TaplingSettings
     @QuerySingleton private var keyboardSettings: KeyboardSettings
 
-    @State private var leftHand: TaplingConfig.Hand = .up
-    @State private var rightHand: TaplingConfig.Hand = .down
+    @State private var leftHand: HandPosition = .up
+    @State private var rightHand: HandPosition = .down
 
     private var baseScale: CGFloat {
         // Base scale: upper part (baseSize - baseBodyBottomOffset) fits toolbar height
@@ -44,6 +44,16 @@ struct AutocompleteToolbarView: View {
     private var taplingBottomOffset: CGFloat {
         TaplingConfig.shared.baseBodyBottomOffset
             * (taplingSize / TaplingConfig.shared.baseSize) + userBottomOffset
+    }
+
+    private var currentTapling: Tapling {
+        Tapling(
+            fur: .default,
+            hat: Hat.get("hat_lil-duck"),
+            face: .default,
+            leftHand: leftHand,
+            rightHand: rightHand
+        )
     }
 
     // MARK: - UI
@@ -93,26 +103,18 @@ struct AutocompleteToolbarView: View {
         }
         .overlay(alignment: .bottomTrailing) {
             // Tapling
-            TaplingView(
-                tapling: Tapling(
-                    fur: TaplingConfig.Fur.white,
-                    hat: TaplingConfig.Hat.lilDuck,
-                    face: TaplingConfig.Face.cute,
-                    leftHand: leftHand,
-                    rightHand: rightHand
-                )
-            )
-            .overlay {
-                if keyboardSettings.debug {
-                    Rectangle()
-                        .fill(Color.red.opacity(0.1))
-                        .stroke(.red, lineWidth: 1)
-                        .allowsHitTesting(false)
+            TaplingView(tapling: currentTapling)
+                .overlay {
+                    if keyboardSettings.debug {
+                        Rectangle()
+                            .fill(Color.red.opacity(0.1))
+                            .stroke(.red, lineWidth: 1)
+                            .allowsHitTesting(false)
+                    }
                 }
-            }
-            .frame(width: taplingSize, height: taplingSize)
-            .offset(y: taplingBottomOffset)
-            .allowsHitTesting(false)
+                .frame(width: taplingSize, height: taplingSize)
+                .offset(y: taplingBottomOffset)
+                .allowsHitTesting(false)
         }
         .overlay {
             if keyboardSettings.debug {
