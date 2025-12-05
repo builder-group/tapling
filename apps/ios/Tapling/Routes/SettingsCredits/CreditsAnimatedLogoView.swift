@@ -57,7 +57,7 @@ struct CreditsAnimatedLogoView: View {
 
     private var heartRisingView: some View {
         HeartRisingView(
-            spawnSize: CGSize(width: 20, height: 20),
+            spawnSize: CGSize(width: 10, height: 10),
             targetSize: CGSize(width: 80, height: 40),
             riseDistance: 70,
             riseDuration: 4.0,
@@ -66,7 +66,7 @@ struct CreditsAnimatedLogoView: View {
             heartSize: 10,
             // debug: true
         )
-        .offset(x: -Layout.size / 6, y: -Layout.size / 8)
+        .offset(x: -Layout.size / 5, y: -Layout.size / 10)
         .allowsHitTesting(false)
     }
 
