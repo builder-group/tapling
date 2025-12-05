@@ -14,7 +14,6 @@ class KeyboardViewController: KeyboardInputViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateLocaleFromSettings()
-        updateAutocompleteLocale()
     }
 
     override func viewDidLoad() {
@@ -84,6 +83,10 @@ class KeyboardViewController: KeyboardInputViewController {
         let context = controller.state.keyboardContext
         let language = context.keyboardLanguage
 
+        // Sync autocomplete locale whenever layout is generated
+        // This ensures autocomplete language matches current keyboard language
+        self.services.autocompleteService.locale = context.locale
+
         let baseLayout = KeyboardLayout.baseLayout(
             for: context,
             alphabeticInputSet: language.layout,
@@ -125,11 +128,5 @@ class KeyboardViewController: KeyboardInputViewController {
             // For .system, use the current system locale
             self.state.keyboardContext.locale = Locale.current
         }
-    }
-
-    private func updateAutocompleteLocale() {
-        // Sync autocomplete service locale with keyboard context locale
-        self.services.autocompleteService.locale =
-            self.state.keyboardContext.locale
     }
 }
