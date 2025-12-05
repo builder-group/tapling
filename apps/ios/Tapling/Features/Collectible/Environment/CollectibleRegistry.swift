@@ -33,6 +33,12 @@ struct CollectibleRegistry {
             rarity: .rare,
             assetVariant: "propeller-hat"
         ),
+        Hat(
+            id: "hat_heart",
+            name: "Heart",
+            rarity: .common,
+            assetVariant: "heart"
+        ),
     ]
 
     // MARK: - Faces

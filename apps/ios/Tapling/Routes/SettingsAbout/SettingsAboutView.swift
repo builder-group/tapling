@@ -34,7 +34,7 @@ struct SettingsAboutView: View {
 
     private var headerSection: some View {
         VStack(spacing: 16) {
-            AnimatedTaplingLogoView()
+            AboutAnimatedLogoView()
 
             VStack(spacing: 4) {
                 Text("Your delightful keyboard companion")

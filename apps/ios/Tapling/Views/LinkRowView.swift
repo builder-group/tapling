@@ -11,7 +11,22 @@ struct LinkRowView: View {
     let icon: String
     let iconColor: Color
     let title: String
+    let subtitle: String?
     let url: URL
+
+    init(
+        icon: String,
+        iconColor: Color,
+        title: String,
+        subtitle: String? = nil,
+        url: URL
+    ) {
+        self.icon = icon
+        self.iconColor = iconColor
+        self.title = title
+        self.subtitle = subtitle
+        self.url = url
+    }
 
     var body: some View {
         Link(destination: url) {
@@ -21,9 +36,21 @@ struct LinkRowView: View {
                     .foregroundStyle(iconColor)
                     .frame(width: 32)
 
-                Text(title)
-                    .font(.body)
-                    .foregroundStyle(.primary)
+                if let subtitle = subtitle {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .font(.body)
+                            .foregroundStyle(.primary)
+
+                        Text(subtitle)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
+                    Text(title)
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                }
 
                 Spacer()
 

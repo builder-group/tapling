@@ -12,7 +12,7 @@ export const taplingConfig = {
 			}
 		},
 		hat: {
-			available: ['banana', 'lil-duck', 'propeller-hat'] satisfies TTaplingHat[],
+			available: ['banana', 'lil-duck', 'propeller-hat', 'heart'] satisfies TTaplingHat[],
 			path: (hat: TTaplingHat) => getTaplingPath('hat', hat)
 		},
 		face: {
@@ -38,7 +38,7 @@ function getTaplingPath(category: string, name: string): string {
 
 type TTaplingFur = 'mask' | 'white';
 
-type TTaplingHat = 'banana' | 'lil-duck' | 'propeller-hat';
+type TTaplingHat = 'banana' | 'lil-duck' | 'propeller-hat' | 'heart';
 
 type TTaplingFace = 'asia' | 'cute' | 'dead' | 'harry-potter' | 'pilot' | 'pixel-cool';
 

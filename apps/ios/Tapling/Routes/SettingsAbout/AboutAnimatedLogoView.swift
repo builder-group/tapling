@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AnimatedTaplingLogoView: View {
+struct AboutAnimatedLogoView: View {
     @State private var leftHandUp = true
     @State private var rotationDegrees: Double = 0
 
@@ -111,6 +111,6 @@ struct AnimatedTaplingLogoView: View {
 }
 
 #Preview {
-    AnimatedTaplingLogoView()
+    AboutAnimatedLogoView()
         .padding()
 }

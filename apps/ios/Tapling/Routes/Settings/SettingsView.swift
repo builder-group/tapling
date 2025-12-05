@@ -84,6 +84,12 @@ struct SettingsView: View {
             } label: {
                 Label("About", systemImage: "info.circle")
             }
+
+            NavigationLink {
+                SettingsCreditsView()
+            } label: {
+                Label("Credits", systemImage: "heart")
+            }
         }
     }
 
