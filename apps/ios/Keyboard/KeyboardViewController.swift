@@ -12,6 +12,11 @@ import UIKit
 
 class KeyboardViewController: KeyboardInputViewController {
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateLocaleFromSettings()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -104,15 +109,16 @@ class KeyboardViewController: KeyboardInputViewController {
         let settings = try? modelContext.fetch(
             FetchDescriptor<KeyboardSettings>()
         ).first
-        let languageCode = settings?.languageCode ?? "system"
+        
+        let language = settings?.language ?? .system
 
-        switch languageCode {
-        case "de":
-            self.state.keyboardContext.locale = Locale(identifier: "de")
-        case "en":
-            self.state.keyboardContext.locale = Locale(identifier: "en")
-        default:
-            break
+        // Always support all available locales so the globe key works
+        self.state.keyboardContext.locales = KeyboardLanguage.allCases
+            .compactMap { $0.localeIdentifier }
+            .map { Locale(identifier: $0) }
+
+        if let localeIdentifier = language.localeIdentifier {
+            self.state.keyboardContext.locale = Locale(identifier: localeIdentifier)
         }
     }
 }

@@ -13,36 +13,21 @@ struct SettingsLanguageView: View {
     @QuerySingleton private var keyboardSettings: KeyboardSettings
     @Environment(\.modelContext) private var modelContext
 
-    private let availableLanguages: [(code: String, name: String)] = [
-        ("system", "System Default"),
-        ("en", "English"),
-        ("de", "German"),
-    ]
-
-    private var languageBinding: Binding<String> {
-        Binding(
-            get: { keyboardSettings.languageCode },
-            set: { newValue in
-                keyboardSettings.languageCode = newValue
-                try? modelContext.save()
-            }
-        )
-    }
-
     var body: some View {
         Form {
             Section {
-                ForEach(availableLanguages, id: \.code) { language in
+                ForEach(KeyboardLanguage.allCases) { language in
                     Button {
-                        languageBinding.wrappedValue = language.code
+                        keyboardSettings.language = language
+                        try? modelContext.save()
                     } label: {
                         HStack {
-                            Text(language.name)
+                            Text(language.displayName)
                                 .foregroundStyle(.primary)
 
                             Spacer()
 
-                            if languageBinding.wrappedValue == language.code {
+                            if keyboardSettings.language == language {
                                 Image(systemName: "checkmark")
                                     .foregroundStyle(.blue)
                                     .fontWeight(.semibold)

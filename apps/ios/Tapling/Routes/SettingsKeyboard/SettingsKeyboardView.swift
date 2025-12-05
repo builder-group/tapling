@@ -41,14 +41,8 @@ struct SettingsKeyboardView: View {
     }
     
     private var currentLanguageName: String {
-        availableLanguages.first(where: { $0.code == keyboardSettings.languageCode })?.name ?? "System Default"
+        keyboardSettings.language.displayName
     }
-    
-    private let availableLanguages: [(code: String, name: String)] = [
-        ("system", "System Default"),
-        ("en", "English"),
-        ("de", "German"),
-    ]
 
     // MARK: - UI
 

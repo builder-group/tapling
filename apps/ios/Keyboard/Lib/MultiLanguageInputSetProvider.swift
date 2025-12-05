@@ -17,9 +17,13 @@ class MultiLanguageInputSetProvider {
     }
 
     var alphabeticInputSet: KeyboardLayout.InputSet {
-        if context.locale.identifier.hasPrefix("de") {
+        let localeId = context.locale.identifier
+        
+        if localeId.hasPrefix("de") {
             return .german
         }
+        
+        // Default: English QWERTY
         return .qwerty
     }
 
