@@ -57,11 +57,10 @@ struct CreditsAnimatedLogoView: View {
 
     private var heartRisingView: some View {
         HeartRisingView(
-            spawnSize: CGSize(width: 30, height: 30),
+            spawnSize: CGSize(width: 20, height: 20),
             targetSize: CGSize(width: 80, height: 40),
-            curveAmplitude: 20,
-            riseDistance: 80,
-            riseDuration: 3.0,
+            riseDistance: 70,
+            riseDuration: 4.0,
             spawnInterval: 0.8...1.5,
             maxHearts: 4,
             heartSize: 10,

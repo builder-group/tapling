@@ -10,7 +10,6 @@ import SwiftUI
 struct HeartRisingView: View {
     let spawnSize: CGSize
     let targetSize: CGSize
-    let curveAmplitude: CGFloat
     let riseDistance: CGFloat
     let riseDuration: Double
     let spawnInterval: ClosedRange<Double>
@@ -24,7 +23,6 @@ struct HeartRisingView: View {
     init(
         spawnSize: CGSize = CGSize(width: 40, height: 40),
         targetSize: CGSize = CGSize(width: 20, height: 20),
-        curveAmplitude: CGFloat = 30,
         riseDistance: CGFloat = 150,
         riseDuration: Double = 4.0,
         spawnInterval: ClosedRange<Double> = 1.0...2.0,
@@ -34,7 +32,6 @@ struct HeartRisingView: View {
     ) {
         self.spawnSize = spawnSize
         self.targetSize = targetSize
-        self.curveAmplitude = curveAmplitude
         self.riseDistance = riseDistance
         self.riseDuration = riseDuration
         self.spawnInterval = spawnInterval
@@ -55,8 +52,6 @@ struct HeartRisingView: View {
                 RisingHeartView(
                     spawnOffset: heart.spawnOffset,
                     targetOffset: heart.targetOffset,
-                    curveDirection: heart.curveDirection,
-                    curveAmplitude: curveAmplitude,
                     riseDistance: riseDistance,
                     riseDuration: riseDuration,
                     heartSize: heartSize
@@ -68,31 +63,22 @@ struct HeartRisingView: View {
 
     private var debugOverlay: some View {
         ZStack {
-            targetEllipse
-            spawnEllipse
-            curvePath
+            debugTargetEllipse
+            debugSpawnEllipse
         }
     }
 
-    private var targetEllipse: some View {
+    private var debugTargetEllipse: some View {
         Ellipse()
             .stroke(.purple, lineWidth: 2)
             .frame(width: targetSize.width, height: targetSize.height)
             .offset(y: -riseDistance)
     }
 
-    private var spawnEllipse: some View {
+    private var debugSpawnEllipse: some View {
         Ellipse()
             .stroke(.blue, lineWidth: 2)
             .frame(width: spawnSize.width, height: spawnSize.height)
-    }
-
-    private var curvePath: some View {
-        CurvePathShape(
-            curveAmplitude: curveAmplitude,
-            riseDistance: riseDistance
-        )
-        .stroke(.green, style: StrokeStyle(lineWidth: 2, dash: [5, 5]))
     }
 
     // MARK: - Actions
@@ -126,8 +112,7 @@ struct HeartRisingView: View {
         let heart = HeartData(
             id: nextId,
             spawnOffset: spawnOffset,
-            targetOffset: targetOffset,
-            curveDirection: Bool.random() ? 1.0 : -1.0
+            targetOffset: targetOffset
         )
         nextId += 1
         hearts.append(heart)
@@ -164,7 +149,6 @@ private struct HeartData: Identifiable {
     let id: Int
     let spawnOffset: CGPoint
     let targetOffset: CGPoint
-    let curveDirection: Double
 }
 
 // MARK: - Rising Heart View
@@ -172,8 +156,6 @@ private struct HeartData: Identifiable {
 private struct RisingHeartView: View {
     let spawnOffset: CGPoint
     let targetOffset: CGPoint
-    let curveDirection: Double
-    let curveAmplitude: CGFloat
     let riseDistance: CGFloat
     let riseDuration: Double
     let heartSize: CGFloat
@@ -207,11 +189,10 @@ private struct RisingHeartView: View {
     }
 
     private var currentOffset: CGPoint {
-        let baseX = spawnOffset.x * (1 - progress) + targetOffset.x * progress
-        let baseY = spawnOffset.y * (1 - progress) + targetOffset.y * progress
-        let curveX = sin(progress * .pi) * curveAmplitude * curveDirection
-        let x = baseX + curveX
-        let y = baseY - riseDistance * progress
+        let x = spawnOffset.x * (1 - progress) + targetOffset.x * progress
+        let y =
+            spawnOffset.y * (1 - progress) + targetOffset.y * progress
+            - riseDistance * progress
         return CGPoint(x: x, y: y)
     }
 
@@ -224,43 +205,11 @@ private struct RisingHeartView: View {
     }
 }
 
-// MARK: - Curve Path Shape
-
-private struct CurvePathShape: Shape {
-    let curveAmplitude: CGFloat
-    let riseDistance: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let steps = 50
-        let centerX = rect.midX
-        let startY = rect.midY
-        let endY = rect.midY - riseDistance
-        let curveDirection: Double = 1.0
-
-        for i in 0...steps {
-            let progress = Double(i) / Double(steps)
-            let y = startY + (endY - startY) * CGFloat(progress)
-            let x =
-                centerX + sin(progress * .pi) * curveAmplitude * curveDirection
-
-            if i == 0 {
-                path.move(to: CGPoint(x: x, y: y))
-            } else {
-                path.addLine(to: CGPoint(x: x, y: y))
-            }
-        }
-
-        return path
-    }
-}
-
 #Preview {
     VStack(spacing: 40) {
         HeartRisingView(
             spawnSize: CGSize(width: 20, height: 15),
             targetSize: CGSize(width: 60, height: 40),
-            curveAmplitude: 40,
             riseDistance: 120,
             riseDuration: 3.0,
             spawnInterval: 0.8...1.5,
@@ -273,7 +222,6 @@ private struct CurvePathShape: Shape {
         HeartRisingView(
             spawnSize: CGSize(width: 15, height: 12),
             targetSize: CGSize(width: 50, height: 35),
-            curveAmplitude: 25,
             riseDistance: 100,
             riseDuration: 2.5,
             spawnInterval: 0.5...1.0,
