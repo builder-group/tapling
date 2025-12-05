@@ -11,10 +11,10 @@ import SwiftUI
 import UIKit
 
 class KeyboardViewController: KeyboardInputViewController {
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateLocaleFromSettings()
+        updateAutocompleteLocale()
     }
 
     override func viewDidLoad() {
@@ -82,13 +82,13 @@ class KeyboardViewController: KeyboardInputViewController {
         -> KeyboardLayout
     {
         let context = controller.state.keyboardContext
-        let inputSetProvider = MultiLanguageInputSetProvider(context: context)
+        let language = context.keyboardLanguage
 
         let baseLayout = KeyboardLayout.baseLayout(
             for: context,
-            alphabeticInputSet: inputSetProvider.alphabeticInputSet,
-            numericInputSet: inputSetProvider.numericInputSet,
-            symbolicInputSet: inputSetProvider.symbolicInputSet
+            alphabeticInputSet: language.layout,
+            numericInputSet: .numeric(currency: language.primaryCurrency),
+            symbolicInputSet: .symbolic(currencies: language.currencies)
         )
 
         if context.deviceType == .pad {
@@ -109,7 +109,7 @@ class KeyboardViewController: KeyboardInputViewController {
         let settings = try? modelContext.fetch(
             FetchDescriptor<KeyboardSettings>()
         ).first
-        
+
         let language = settings?.language ?? .system
 
         // Always support all available locales so the globe key works
@@ -118,7 +118,18 @@ class KeyboardViewController: KeyboardInputViewController {
             .map { Locale(identifier: $0) }
 
         if let localeIdentifier = language.localeIdentifier {
-            self.state.keyboardContext.locale = Locale(identifier: localeIdentifier)
+            self.state.keyboardContext.locale = Locale(
+                identifier: localeIdentifier
+            )
+        } else {
+            // For .system, use the current system locale
+            self.state.keyboardContext.locale = Locale.current
         }
+    }
+
+    private func updateAutocompleteLocale() {
+        // Sync autocomplete service locale with keyboard context locale
+        self.services.autocompleteService.locale =
+            self.state.keyboardContext.locale
     }
 }

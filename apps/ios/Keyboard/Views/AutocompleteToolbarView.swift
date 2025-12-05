@@ -134,23 +134,3 @@ struct AutocompleteToolbarView: View {
         rightHand = rightHand == .down ? .up : .down
     }
 }
-
-// TODO: Preview not supported in Keyboard extension?
-//#Preview {
-//    let mockSuggestions = [
-//        Autocomplete.Suggestion(text: "hello", title: "hello"),
-//        Autocomplete.Suggestion(text: "world", title: "world"),
-//        Autocomplete.Suggestion(text: "test", title: "test")
-//    ]
-//
-//    let mockToolbar = Autocomplete.Toolbar(
-//        suggestions: mockSuggestions,
-//        suggestionAction: { _ in }
-//    )
-//
-//    return AutocompleteToolbarView(
-//        standardToolbar: mockToolbar,
-//        autocompleteAction: { _ in }
-//    )
-//    .padding()
-//}

@@ -1,5 +1,5 @@
 //
-//  SettingsLanguageView.swift
+//  SettingsKeyboardLanguageView.swift
 //  Tapling
 //
 //  Created by Benno on 05.12.25.
@@ -9,7 +9,7 @@ import KeyboardKit
 import SwiftData
 import SwiftUI
 
-struct SettingsLanguageView: View {
+struct SettingsKeyboardLanguageView: View {
     @QuerySingleton private var keyboardSettings: KeyboardSettings
     @Environment(\.modelContext) private var modelContext
 
@@ -22,7 +22,7 @@ struct SettingsLanguageView: View {
                         try? modelContext.save()
                     } label: {
                         HStack {
-                            Text(language.displayName)
+                            Text(language.displayNameWithResolved)
                                 .foregroundStyle(.primary)
 
                             Spacer()
@@ -35,10 +35,6 @@ struct SettingsLanguageView: View {
                         }
                     }
                 }
-            } footer: {
-                Text(
-                    "Select the language layout for the keyboard. 'System Default' uses the active keyboard language."
-                )
             }
         }
         .navigationTitle("Language")
@@ -48,7 +44,7 @@ struct SettingsLanguageView: View {
 
 #Preview {
     NavigationStack {
-        SettingsLanguageView()
+        SettingsKeyboardLanguageView()
             .previewDataContainer()
     }
 }

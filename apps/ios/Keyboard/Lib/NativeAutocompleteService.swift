@@ -18,7 +18,6 @@ class NativeAutocompleteService: AutocompleteService {
 
     private var lexicon: UILexicon?
     private let textChecker = UITextChecker()
-
     private static let maxSuggestions = 3
 
     init(lexicon: UILexicon? = nil) {
@@ -83,14 +82,46 @@ class NativeAutocompleteService: AutocompleteService {
     }
 
     private func getSuggestions(for text: String) -> [Autocomplete.Suggestion] {
-        // Provide suggestions for empty text (sentence starters)
         if text.isEmpty {
-            return getEmptyTextSuggestions()
+            return locale.keyboardLanguage.emptyTextSuggestions
         }
 
-        var suggestions: [String] = []
+        var allSuggestions: [String] = []
+        let language = locale.keyboardLanguage.config.localeIdentifier
 
-        // 1. Use UILexicon (user's contacts, shortcuts, common words)
+        // Check if word is correctly spelled (for autocorrect detection)
+        let isCorrectlySpelled =
+            textChecker.rangeOfMisspelledWord(
+                in: text,
+                range: NSRange(location: 0, length: text.utf16.count),
+                startingAt: 0,
+                wrap: false,
+                language: language
+            ).location == NSNotFound
+
+        // Get spell corrections for misspelled words
+        var autocorrectCandidate: String?
+        if !isCorrectlySpelled {
+            if let guesses = textChecker.guesses(
+                forWordRange: NSRange(location: 0, length: text.utf16.count),
+                in: text,
+                language: language
+            ), let firstGuess = guesses.first {
+                autocorrectCandidate = firstGuess
+                allSuggestions.append(contentsOf: guesses)
+            }
+        }
+
+        // Add word completions (iOS ranks these by relevance)
+        if let completions = textChecker.completions(
+            forPartialWordRange: NSRange(location: 0, length: text.utf16.count),
+            in: text,
+            language: language
+        ) {
+            allSuggestions.append(contentsOf: completions)
+        }
+
+        // Add lexicon matches (contacts, shortcuts, user dictionary)
         if let lexicon = lexicon {
             let lowercasedText = text.lowercased()
             for entry in lexicon.entries {
@@ -98,36 +129,31 @@ class NativeAutocompleteService: AutocompleteService {
                 if entryText.hasPrefix(lowercasedText)
                     && entryText != lowercasedText
                 {
-                    suggestions.append(entry.userInput)
+                    allSuggestions.append(entry.userInput)
                 }
             }
         }
 
-        // 2. Use UITextChecker for spell checking and word completions
-        let range = NSRange(location: 0, length: text.utf16.count)
-        let language = getLanguageCode()
-        if let completions = textChecker.completions(
-            forPartialWordRange: range,
-            in: text,
-            language: language
-        ) {
-            suggestions.append(contentsOf: completions)
+        // Remove duplicates while preserving order
+        var seen = Set<String>()
+        let uniqueSuggestions = allSuggestions.filter { suggestion in
+            let lowercased = suggestion.lowercased()
+            guard lowercased != text.lowercased() else { return false }
+            return seen.insert(lowercased).inserted
         }
 
-        // Remove duplicates, filter out exact matches, and sort by length (shorter = more common)
-        let lowercasedText = text.lowercased()
-        let uniqueSuggestions = Array(Set(suggestions))
-            .filter { $0.lowercased() != lowercasedText }
-            .sorted { word1, word2 in
-                if word1.count != word2.count {
-                    return word1.count < word2.count
-                }
-                return word1 < word2
-            }
-            .prefix(Self.maxSuggestions)
+        // Match capitalization from user input
+        let capitalizedSuggestions = uniqueSuggestions.map { suggestion in
+            matchCapitalization(suggestion: suggestion, to: text)
+        }
 
-        // If no suggestions found, show the current word as fallback (wrapped in quotes)
-        if uniqueSuggestions.isEmpty && !text.isEmpty {
+        // Take top suggestions
+        let topSuggestions = Array(
+            capitalizedSuggestions.prefix(Self.maxSuggestions)
+        )
+
+        // If no suggestions, show current word in quotes
+        if topSuggestions.isEmpty && !text.isEmpty {
             return [
                 Autocomplete.Suggestion(
                     text: text,
@@ -136,64 +162,42 @@ class NativeAutocompleteService: AutocompleteService {
             ]
         }
 
-        return uniqueSuggestions.map { word in
-            Autocomplete.Suggestion(
+        // Mark autocorrect suggestion (bold middle suggestion that auto-applies)
+        return topSuggestions.enumerated().map { index, word in
+            let isAutocorrect =
+                (word.lowercased() == autocorrectCandidate?.lowercased())
+                && index == 0 && !isCorrectlySpelled
+
+            return Autocomplete.Suggestion(
                 text: word,
+                type: isAutocorrect ? .autocorrect : .regular,
                 title: word
             )
         }
     }
 
-    private func getEmptyTextSuggestions() -> [Autocomplete.Suggestion] {
-        let languageCode = getLanguageCode()
+    private func matchCapitalization(suggestion: String, to input: String)
+        -> String
+    {
+        guard !input.isEmpty, !suggestion.isEmpty else { return suggestion }
 
-        switch languageCode {
-        case "es":  // Spanish
-            return [
-                Autocomplete.Suggestion(text: "El", title: "El"),
-                Autocomplete.Suggestion(text: "La", title: "La"),
-                Autocomplete.Suggestion(text: "Yo", title: "Yo"),
-            ]
-        case "fr":  // French
-            return [
-                Autocomplete.Suggestion(text: "Le", title: "Le"),
-                Autocomplete.Suggestion(text: "La", title: "La"),
-                Autocomplete.Suggestion(text: "Je", title: "Je"),
-            ]
-        case "de":  // German
-            return [
-                Autocomplete.Suggestion(text: "Der", title: "Der"),
-                Autocomplete.Suggestion(text: "Die", title: "Die"),
-                Autocomplete.Suggestion(text: "Ich", title: "Ich"),
-            ]
-        case "it":  // Italian
-            return [
-                Autocomplete.Suggestion(text: "Il", title: "Il"),
-                Autocomplete.Suggestion(text: "La", title: "La"),
-                Autocomplete.Suggestion(text: "Io", title: "Io"),
-            ]
-        case "pt":  // Portuguese
-            return [
-                Autocomplete.Suggestion(text: "O", title: "O"),
-                Autocomplete.Suggestion(text: "A", title: "A"),
-                Autocomplete.Suggestion(text: "Eu", title: "Eu"),
-            ]
-        case "nl":  // Dutch
-            return [
-                Autocomplete.Suggestion(text: "De", title: "De"),
-                Autocomplete.Suggestion(text: "Het", title: "Het"),
-                Autocomplete.Suggestion(text: "Ik", title: "Ik"),
-            ]
-        default:  // English and others
-            return [
-                Autocomplete.Suggestion(text: "I", title: "I"),
-                Autocomplete.Suggestion(text: "The", title: "The"),
-                Autocomplete.Suggestion(text: "You", title: "You"),
-            ]
+        // If input is all lowercase, lowercase suggestion
+        if input.lowercased() == input {
+            return suggestion.lowercased()
         }
-    }
 
-    private func getLanguageCode() -> String {
-        locale.language.languageCode?.identifier ?? "en"
+        // If first character is uppercase, capitalize suggestion
+        if input.first!.isUppercase {
+            return suggestion.prefix(1).uppercased()
+                + suggestion.dropFirst().lowercased()
+        }
+
+        // If input is all uppercase, uppercase suggestion
+        if input.uppercased() == input {
+            return suggestion.uppercased()
+        }
+
+        // Default: return as-is
+        return suggestion
     }
 }

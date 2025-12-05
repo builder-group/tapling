@@ -39,7 +39,7 @@ struct SettingsKeyboardView: View {
             }
         )
     }
-    
+
     private var currentLanguageName: String {
         keyboardSettings.language.displayName
     }
@@ -94,7 +94,7 @@ struct SettingsKeyboardView: View {
             Form {
                 Section("GENERAL") {
                     NavigationLink {
-                        SettingsLanguageView()
+                        SettingsKeyboardLanguageView()
                     } label: {
                         HStack {
                             Text("Language")
@@ -104,7 +104,7 @@ struct SettingsKeyboardView: View {
                         }
                     }
                 }
-                
+
                 Section("DEVELOPER") {
                     Toggle("Debug Mode", isOn: debugModeBinding)
                 }
