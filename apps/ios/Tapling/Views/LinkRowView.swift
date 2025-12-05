@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// A reusable row view for external links with an icon, title, and external link indicator.
 struct LinkRowView: View {
     let icon: String
     let iconColor: Color

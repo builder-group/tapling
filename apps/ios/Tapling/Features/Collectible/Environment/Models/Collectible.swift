@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-/// Represents a collectible item in the game.
 struct Collectible: Identifiable, Hashable {
     let id: String
     let name: String
@@ -37,7 +36,7 @@ struct Collectible: Identifiable, Hashable {
             }
         }
 
-        var order: Int {
+        var sortOrder: Int {
             switch self {
             case .common: return 0
             case .rare: return 1
@@ -46,13 +45,8 @@ struct Collectible: Identifiable, Hashable {
             }
         }
 
-        var sortOrder: Int {
-            order
-        }
-
         static func < (lhs: Rarity, rhs: Rarity) -> Bool {
-            lhs.order < rhs.order
+            lhs.sortOrder < rhs.sortOrder
         }
     }
 }
-

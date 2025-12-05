@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// View that displays a Tapling character with layered parts.
 struct TaplingView: View {
     let tapling: Tapling
     let config = TaplingConfig.shared

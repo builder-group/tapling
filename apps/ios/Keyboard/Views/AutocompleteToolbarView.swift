@@ -46,6 +46,8 @@ struct AutocompleteToolbarView: View {
             * (taplingSize / TaplingConfig.shared.baseSize) + userBottomOffset
     }
 
+    // MARK: - UI
+
     var body: some View {
         HStack(spacing: 8) {
             // Standard autocomplete toolbar
@@ -122,6 +124,8 @@ struct AutocompleteToolbarView: View {
         }
         .zIndex(100)  // Ensure toolbar and Tapling appear above keyboard keys
     }
+
+    // MARK: - Actions
 
     private func toggleHands() {
         leftHand = leftHand == .down ? .up : .down

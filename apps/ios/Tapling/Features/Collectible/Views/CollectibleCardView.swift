@@ -11,47 +11,77 @@ struct CollectibleCardView: View {
     let collectible: Collectible
     let isUnlocked: Bool
 
+    private var previewTapling: Tapling? {
+        let defaultFur = TaplingConfig.Fur.white
+        let defaultFace = TaplingConfig.Face.cute
+        let defaultHand = TaplingConfig.Hand.down
+
+        switch collectible.type {
+        case .hat:
+            guard let hat = extractHat(from: collectible.assetName) else {
+                return nil
+            }
+            return Tapling(
+                fur: defaultFur,
+                hat: hat,
+                face: defaultFace,
+                leftHand: defaultHand,
+                rightHand: defaultHand
+            )
+        case .face:
+            guard let face = extractFace(from: collectible.assetName) else {
+                return nil
+            }
+            return Tapling(
+                fur: defaultFur,
+                hat: nil,
+                face: face,
+                leftHand: defaultHand,
+                rightHand: defaultHand
+            )
+        case .fur:
+            guard let fur = extractFur(from: collectible.assetName) else {
+                return nil
+            }
+            return Tapling(
+                fur: fur,
+                hat: nil,
+                face: defaultFace,
+                leftHand: defaultHand,
+                rightHand: defaultHand
+            )
+        }
+    }
+
+    private var rarityColor: Color {
+        collectible.rarity.color
+    }
+
+    // MARK: - UI
+
     var body: some View {
         VStack(spacing: 8) {
-            // Collectible preview with rarity-colored border and background
-            ZStack(alignment: .topTrailing) {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(rarityColor.opacity(0.15))
-                    .aspectRatio(1, contentMode: .fit)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(rarityColor, lineWidth: 2)
-                    )
+            previewCard
+            nameLabel
+        }
+    }
 
-                collectiblePreview
-
-                if !isUnlocked {
-                    // Subtle overlay for locked collectibles (lighter so preview is visible)
+    private var previewCard: some View {
+        ZStack(alignment: .topTrailing) {
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(rarityColor.opacity(0.15))
+                .aspectRatio(1, contentMode: .fit)
+                .overlay(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.black.opacity(0.3))
-                }
+                        .stroke(rarityColor, lineWidth: 2)
+                )
 
-                // Lock badge in top-right corner
-                if !isUnlocked {
-                    Image(systemName: "lock.fill")
-                        .font(.caption)
-                        .foregroundStyle(.white)
-                        .padding(6)
-                        .background(
-                            Circle()
-                                .fill(.black.opacity(0.7))
-                        )
-                        .padding(8)
-                }
+            collectiblePreview
+
+            if !isUnlocked {
+                lockedOverlay
+                lockBadge
             }
-
-            // Collectible name
-            Text(collectible.name)
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundStyle(isUnlocked ? .primary : .secondary)
-                .lineLimit(2)
-                .multilineTextAlignment(.center)
         }
     }
 
@@ -69,62 +99,47 @@ struct CollectibleCardView: View {
         }
     }
 
-    private var previewTapling: Tapling? {
-        let defaultFur = TaplingConfig.Fur.white
-        let defaultFace = TaplingConfig.Face.cute
-        let defaultHand = TaplingConfig.Hand.down
-
-        switch collectible.type {
-        case .hat:
-            let rawValue = collectible.assetName.replacingOccurrences(
-                of: "hat_",
-                with: ""
-            )
-            guard let hat = TaplingConfig.Hat(rawValue: rawValue) else {
-                return nil
-            }
-            return Tapling(
-                fur: defaultFur,
-                hat: hat,
-                face: defaultFace,
-                leftHand: defaultHand,
-                rightHand: defaultHand
-            )
-        case .face:
-            let rawValue = collectible.assetName.replacingOccurrences(
-                of: "face_",
-                with: ""
-            )
-            guard let face = TaplingConfig.Face(rawValue: rawValue) else {
-                return nil
-            }
-            return Tapling(
-                fur: defaultFur,
-                hat: nil,
-                face: face,
-                leftHand: defaultHand,
-                rightHand: defaultHand
-            )
-        case .fur:
-            let rawValue = collectible.assetName.replacingOccurrences(
-                of: "fur_",
-                with: ""
-            )
-            guard let fur = TaplingConfig.Fur(rawValue: rawValue) else {
-                return nil
-            }
-            return Tapling(
-                fur: fur,
-                hat: nil,
-                face: defaultFace,
-                leftHand: defaultHand,
-                rightHand: defaultHand
-            )
-        }
+    private var lockedOverlay: some View {
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .fill(.black.opacity(0.3))
     }
 
-    private var rarityColor: Color {
-        collectible.rarity.color
+    private var lockBadge: some View {
+        Image(systemName: "lock.fill")
+            .font(.caption)
+            .foregroundStyle(.white)
+            .padding(6)
+            .background(
+                Circle()
+                    .fill(.black.opacity(0.7))
+            )
+            .padding(8)
+    }
+
+    private var nameLabel: some View {
+        Text(collectible.name)
+            .font(.caption)
+            .fontWeight(.medium)
+            .foregroundStyle(isUnlocked ? .primary : .secondary)
+            .lineLimit(2)
+            .multilineTextAlignment(.center)
+    }
+
+    // MARK: - Actions
+
+    private func extractHat(from assetName: String) -> TaplingConfig.Hat? {
+        let rawValue = assetName.replacingOccurrences(of: "hat_", with: "")
+        return TaplingConfig.Hat(rawValue: rawValue)
+    }
+
+    private func extractFace(from assetName: String) -> TaplingConfig.Face? {
+        let rawValue = assetName.replacingOccurrences(of: "face_", with: "")
+        return TaplingConfig.Face(rawValue: rawValue)
+    }
+
+    private func extractFur(from assetName: String) -> TaplingConfig.Fur? {
+        let rawValue = assetName.replacingOccurrences(of: "fur_", with: "")
+        return TaplingConfig.Fur(rawValue: rawValue)
     }
 }
 
@@ -136,7 +151,7 @@ struct CollectibleCardView: View {
                 name: "Test Collectible",
                 type: .hat,
                 rarity: .epic,
-                assetName: "test"
+                assetName: "hat_propeller-hat"
             ),
             isUnlocked: true
         )
@@ -147,11 +162,12 @@ struct CollectibleCardView: View {
                 name: "Locked Collectible",
                 type: .face,
                 rarity: .legendary,
-                assetName: "test2"
+                assetName: "face_cute"
             ),
             isUnlocked: false
         )
     }
+    .fixedSize(horizontal: false, vertical: true)
+    .frame(maxWidth: .infinity)
     .padding()
 }
-

@@ -70,7 +70,6 @@ class DataContainer {
     /// Ensures default collectibles are unlocked (white fur, cute face)
     static func ensureDefaultItems(in context: ModelContext) {
         let defaultCollectibleIds = ["fur_white", "face_cute"]
-        let registry = CollectibleRegistry.shared
 
         for collectibleId in defaultCollectibleIds {
             // Check if already exists
@@ -85,7 +84,10 @@ class DataContainer {
                 }
             } else {
                 // Create new unlocked collectible
-                let ownedCollectible = OwnedCollectible(collectibleId: collectibleId, unlockedAt: Date())
+                let ownedCollectible = OwnedCollectible(
+                    collectibleId: collectibleId,
+                    unlockedAt: Date()
+                )
                 context.insert(ownedCollectible)
             }
         }

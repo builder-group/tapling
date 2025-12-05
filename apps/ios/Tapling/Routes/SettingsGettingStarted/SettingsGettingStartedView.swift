@@ -26,6 +26,8 @@ struct SettingsGettingStartedView: View {
         )
     }
 
+    // MARK: - UI
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -37,8 +39,6 @@ struct SettingsGettingStartedView: View {
         .navigationTitle("Getting Started")
         .navigationBarTitleDisplayMode(.inline)
     }
-
-    // MARK: - Components
 
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 8) {

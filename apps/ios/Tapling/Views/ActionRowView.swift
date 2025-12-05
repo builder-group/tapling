@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// A reusable row view for actions with an icon, title, and chevron.
 struct ActionRowView: View {
     let icon: String
     let iconColor: Color

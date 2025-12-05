@@ -7,27 +7,14 @@
 
 import Foundation
 
-/// Central registry of all available collectibles in the game.
 struct CollectibleRegistry {
     static let shared = CollectibleRegistry()
 
-    /// All available collectibles grouped by type.
     let allCollectibles: [Collectible.CollectibleType: [Collectible]]
 
-    /// All collectibles as a flat array.
     var collectibles: [Collectible] {
         allCollectibles.values.flatMap { $0 }
     }
-
-    private init() {
-        allCollectibles = [
-            .hat: CollectibleRegistry.hatCollectibles,
-            .face: CollectibleRegistry.faceCollectibles,
-            .fur: CollectibleRegistry.furCollectibles,
-        ]
-    }
-
-    // MARK: - Collectible Definitions
 
     private static let hatCollectibles: [Collectible] = [
         Collectible(
@@ -108,14 +95,20 @@ struct CollectibleRegistry {
         )
     ]
 
-    // MARK: - Helpers
+    private init() {
+        allCollectibles = [
+            .hat: CollectibleRegistry.hatCollectibles,
+            .face: CollectibleRegistry.faceCollectibles,
+            .fur: CollectibleRegistry.furCollectibles,
+        ]
+    }
 
     func collectible(id: String) -> Collectible? {
         collectibles.first { $0.id == id }
     }
 
-    func collectibles(ofType type: Collectible.CollectibleType) -> [Collectible] {
+    func collectibles(ofType type: Collectible.CollectibleType) -> [Collectible]
+    {
         allCollectibles[type] ?? []
     }
 }
-

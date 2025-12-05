@@ -17,6 +17,8 @@ struct SettingsAboutView: View {
         static let bug = "Bug Report"
     }
 
+    // MARK: - UI
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
@@ -31,8 +33,6 @@ struct SettingsAboutView: View {
         .navigationTitle("About")
         .navigationBarTitleDisplayMode(.inline)
     }
-
-    // MARK: - Components
 
     private var headerSection: some View {
         VStack(spacing: 16) {

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// An animated Tapling logo with tapping hands and rotating rainbow border.
 struct AnimatedTaplingLogoView: View {
     @State private var leftHandUp = true
     @State private var rotationDegrees: Double = 0
@@ -26,6 +25,18 @@ struct AnimatedTaplingLogoView: View {
         static let borderWidth: CGFloat = 3
     }
 
+    private var currentTapling: Tapling {
+        Tapling(
+            fur: .white,
+            hat: .lilDuck,
+            face: .cute,
+            leftHand: leftHandUp ? .up : .down,
+            rightHand: leftHandUp ? .down : .up
+        )
+    }
+
+    // MARK: - UI
+
     var body: some View {
         TaplingView(tapling: currentTapling)
             .frame(width: Layout.size, height: Layout.size)
@@ -38,18 +49,6 @@ struct AnimatedTaplingLogoView: View {
             .onAppear {
                 startAnimations()
             }
-    }
-
-    // MARK: - Components
-
-    private var currentTapling: Tapling {
-        Tapling(
-            fur: .white,
-            hat: .lilDuck,
-            face: .cute,
-            leftHand: leftHandUp ? .up : .down,
-            rightHand: leftHandUp ? .down : .up
-        )
     }
 
     private var logoBackground: some View {
@@ -84,7 +83,7 @@ struct AnimatedTaplingLogoView: View {
             )
     }
 
-    // MARK: - Animations
+    // MARK: - Actions
 
     private func startAnimations() {
         startTappingAnimation()
