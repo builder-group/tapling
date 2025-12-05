@@ -54,8 +54,8 @@ struct TaplingView: View {
         )
     )
     .frame(
-        width: TaplingConfig.shared.baseSize,
-        height: TaplingConfig.shared.baseSize
+        width: TaplingConfig.baseSize,
+        height: TaplingConfig.baseSize
     )
     .padding()
 }

@@ -25,8 +25,8 @@ struct AutocompleteToolbarView: View {
     private var baseScale: CGFloat {
         // Base scale: upper part (baseSize - baseBodyBottomOffset) fits toolbar height
         let baseVisibleHeight =
-            TaplingConfig.shared.baseSize
-            - TaplingConfig.shared.baseBodyBottomOffset
+            TaplingConfig.baseSize
+            - TaplingConfig.baseBodyBottomOffset
         let toolbarHeight = Keyboard.ToolbarStyle.standardHeight
         return toolbarHeight / baseVisibleHeight
     }
@@ -36,21 +36,21 @@ struct AutocompleteToolbarView: View {
     private var taplingScale: CGFloat { baseScale * userScale }
 
     private var taplingSize: CGFloat {
-        TaplingConfig.shared.baseSize * taplingScale
+        TaplingConfig.baseSize * taplingScale
     }
     private var userBottomOffset: CGFloat {
         CGFloat(taplingSettings.userBottomOffset)
     }
     private var taplingBottomOffset: CGFloat {
-        TaplingConfig.shared.baseBodyBottomOffset
-            * (taplingSize / TaplingConfig.shared.baseSize) + userBottomOffset
+        TaplingConfig.baseBodyBottomOffset
+            * (taplingSize / TaplingConfig.baseSize) + userBottomOffset
     }
 
     private var currentTapling: Tapling {
         Tapling(
-            fur: .default,
-            hat: Hat.get("hat_lil-duck"),
-            face: .default,
+            fur: taplingSettings.equippedFur,
+            hat: taplingSettings.equippedHat,
+            face: taplingSettings.equippedFace,
             leftHand: leftHand,
             rightHand: rightHand
         )

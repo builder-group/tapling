@@ -7,14 +7,10 @@
 
 import Foundation
 
-struct TaplingConfig {
-    static let shared = TaplingConfig()
-
+enum TaplingConfig {
     /// Base size of the Tapling asset (width and height, since it's square).
-    let baseSize: CGFloat = 248
+    static let baseSize: CGFloat = 248
 
     /// Base bottom offset of the body from the bottom of the image (in pixels at base size).
-    let baseBodyBottomOffset: CGFloat = 83
-
-    private init() {}
+    static let baseBodyBottomOffset: CGFloat = 83
 }

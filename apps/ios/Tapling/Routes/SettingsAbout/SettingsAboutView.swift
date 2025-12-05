@@ -9,8 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct SettingsAboutView: View {
-    private let config = AppConfig.shared
-
     private enum FeedbackSubject {
         static let general = "Tapling Feedback"
         static let feature = "Feature Request"
@@ -85,7 +83,7 @@ struct SettingsAboutView: View {
 
     private var linksSection: some View {
         SectionContainerView {
-            if let url = config.appStoreURL {
+            if let url = AppConfig.appStoreURL {
                 LinkRowView(
                     icon: "apple.logo",
                     iconColor: .primary,
@@ -96,7 +94,7 @@ struct SettingsAboutView: View {
                 SectionDivider()
             }
 
-            if let url = config.websiteURL {
+            if let url = AppConfig.websiteURL {
                 LinkRowView(
                     icon: "safari.fill",
                     iconColor: .blue,
@@ -109,7 +107,7 @@ struct SettingsAboutView: View {
 
     @ViewBuilder
     private var privacySection: some View {
-        if let privacyURL = config.privacyPolicyURL {
+        if let privacyURL = AppConfig.privacyPolicyURL {
             SectionContainerView {
                 LinkRowView(
                     icon: "hand.raised.fill",
@@ -123,7 +121,7 @@ struct SettingsAboutView: View {
 
     private var versionSection: some View {
         VStack(spacing: 4) {
-            Text("Version \(config.version) (\(config.build))")
+            Text("Version \(AppConfig.version) (\(AppConfig.build))")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -138,7 +136,7 @@ struct SettingsAboutView: View {
     // MARK: - Actions
 
     private func openMail(subject: String) {
-        guard let url = config.mailtoURL(subject: subject) else { return }
+        guard let url = AppConfig.mailtoURL(subject: subject) else { return }
         UIApplication.shared.open(url)
     }
 }
