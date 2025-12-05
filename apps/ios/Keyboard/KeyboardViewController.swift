@@ -15,6 +15,8 @@ class KeyboardViewController: KeyboardInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        updateLocaleFromSettings()
+
         // Set up custom action handler
         self.services.actionHandler = KeyboardActionHandler(
             controller: self
@@ -49,7 +51,10 @@ class KeyboardViewController: KeyboardInputViewController {
             VStack(spacing: 0) {
                 PreviewBannerView()
 
-                KeyboardView(services: controller.services) { params in
+                KeyboardView(
+                    layout: self.generateLayout(for: controller),
+                    services: controller.services
+                ) { params in
                     params.view
                 } buttonView: { params in
                     params.view
@@ -65,6 +70,49 @@ class KeyboardViewController: KeyboardInputViewController {
                 }
             }
             .modelContainer(DataContainer.shared.modelContainer)
+        }
+    }
+
+    private func generateLayout(for controller: KeyboardInputViewController)
+        -> KeyboardLayout
+    {
+        let context = controller.state.keyboardContext
+        let inputSetProvider = MultiLanguageInputSetProvider(context: context)
+
+        let baseLayout = KeyboardLayout.baseLayout(
+            for: context,
+            alphabeticInputSet: inputSetProvider.alphabeticInputSet,
+            numericInputSet: inputSetProvider.numericInputSet,
+            symbolicInputSet: inputSetProvider.symbolicInputSet
+        )
+
+        if context.deviceType == .pad {
+            return KeyboardLayout.iPadLayout(
+                from: baseLayout,
+                keyboardContext: context
+            )
+        } else {
+            return KeyboardLayout.iPhoneLayout(
+                from: baseLayout,
+                keyboardContext: context
+            )
+        }
+    }
+
+    private func updateLocaleFromSettings() {
+        let modelContext = DataContainer.shared.modelContext
+        let settings = try? modelContext.fetch(
+            FetchDescriptor<KeyboardSettings>()
+        ).first
+        let languageCode = settings?.languageCode ?? "system"
+
+        switch languageCode {
+        case "de":
+            self.state.keyboardContext.locale = Locale(identifier: "de")
+        case "en":
+            self.state.keyboardContext.locale = Locale(identifier: "en")
+        default:
+            break
         }
     }
 }

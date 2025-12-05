@@ -12,10 +12,16 @@ import SwiftData
 final class KeyboardSettings: SingletonModel {
     var debug: Bool
     var isPreviewMode: Bool
+    var languageCode: String // "system", "en", "de"
 
-    init(debug: Bool = false, isPreviewMode: Bool = false) {
+    init(
+        debug: Bool = false,
+        isPreviewMode: Bool = false,
+        languageCode: String = "system"
+    ) {
         self.debug = debug
         self.isPreviewMode = isPreviewMode
+        self.languageCode = languageCode
     }
 
     static var `default`: KeyboardSettings {

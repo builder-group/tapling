@@ -39,6 +39,16 @@ struct SettingsKeyboardView: View {
             }
         )
     }
+    
+    private var currentLanguageName: String {
+        availableLanguages.first(where: { $0.code == keyboardSettings.languageCode })?.name ?? "System Default"
+    }
+    
+    private let availableLanguages: [(code: String, name: String)] = [
+        ("system", "System Default"),
+        ("en", "English"),
+        ("de", "German"),
+    ]
 
     // MARK: - UI
 
@@ -88,7 +98,20 @@ struct SettingsKeyboardView: View {
             }
 
             Form {
-                Section {
+                Section("GENERAL") {
+                    NavigationLink {
+                        SettingsLanguageView()
+                    } label: {
+                        HStack {
+                            Text("Language")
+                            Spacer()
+                            Text(currentLanguageName)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                
+                Section("DEVELOPER") {
                     Toggle("Debug Mode", isOn: debugModeBinding)
                 }
             }
