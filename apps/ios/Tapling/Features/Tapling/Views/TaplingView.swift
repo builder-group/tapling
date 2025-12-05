@@ -48,7 +48,7 @@ struct TaplingView: View {
         tapling: Tapling(
             fur: .default,
             hat: Hat.get("hat_lil-duck"),
-            face: .default,
+            face: Face.get("face_pilot")!,
             leftHand: .up,
             rightHand: .down
         )
