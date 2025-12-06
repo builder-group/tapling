@@ -45,10 +45,7 @@ struct SettingsKeyboardView: View {
             get: { keyboardSettings.autocompleteEnabled },
             set: { newValue in
                 keyboardSettings.autocompleteEnabled = newValue
-                // If autocomplete is disabled, also disable autocorrect
-                if !newValue {
-                    keyboardSettings.autocorrectEnabled = false
-                }
+                keyboardSettings.autocorrectEnabled = newValue
                 try? modelContext.save()
             }
         )

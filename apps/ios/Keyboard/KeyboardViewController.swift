@@ -29,11 +29,12 @@ class KeyboardViewController: KeyboardInputViewController {
         // Set up keyboard with the shared keyboard app instance
         setup(for: .shared) { result in
             if case .success = result {
-                // Set up native autocomplete service using iOS APIs
                 let modelContext = DataContainer.shared.modelContext
                 let settings = try? modelContext.fetch(
                     FetchDescriptor<KeyboardSettings>()
                 ).first
+                
+                // Set up native autocomplete service using iOS APIs
                 let autocompleteService = NativeAutocompleteService()
                 autocompleteService.locale = self.state.keyboardContext.locale
                 autocompleteService.autocorrectEnabled =

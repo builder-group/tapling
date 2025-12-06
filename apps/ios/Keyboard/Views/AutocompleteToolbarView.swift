@@ -75,6 +75,7 @@ struct AutocompleteToolbarView: View {
                     }
                 }
         }
+        .frame(maxWidth: .infinity, alignment: .trailing)
         .background(alignment: .topTrailing) {
             // Hitbox (invisible)
             Button {
