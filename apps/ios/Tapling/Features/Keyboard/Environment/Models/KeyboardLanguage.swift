@@ -30,7 +30,7 @@ enum KeyboardLanguage: String, CaseIterable, Identifiable {
                 emptyTextSuggestions: [
                     Autocomplete.Suggestion(text: "I", title: "I"),
                     Autocomplete.Suggestion(text: "The", title: "The"),
-                    Autocomplete.Suggestion(text: "You", title: "You"),
+                    Autocomplete.Suggestion(text: "I'm", title: "I'm"),
                 ],
                 primaryCurrency: "$",
                 currencies: ["$", "€", "£", "¥"]
@@ -46,9 +46,9 @@ enum KeyboardLanguage: String, CaseIterable, Identifiable {
                     .init(chars: "yxcvbnm"),
                 ]),
                 emptyTextSuggestions: [
-                    Autocomplete.Suggestion(text: "Der", title: "Der"),
-                    Autocomplete.Suggestion(text: "Die", title: "Die"),
                     Autocomplete.Suggestion(text: "Ich", title: "Ich"),
+                    Autocomplete.Suggestion(text: "Ja", title: "Ja"),
+                    Autocomplete.Suggestion(text: "Das", title: "Das"),
                 ],
                 primaryCurrency: "€",
                 currencies: ["€", "$", "£", "¥"]
