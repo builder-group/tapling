@@ -18,6 +18,10 @@ enum AppConfig {
             ?? "Tapling"
     }
 
+    static var bundleIdentifier: String {
+        Bundle.main.bundleIdentifier ?? "com.buildergroup.Tapling"
+    }
+
     static var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
             as? String ?? "1.0.0"
