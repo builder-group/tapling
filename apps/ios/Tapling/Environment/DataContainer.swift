@@ -37,8 +37,8 @@ class DataContainer {
                 configurations: configurations
             )
 
-            KeyboardDataContainer.ensureDefaults(in: modelContext)
             DataContainer.ensureDefaults(in: modelContext)
+            KeyboardDataContainer.ensureDefaults(in: modelContext)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -67,7 +67,6 @@ class DataContainer {
                 schema: schema,
                 isStoredInMemoryOnly: false,
                 allowsSave: true,
-                groupContainer: .identifier("group.com.buildergroup.Tapling"),
                 cloudKitDatabase: .none
             )
         }

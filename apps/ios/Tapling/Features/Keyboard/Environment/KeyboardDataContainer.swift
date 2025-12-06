@@ -27,9 +27,8 @@ class KeyboardDataContainer {
         ]
 
         do {
-            // ModelContainer requires full schema even if configuration only uses subset.
-            // This matches what main app created, allowing keyboard to open shared store.
             modelContainer = try ModelContainer(
+                // Note: ModelContainer requires full schema even if configuration only uses subset
                 for: Schema(KeyboardDataContainer.schema() + DataContainer.schema()),
                 configurations: configurations
             )
@@ -59,7 +58,7 @@ class KeyboardDataContainer {
             )
         } else {
             return ModelConfiguration(
-                "KeyboardData",
+                "TaplingKeyboardData",
                 schema: schema,
                 isStoredInMemoryOnly: false,
                 allowsSave: true,
