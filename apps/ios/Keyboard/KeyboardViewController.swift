@@ -33,7 +33,7 @@ class KeyboardViewController: KeyboardInputViewController {
                 let settings = try? modelContext.fetch(
                     FetchDescriptor<KeyboardSettings>()
                 ).first
-                
+
                 // Set up native autocomplete service using iOS APIs
                 let autocompleteService = NativeAutocompleteService()
                 autocompleteService.locale = self.state.keyboardContext.locale
@@ -73,13 +73,14 @@ class KeyboardViewController: KeyboardInputViewController {
                     params.view
                 } emojiKeyboard: { params in
                     params.view
+                    // EmojiPickerView(controller: controller)
                 } toolbar: { params in
                     AutocompleteToolbarView(
                         standardToolbar: params.view,
                         autocompleteAction: params.autocompleteAction
                     )
                 }
-                
+
                 PreviewBannerView()
             }
             .modelContainer(KeyboardDataContainer.shared.modelContainer)
