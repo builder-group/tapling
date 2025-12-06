@@ -331,6 +331,33 @@ struct NativeAutocompleteServiceTests {
         )
     }
 
+    @Test @MainActor func testH_SingleCapital_enUS_ReturnsCapitalized()
+        async throws
+    {
+        // Real keyboard: "H" | Hey | How
+        try await expectAutocomplete(
+            input: "H",
+            locale: Locale(identifier: "en_US"),
+            expected: [
+                Autocomplete.Suggestion(
+                    text: "H",
+                    type: .regular,
+                    title: "\"H\""
+                ),
+                Autocomplete.Suggestion(
+                    text: "He",
+                    type: .regular,
+                    title: "He"
+                ),
+                Autocomplete.Suggestion(
+                    text: "Hey",
+                    type: .regular,
+                    title: "Hey"
+                ),
+            ]
+        )
+    }
+
     // MARK: - Helpers
 
     @MainActor

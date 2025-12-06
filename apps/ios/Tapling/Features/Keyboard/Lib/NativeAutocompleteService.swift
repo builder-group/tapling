@@ -299,7 +299,7 @@ class NativeAutocompleteService: AutocompleteService {
             return suggestion.lowercased()
         }
 
-        if input.uppercased() == input {
+        if input.count > 1 && input.uppercased() == input {
             return suggestion.uppercased()
         }
 
