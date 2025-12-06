@@ -29,7 +29,7 @@ class KeyboardViewController: KeyboardInputViewController {
         // Set up keyboard with the shared keyboard app instance
         setup(for: .shared) { result in
             if case .success = result {
-                let modelContext = DataContainer.shared.modelContext
+                let modelContext = KeyboardDataContainer.shared.modelContext
                 let settings = try? modelContext.fetch(
                     FetchDescriptor<KeyboardSettings>()
                 ).first
@@ -82,7 +82,7 @@ class KeyboardViewController: KeyboardInputViewController {
                 
                 PreviewBannerView()
             }
-            .modelContainer(DataContainer.shared.modelContainer)
+            .modelContainer(KeyboardDataContainer.shared.modelContainer)
         }
     }
 
@@ -99,7 +99,7 @@ class KeyboardViewController: KeyboardInputViewController {
         {
             autocompleteService.locale = context.locale
 
-            let modelContext = DataContainer.shared.modelContext
+            let modelContext = KeyboardDataContainer.shared.modelContext
             let settings = try? modelContext.fetch(
                 FetchDescriptor<KeyboardSettings>()
             ).first
@@ -130,7 +130,7 @@ class KeyboardViewController: KeyboardInputViewController {
     }
 
     private func updateLocaleFromSettings() {
-        let modelContext = DataContainer.shared.modelContext
+        let modelContext = KeyboardDataContainer.shared.modelContext
         let settings = try? modelContext.fetch(
             FetchDescriptor<KeyboardSettings>()
         ).first

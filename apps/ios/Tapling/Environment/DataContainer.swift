@@ -20,22 +20,49 @@ class DataContainer {
     }
 
     init(isStoredInMemoryOnly: Bool = false) {
-        let schema = Schema([
-            TaplingSettings.self,
-            KeyboardSettings.self,
-            OwnedCollectible.self,
-        ])
+        let configurations = [
+            DataContainer.configuration(
+                isStoredInMemoryOnly: isStoredInMemoryOnly
+            ),
+            KeyboardDataContainer.configuration(
+                isStoredInMemoryOnly: isStoredInMemoryOnly
+            ),
+        ]
 
-        let modelConfiguration: ModelConfiguration
+        do {
+            modelContainer = try ModelContainer(
+                for: Schema(
+                    DataContainer.schema() + KeyboardDataContainer.schema()
+                ),
+                configurations: configurations
+            )
+
+            KeyboardDataContainer.ensureDefaults(in: modelContext)
+            DataContainer.ensureDefaults(in: modelContext)
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }
+
+    static func schema() -> [any PersistentModel.Type] {
+        [
+            OwnedCollectible.self,
+            Player.self,
+        ]
+    }
+
+    static func configuration(isStoredInMemoryOnly: Bool = false)
+        -> ModelConfiguration
+    {
+        let schema = Schema(DataContainer.schema())
+
         if isStoredInMemoryOnly {
-            // Configure for in-memory only
-            modelConfiguration = ModelConfiguration(
+            return ModelConfiguration(
                 schema: schema,
                 isStoredInMemoryOnly: true
             )
         } else {
-            // Configure for App Group
-            modelConfiguration = ModelConfiguration(
+            return ModelConfiguration(
                 "TaplingData",
                 schema: schema,
                 isStoredInMemoryOnly: false,
@@ -44,46 +71,21 @@ class DataContainer {
                 cloudKitDatabase: .none
             )
         }
-
-        do {
-            modelContainer = try ModelContainer(
-                for: schema,
-                configurations: [modelConfiguration]
-            )
-
-            // Initialize singletons
-            DataContainer.ensureSingletons(in: modelContext)
-
-            // Initialize default unlocked items
-            DataContainer.ensureDefaultItems(in: modelContext)
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
     }
 
-    /// Ensures singleton models exist in the given context
-    static func ensureSingletons(in context: ModelContext) {
-        _ = TaplingSettings.instance(with: context)
-        _ = KeyboardSettings.instance(with: context)
-    }
-
-    /// Ensures default collectibles are unlocked (white fur, cute face)
-    static func ensureDefaultItems(in context: ModelContext) {
+    static func ensureDefaults(in context: ModelContext) {
         let defaultCollectibleIds = ["fur_white", "face_cute"]
 
         for collectibleId in defaultCollectibleIds {
-            // Check if already exists
             let descriptor = FetchDescriptor<OwnedCollectible>(
                 predicate: #Predicate { $0.collectibleId == collectibleId }
             )
 
             if let existing = try? context.fetch(descriptor).first {
-                // If exists but not unlocked, unlock it
                 if existing.unlockedAt == nil {
                     existing.unlockedAt = Date()
                 }
             } else {
-                // Create new unlocked collectible
                 let ownedCollectible = OwnedCollectible(
                     collectibleId: collectibleId,
                     unlockedAt: Date()
@@ -99,12 +101,10 @@ class DataContainer {
 // MARK: - Preview Support
 
 extension DataContainer {
-    /// In-memory container for SwiftUI previews
     static let preview = DataContainer(isStoredInMemoryOnly: true)
 }
 
 extension View {
-    /// Applies preview data container for SwiftUI previews
     func previewDataContainer() -> some View {
         self.modelContainer(DataContainer.preview.modelContainer)
     }

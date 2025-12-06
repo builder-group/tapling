@@ -13,7 +13,7 @@ struct SettingsTaplingView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
 
-    @QuerySingleton private var taplingSettings: TaplingSettings
+    @QuerySingleton private var taplingSettings: KeyboardTaplingSettings
     @QuerySingleton private var keyboardSettings: KeyboardSettings
 
     @FocusState private var isTextFieldFocused: Bool
