@@ -14,6 +14,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D3458FB02EE4017500CDDD3B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D31D7DF72EDEB86000A51CBE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D31D7DFE2EDEB86000A51CBE;
+			remoteInfo = Tapling;
+		};
 		D3769A442EDEDAD20048E728 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D31D7DF72EDEB86000A51CBE /* Project object */;
@@ -39,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		D31D7DFF2EDEB86000A51CBE /* Tapling.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tapling.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3458FAC2EE4017500CDDD3B /* TaplingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaplingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3769A3F2EDEDAD20048E728 /* Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Keyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3769D752EE15FF80048E728 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,6 +73,7 @@
 				"Features/Keyboard/Environment/KeyboardApp+Extension.swift",
 				Features/Keyboard/Environment/Models/KeyboardLanguage.swift,
 				Features/Keyboard/Environment/Models/KeyboardSettings.swift,
+				Features/Keyboard/Lib/NativeAutocompleteService.swift,
 				Features/Tapling/Environment/Models/HandPosition.swift,
 				Features/Tapling/Environment/Models/Tapling.swift,
 				Features/Tapling/Environment/Models/TaplingSettings.swift,
@@ -86,6 +95,11 @@
 			path = Tapling;
 			sourceTree = "<group>";
 		};
+		D3458FAD2EE4017500CDDD3B /* TaplingTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TaplingTests;
+			sourceTree = "<group>";
+		};
 		D3769A402EDEDAD20048E728 /* Keyboard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -105,6 +119,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D3458FA92EE4017500CDDD3B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D3769A3C2EDEDAD20048E728 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -120,6 +141,7 @@
 			children = (
 				D31D7E012EDEB86000A51CBE /* Tapling */,
 				D3769A402EDEDAD20048E728 /* Keyboard */,
+				D3458FAD2EE4017500CDDD3B /* TaplingTests */,
 				D31D7E002EDEB86000A51CBE /* Products */,
 				D3769D752EE15FF80048E728 /* AppIcon.icon */,
 			);
@@ -130,6 +152,7 @@
 			children = (
 				D31D7DFF2EDEB86000A51CBE /* Tapling.app */,
 				D3769A3F2EDEDAD20048E728 /* Keyboard.appex */,
+				D3458FAC2EE4017500CDDD3B /* TaplingTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,6 +184,29 @@
 			productName = Tapling;
 			productReference = D31D7DFF2EDEB86000A51CBE /* Tapling.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D3458FAB2EE4017500CDDD3B /* TaplingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D3458FB42EE4017500CDDD3B /* Build configuration list for PBXNativeTarget "TaplingTests" */;
+			buildPhases = (
+				D3458FA82EE4017500CDDD3B /* Sources */,
+				D3458FA92EE4017500CDDD3B /* Frameworks */,
+				D3458FAA2EE4017500CDDD3B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D3458FB12EE4017500CDDD3B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D3458FAD2EE4017500CDDD3B /* TaplingTests */,
+			);
+			name = TaplingTests;
+			packageProductDependencies = (
+			);
+			productName = TaplingTests;
+			productReference = D3458FAC2EE4017500CDDD3B /* TaplingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		D3769A3E2EDEDAD20048E728 /* Keyboard */ = {
 			isa = PBXNativeTarget;
@@ -197,6 +243,10 @@
 					D31D7DFE2EDEB86000A51CBE = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
+					D3458FAB2EE4017500CDDD3B = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = D31D7DFE2EDEB86000A51CBE;
+					};
 					D3769A3E2EDEDAD20048E728 = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
@@ -221,6 +271,7 @@
 			targets = (
 				D31D7DFE2EDEB86000A51CBE /* Tapling */,
 				D3769A3E2EDEDAD20048E728 /* Keyboard */,
+				D3458FAB2EE4017500CDDD3B /* TaplingTests */,
 			);
 		};
 /* End PBXProject section */
@@ -231,6 +282,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3769D762EE15FF80048E728 /* AppIcon.icon in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3458FAA2EE4017500CDDD3B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +310,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D3458FA82EE4017500CDDD3B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D3769A3B2EDEDAD20048E728 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -262,6 +327,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D3458FB12EE4017500CDDD3B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D31D7DFE2EDEB86000A51CBE /* Tapling */;
+			targetProxy = D3458FB02EE4017500CDDD3B /* PBXContainerItemProxy */;
+		};
 		D3769A452EDEDAD20048E728 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
@@ -467,6 +537,48 @@
 			};
 			name = Release;
 		};
+		D3458FB22EE4017500CDDD3B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9RQRHCCMVL;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.buildergroup.TaplingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tapling.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tapling";
+			};
+			name = Debug;
+		};
+		D3458FB32EE4017500CDDD3B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9RQRHCCMVL;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.buildergroup.TaplingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tapling.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tapling";
+			};
+			name = Release;
+		};
 		D3769A482EDEDAD20048E728 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -544,6 +656,15 @@
 			buildConfigurations = (
 				D31D7E0B2EDEB86200A51CBE /* Debug */,
 				D31D7E0C2EDEB86200A51CBE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D3458FB42EE4017500CDDD3B /* Build configuration list for PBXNativeTarget "TaplingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D3458FB22EE4017500CDDD3B /* Debug */,
+				D3458FB32EE4017500CDDD3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
