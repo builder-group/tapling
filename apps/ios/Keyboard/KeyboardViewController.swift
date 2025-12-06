@@ -62,8 +62,6 @@ class KeyboardViewController: KeyboardInputViewController {
 
         setupKeyboardView { controller in
             VStack(spacing: 0) {
-                PreviewBannerView()
-
                 KeyboardView(
                     layout: self.generateLayout(for: controller),
                     services: controller.services
@@ -81,6 +79,8 @@ class KeyboardViewController: KeyboardInputViewController {
                         autocompleteAction: params.autocompleteAction
                     )
                 }
+                
+                PreviewBannerView()
             }
             .modelContainer(DataContainer.shared.modelContainer)
         }
