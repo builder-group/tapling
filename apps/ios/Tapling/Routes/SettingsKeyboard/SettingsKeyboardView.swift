@@ -40,6 +40,30 @@ struct SettingsKeyboardView: View {
         )
     }
 
+    private var autocompleteEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { keyboardSettings.autocompleteEnabled },
+            set: { newValue in
+                keyboardSettings.autocompleteEnabled = newValue
+                // If autocomplete is disabled, also disable autocorrect
+                if !newValue {
+                    keyboardSettings.autocorrectEnabled = false
+                }
+                try? modelContext.save()
+            }
+        )
+    }
+
+    private var autocorrectEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { keyboardSettings.autocorrectEnabled },
+            set: { newValue in
+                keyboardSettings.autocorrectEnabled = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
     private var currentLanguageName: String {
         keyboardSettings.language.displayName
     }
@@ -102,6 +126,10 @@ struct SettingsKeyboardView: View {
                             Text(currentLanguageName)
                                 .foregroundStyle(.secondary)
                         }
+                    }
+                    Toggle("Autocomplete", isOn: autocompleteEnabledBinding)
+                    if keyboardSettings.autocompleteEnabled {
+                        Toggle("Autocorrect", isOn: autocorrectEnabledBinding)
                     }
                 }
 

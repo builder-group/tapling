@@ -13,6 +13,8 @@ final class KeyboardSettings: SingletonModel {
     var debug: Bool
     var isPreviewMode: Bool
     var languageCode: String
+    var autocorrectEnabled: Bool
+    var autocompleteEnabled: Bool
 
     var language: KeyboardLanguage {
         get { KeyboardLanguage(rawValue: languageCode) ?? .system }
@@ -22,11 +24,15 @@ final class KeyboardSettings: SingletonModel {
     init(
         debug: Bool = false,
         isPreviewMode: Bool = false,
-        language: KeyboardLanguage = .system
+        language: KeyboardLanguage = .system,
+        autocorrectEnabled: Bool = true,
+        autocompleteEnabled: Bool = true
     ) {
         self.debug = debug
         self.isPreviewMode = isPreviewMode
         self.languageCode = language.rawValue
+        self.autocorrectEnabled = autocorrectEnabled
+        self.autocompleteEnabled = autocompleteEnabled
     }
 
     static var `default`: KeyboardSettings {

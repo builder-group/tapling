@@ -30,8 +30,16 @@ class KeyboardViewController: KeyboardInputViewController {
         setup(for: .shared) { result in
             if case .success = result {
                 // Set up native autocomplete service using iOS APIs
+                let modelContext = DataContainer.shared.modelContext
+                let settings = try? modelContext.fetch(
+                    FetchDescriptor<KeyboardSettings>()
+                ).first
                 let autocompleteService = NativeAutocompleteService()
                 autocompleteService.locale = self.state.keyboardContext.locale
+                autocompleteService.autocorrectEnabled =
+                    settings?.autocorrectEnabled ?? true
+                autocompleteService.autocompleteEnabled =
+                    settings?.autocompleteEnabled ?? true
                 self.services.autocompleteService = autocompleteService
 
                 // Request lexicon asynchronously and register it when ready
@@ -83,9 +91,22 @@ class KeyboardViewController: KeyboardInputViewController {
         let context = controller.state.keyboardContext
         let language = context.keyboardLanguage
 
-        // Sync autocomplete locale whenever layout is generated
-        // This ensures autocomplete language matches current keyboard language
-        self.services.autocompleteService.locale = context.locale
+        // Sync autocomplete settings whenever layout is generated
+        // This ensures autocomplete language and settings match current keyboard state
+        if let autocompleteService = self.services.autocompleteService
+            as? NativeAutocompleteService
+        {
+            autocompleteService.locale = context.locale
+
+            let modelContext = DataContainer.shared.modelContext
+            let settings = try? modelContext.fetch(
+                FetchDescriptor<KeyboardSettings>()
+            ).first
+            autocompleteService.autocorrectEnabled =
+                settings?.autocorrectEnabled ?? true
+            autocompleteService.autocompleteEnabled =
+                settings?.autocompleteEnabled ?? true
+        }
 
         let baseLayout = KeyboardLayout.baseLayout(
             for: context,
@@ -127,6 +148,16 @@ class KeyboardViewController: KeyboardInputViewController {
         } else {
             // For .system, use the current system locale
             self.state.keyboardContext.locale = Locale.current
+        }
+
+        // Update autocomplete service settings
+        if let autocompleteService = self.services.autocompleteService
+            as? NativeAutocompleteService
+        {
+            autocompleteService.autocorrectEnabled =
+                settings?.autocorrectEnabled ?? true
+            autocompleteService.autocompleteEnabled =
+                settings?.autocompleteEnabled ?? true
         }
     }
 }

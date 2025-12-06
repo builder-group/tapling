@@ -11,6 +11,8 @@ import UIKit
 /// Autocomplete service using native iOS APIs (UILexicon and UITextChecker).
 class NativeAutocompleteService: AutocompleteService {
     var locale: Locale = .current
+    var autocorrectEnabled: Bool = true
+    var autocompleteEnabled: Bool = true
     var canIgnoreWords: Bool { false }
     var canLearnWords: Bool { false }
     var ignoredWords: [String] = []
@@ -71,7 +73,13 @@ class NativeAutocompleteService: AutocompleteService {
     /// Strategy: If user typed "hel" (many completions), show completions. If "helo" (few completions), show autocorrect.
     private func getSuggestions(for text: String) -> [Autocomplete.Suggestion] {
         if text.isEmpty {
-            return locale.keyboardLanguage.emptyTextSuggestions
+            return autocompleteEnabled
+                ? locale.keyboardLanguage.emptyTextSuggestions : []
+        }
+
+        guard autocompleteEnabled else {
+            // If autocomplete is disabled, only show current word in quotes if it's not empty
+            return [Autocomplete.Suggestion(text: text, title: "\"\(text)\"")]
         }
 
         let language = locale.keyboardLanguage.config.localeIdentifier
@@ -141,7 +149,7 @@ class NativeAutocompleteService: AutocompleteService {
     }
 
     /// Determines if autocorrect should be used instead of input completions.
-    /// Rule: Use autocorrect only if first guess doesn't start with input AND we have few completions.
+    /// Rule: Use autocorrect only if enabled, first guess doesn't start with input AND we have few completions.
     /// This prevents autocorrect from overriding good partial word matches (e.g., "hel" → "hello", "help").
     private func getAutocorrectIfNeeded(
         text: String,
@@ -149,7 +157,8 @@ class NativeAutocompleteService: AutocompleteService {
         inputCompletions: [String],
         language: String
     ) -> (candidate: String?, completions: [String]) {
-        guard !isCorrectlySpelled,
+        guard autocorrectEnabled,
+            !isCorrectlySpelled,
             let guesses = textChecker.guesses(
                 forWordRange: NSRange(location: 0, length: text.utf16.count),
                 in: text,
