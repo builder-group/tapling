@@ -47,6 +47,16 @@ struct SettingsKeyboardView: View {
         )
     }
 
+    private var emojiPickerEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { keyboardSettings.emojiPickerEnabled },
+            set: { newValue in
+                keyboardSettings.emojiPickerEnabled = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
     private var currentLanguageName: String {
         keyboardSettings.language.displayName
     }
@@ -77,6 +87,7 @@ struct SettingsKeyboardView: View {
                 if keyboardSettings.autocompleteEnabled {
                     Toggle("Autocorrect", isOn: autocorrectEnabledBinding)
                 }
+                Toggle("Emoji Picker", isOn: emojiPickerEnabledBinding)
             }
 
             Section("DEVELOPER") {

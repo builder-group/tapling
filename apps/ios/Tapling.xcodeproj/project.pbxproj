@@ -11,6 +11,7 @@
 		D3769A512EDEDBF00048E728 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3769A502EDEDBF00048E728 /* KeyboardKit */; };
 		D3769D762EE15FF80048E728 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = D3769D752EE15FF80048E728 /* AppIcon.icon */; };
 		D3769D772EE15FF80048E728 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = D3769D752EE15FF80048E728 /* AppIcon.icon */; };
+		D3B57B5C2EE54E80000160D8 /* MCEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = D3B57B5B2EE54E80000160D8 /* MCEmojiPicker */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3B57B5C2EE54E80000160D8 /* MCEmojiPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +229,7 @@
 			);
 			name = Keyboard;
 			packageProductDependencies = (
+				D3B57B5B2EE54E80000160D8 /* MCEmojiPicker */,
 			);
 			productName = Keyboard;
 			productReference = D3769A3F2EDEDAD20048E728 /* Keyboard.appex */;
@@ -265,6 +268,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D3769A4F2EDEDBF00048E728 /* XCRemoteSwiftPackageReference "KeyboardKit" */,
+				D3B57B5A2EE54E80000160D8 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D31D7E002EDEB86000A51CBE /* Products */;
@@ -691,6 +695,14 @@
 				minimumVersion = 10.1.2;
 			};
 		};
+		D3B57B5A2EE54E80000160D8 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/izyumkin/MCEmojiPicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -698,6 +710,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D3769A4F2EDEDBF00048E728 /* XCRemoteSwiftPackageReference "KeyboardKit" */;
 			productName = KeyboardKit;
+		};
+		D3B57B5B2EE54E80000160D8 /* MCEmojiPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3B57B5A2EE54E80000160D8 /* XCRemoteSwiftPackageReference "MCEmojiPicker" */;
+			productName = MCEmojiPicker;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

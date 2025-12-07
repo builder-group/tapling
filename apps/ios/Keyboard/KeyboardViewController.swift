@@ -30,17 +30,15 @@ class KeyboardViewController: KeyboardInputViewController {
         setup(for: .shared) { result in
             if case .success = result {
                 let modelContext = KeyboardDataContainer.shared.modelContext
-                let settings = try? modelContext.fetch(
-                    FetchDescriptor<KeyboardSettings>()
-                ).first
+                let settings = modelContext.fetchKeyboardSettings()
 
                 // Set up native autocomplete service using iOS APIs
                 let autocompleteService = NativeAutocompleteService()
                 autocompleteService.locale = self.state.keyboardContext.locale
                 autocompleteService.autocorrectEnabled =
-                    settings?.autocorrectEnabled ?? true
+                    settings.autocorrectEnabled
                 autocompleteService.autocompleteEnabled =
-                    settings?.autocompleteEnabled ?? true
+                    settings.autocompleteEnabled
                 self.services.autocompleteService = autocompleteService
 
                 // Request lexicon asynchronously and register it when ready
@@ -60,6 +58,10 @@ class KeyboardViewController: KeyboardInputViewController {
     override func viewWillSetupKeyboardView() {
         super.viewWillSetupKeyboardView()
 
+        let modelContext = KeyboardDataContainer.shared.modelContext
+        let settings = modelContext.fetchKeyboardSettings()
+        let isEmojiPickerEnabled = settings.emojiPickerEnabled
+
         setupKeyboardView { controller in
             VStack(spacing: 0) {
                 KeyboardView(
@@ -72,8 +74,11 @@ class KeyboardViewController: KeyboardInputViewController {
                 } collapsedView: { params in
                     params.view
                 } emojiKeyboard: { params in
-                    params.view
-                    // EmojiPickerView(controller: controller)
+                    if isEmojiPickerEnabled {
+                        EmojiPickerView(controller: controller)
+                    } else {
+                        params.view
+                    }
                 } toolbar: { params in
                     AutocompleteToolbarView(
                         standardToolbar: params.view,
@@ -101,13 +106,10 @@ class KeyboardViewController: KeyboardInputViewController {
             autocompleteService.locale = context.locale
 
             let modelContext = KeyboardDataContainer.shared.modelContext
-            let settings = try? modelContext.fetch(
-                FetchDescriptor<KeyboardSettings>()
-            ).first
-            autocompleteService.autocorrectEnabled =
-                settings?.autocorrectEnabled ?? true
+            let settings = modelContext.fetchKeyboardSettings()
+            autocompleteService.autocorrectEnabled = settings.autocorrectEnabled
             autocompleteService.autocompleteEnabled =
-                settings?.autocompleteEnabled ?? true
+                settings.autocompleteEnabled
         }
 
         let baseLayout = KeyboardLayout.baseLayout(
@@ -132,11 +134,9 @@ class KeyboardViewController: KeyboardInputViewController {
 
     private func updateLocaleFromSettings() {
         let modelContext = KeyboardDataContainer.shared.modelContext
-        let settings = try? modelContext.fetch(
-            FetchDescriptor<KeyboardSettings>()
-        ).first
+        let settings = modelContext.fetchKeyboardSettings()
 
-        let language = settings?.language ?? .system
+        let language = settings.language
 
         // Always support all available locales so the globe key works
         self.state.keyboardContext.locales = KeyboardLanguage.allCases
@@ -156,10 +156,9 @@ class KeyboardViewController: KeyboardInputViewController {
         if let autocompleteService = self.services.autocompleteService
             as? NativeAutocompleteService
         {
-            autocompleteService.autocorrectEnabled =
-                settings?.autocorrectEnabled ?? true
+            autocompleteService.autocorrectEnabled = settings.autocorrectEnabled
             autocompleteService.autocompleteEnabled =
-                settings?.autocompleteEnabled ?? true
+                settings.autocompleteEnabled
         }
     }
 }
