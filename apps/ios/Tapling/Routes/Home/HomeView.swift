@@ -12,10 +12,7 @@ struct HomeView: View {
     @QuerySingleton private var player: Player
     @Query(sort: \KeyboardSession.createdAt, order: .reverse) private
         var sessions: [KeyboardSession]
-    @Environment(\.modelContext) private var modelContext
 
-    @State private var isProcessing = false
-    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -45,36 +42,11 @@ struct HomeView: View {
 
                         Text("Count: \(sessions.count)")
                             .font(.headline)
-
-                        if isProcessing {
-                            HStack {
-                                ProgressView()
-                                Text("Processing...")
-                                    .font(.subheadline)
-                            }
-                        }
                     }
                     .padding()
                 }
             }
             .padding()
-        }
-        .onAppear {
-            processSessionsIfNeeded()
-        }
-        .onChange(of: sessions.count) { oldCount, newCount in
-            processSessionsIfNeeded()
-        }
-    }
-    
-    private func processSessionsIfNeeded() {
-        guard !sessions.isEmpty, !isProcessing else { return }
-        
-        isProcessing = true
-        
-        Task { @MainActor in
-            await KeyboardSessionProcessor.shared.processPendingSessions()
-            isProcessing = false
         }
     }
 

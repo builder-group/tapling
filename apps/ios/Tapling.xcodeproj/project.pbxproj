@@ -75,7 +75,7 @@
 				Features/Collectible/Models/SlotTypes.swift,
 				"Features/Keyboard/Environment/KeyboardApp+Extension.swift",
 				Features/Keyboard/Environment/KeyboardDataContainer.swift,
-				Features/Keyboard/Environment/KeyboardSessionProcessor.swift,
+				Features/Keyboard/Environment/KeyboardSessionMonitor.swift,
 				Features/Keyboard/Lib/NativeAutocompleteService.swift,
 				Features/Keyboard/Models/KeyboardLanguage.swift,
 				Features/Keyboard/Models/KeyboardSession.swift,

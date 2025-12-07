@@ -39,6 +39,9 @@ class DataContainer {
             // Ensure defaults
             DataContainer.ensureDefaults(in: modelContext)
             KeyboardDataContainer.ensureDefaults(in: modelContext)
+
+            // Start monitors
+            KeyboardSessionMonitor.shared.start()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }

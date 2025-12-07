@@ -1,40 +1,79 @@
 //
-//  KeyboardSessionProcessor.swift
+//  KeyboardSessionMonitor.swift
 //  Tapling
 //
 //  Created by Benno on 07.12.25.
 //
 
+import CoreData
 import Foundation
 import SwiftData
 import SwiftUI
 
 @MainActor
-final class KeyboardSessionProcessor {
-    static let shared = KeyboardSessionProcessor()
+final class KeyboardSessionMonitor {
+    static let shared = KeyboardSessionMonitor()
 
     private var modelContext: ModelContext {
         DataContainer.shared.modelContext
     }
 
+    private var isProcessing = false
+    private var previousSessionCount = 0
+    private var observationTask: Task<Void, Never>?
+
     private init() {}
 
+    deinit {
+        observationTask?.cancel()
+    }
+
     func start() {
-        Task { @MainActor in
-            await self.processPendingSessions()
+        #if DEBUG
+            AppLogger.shared.debug(
+                "KeyboardSessionMonitor: Starting to observe KeyboardSession changes"
+            )
+        #endif
+
+        // Use NSPersistentStoreRemoteChange instead of ModelContext.didSave because:
+        // - Catches changes from keyboard extension (remote context)
+        // - Also catches local changes (same persistent store)
+        // - Limitation: Can't filter by model type (notification doesn't tell us which model changed)
+        //   We use count-based filtering as a workaround - check if KeyboardSession count changed
+        observationTask = Task { @MainActor [weak self] in
+            guard let self = self else { return }
+
+            for await _ in NotificationCenter.default.notifications(
+                named: .NSPersistentStoreRemoteChange
+            ) {
+                await self.checkAndProcessSessions()
+            }
+        }
+
+        Task { @MainActor [weak self] in
+            await self?.checkAndProcessSessions()
         }
     }
 
-    func processOnAppActive() {
-        Task { @MainActor in
-            await self.processPendingSessions()
+    private func checkAndProcessSessions() async {
+        guard let sessions = fetchPendingSessions() else {
+            return
+        }
+
+        if sessions.count != previousSessionCount {
+            previousSessionCount = sessions.count
+            await processPendingSessions()
         }
     }
 
     func processPendingSessions() async {
+        guard !isProcessing else { return }
         guard let sessions = fetchPendingSessions(), !sessions.isEmpty else {
             return
         }
+
+        isProcessing = true
+        defer { isProcessing = false }
 
         let totals = calculateTotals(from: sessions)
         guard totals.keystrokes > 0 else {
@@ -43,14 +82,26 @@ final class KeyboardSessionProcessor {
 
         guard let player = fetchPlayer() else {
             AppLogger.shared.error(
-                "KeyboardSessionProcessor: Failed to fetch Player"
+                "KeyboardSessionMonitor: Failed to fetch Player"
             )
             return
         }
 
+        #if DEBUG
+            AppLogger.shared.debug(
+                "KeyboardSessionMonitor: Processing \(sessions.count) sessions, totals: \(totals.keystrokes) keystrokes, \(totals.keycaps) keycaps"
+            )
+        #endif
+
         updatePlayer(player, with: totals)
         deleteSessions(sessions)
         try? modelContext.save()
+
+        #if DEBUG
+            AppLogger.shared.debug(
+                "KeyboardSessionMonitor: Processing complete"
+            )
+        #endif
     }
 
     private func fetchPendingSessions() -> [KeyboardSession]? {
