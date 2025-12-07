@@ -74,11 +74,19 @@ class KeyboardViewController: KeyboardInputViewController {
                 } collapsedView: { params in
                     params.view
                 } emojiKeyboard: { params in
-                    if isEmojiPickerEnabled {
-                        EmojiPickerView(controller: controller)
-                    } else {
-                        params.view
-                    }
+                    // EmojiPickerView(controller: controller)
+                    //
+                    // NOTE: KeyboardKit's basic emoji keyboard seems to be partially working in the free version?
+                    // This is probably a bug that may not be available in future KeyboardKit versions.
+                    params.view
+                        .emojiKeyboardSizes(
+                            EmojiKeyboard.Sizes(
+                                emojiFontSize: 36,
+                                emojiFrameWidth: 50,
+                                emojiFrameHeight: 40
+                            )
+                        )
+                        .frame(height: 220)
                 } toolbar: { params in
                     AutocompleteToolbarView(
                         standardToolbar: params.view,
@@ -119,17 +127,27 @@ class KeyboardViewController: KeyboardInputViewController {
             symbolicInputSet: .symbolic(currencies: language.currencies)
         )
 
+        var layout: KeyboardLayout
         if context.deviceType == .pad {
-            return KeyboardLayout.iPadLayout(
+            layout = KeyboardLayout.iPadLayout(
                 from: baseLayout,
                 keyboardContext: context
             )
         } else {
-            return KeyboardLayout.iPhoneLayout(
+            layout = KeyboardLayout.iPhoneLayout(
                 from: baseLayout,
                 keyboardContext: context
             )
         }
+
+        // Remove emoji keyboard button if emoji picker is disabled
+        let modelContext = KeyboardDataContainer.shared.modelContext
+        let settings = modelContext.fetchKeyboardSettings()
+        if !settings.emojiPickerEnabled {
+            layout.remove(.keyboardType(.emojis))
+        }
+
+        return layout
     }
 
     private func updateLocaleFromSettings() {
