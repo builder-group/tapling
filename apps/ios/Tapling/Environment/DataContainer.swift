@@ -39,9 +39,6 @@ class DataContainer {
             // Ensure defaults
             DataContainer.ensureDefaults(in: modelContext)
             KeyboardDataContainer.ensureDefaults(in: modelContext)
-
-            // Start processors
-            KeyboardSessionProcessor.shared.start()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -101,10 +98,6 @@ class DataContainer {
         }
 
         try? context.save()
-    }
-
-    func onAppActive() {
-        KeyboardSessionProcessor.shared.processOnAppActive()
     }
 }
 

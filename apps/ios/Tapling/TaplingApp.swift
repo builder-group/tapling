@@ -17,10 +17,5 @@ struct TaplingApp: App {
             ContentView()
         }
         .modelContainer(DataContainer.shared.modelContainer)
-        .onChange(of: scenePhase) { oldPhase, newPhase in
-            if newPhase == .active {
-                DataContainer.shared.onAppActive()
-            }
-        }
     }
 }

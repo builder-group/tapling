@@ -10,7 +10,11 @@ import SwiftUI
 
 struct HomeView: View {
     @QuerySingleton private var player: Player
-    @Query(sort: \KeyboardSession.createdAt, order: .reverse) private var sessions: [KeyboardSession]
+    @Query(sort: \KeyboardSession.createdAt, order: .reverse) private
+        var sessions: [KeyboardSession]
+    @Environment(\.modelContext) private var modelContext
+
+    @State private var isProcessing = false
     
     var body: some View {
         ScrollView {
@@ -19,52 +23,35 @@ struct HomeView: View {
                     Text("Player Stats")
                         .font(.title2)
                         .fontWeight(.bold)
-                    
+
                     Text("Total Keystrokes: \(player.totalKeystrokes)")
                         .font(.headline)
-                    
+
                     Text("Total Keycaps Earned: \(player.totalKeycapsEarned)")
                         .font(.headline)
-                    
+
                     Text("Current Keycaps: \(player.currentKeycaps)")
                         .font(.headline)
                 }
                 .padding()
-                
-                // Debug: Show keyboard sessions
+
+                // Debug: Show keyboard sessions count
                 if !sessions.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Keyboard Sessions (Debug)")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.orange)
-                        
+
                         Text("Count: \(sessions.count)")
                             .font(.headline)
-                        
-                        ForEach(sessions.prefix(10), id: \.id) { session in
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Keystrokes: \(session.keystrokeCount)")
+
+                        if isProcessing {
+                            HStack {
+                                ProgressView()
+                                Text("Processing...")
                                     .font(.subheadline)
-                                
-                                Text("Duration: \(formatDuration(from: session.startDate, to: session.endDate))")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                
-                                Text("Created: \(session.createdAt, style: .relative)")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
                             }
-                            .padding(.vertical, 4)
-                            .padding(.horizontal, 8)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(8)
-                        }
-                        
-                        if sessions.count > 10 {
-                            Text("... and \(sessions.count - 10) more")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
                         }
                     }
                     .padding()
@@ -72,8 +59,25 @@ struct HomeView: View {
             }
             .padding()
         }
+        .onAppear {
+            processSessionsIfNeeded()
+        }
+        .onChange(of: sessions.count) { oldCount, newCount in
+            processSessionsIfNeeded()
+        }
     }
     
+    private func processSessionsIfNeeded() {
+        guard !sessions.isEmpty, !isProcessing else { return }
+        
+        isProcessing = true
+        
+        Task { @MainActor in
+            await KeyboardSessionProcessor.shared.processPendingSessions()
+            isProcessing = false
+        }
+    }
+
     private func formatDuration(from start: Date, to end: Date) -> String {
         let duration = end.timeIntervalSince(start)
         let minutes = Int(duration) / 60
