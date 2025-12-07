@@ -75,7 +75,7 @@
 				Features/Collectible/Models/SlotTypes.swift,
 				"Features/Keyboard/Environment/KeyboardApp+Extension.swift",
 				Features/Keyboard/Environment/KeyboardDataContainer.swift,
-				Features/Keyboard/Lib/KeyboardSessionMonitor.swift,
+				Features/Keyboard/Environment/KeyboardSessionProcessor.swift,
 				Features/Keyboard/Lib/NativeAutocompleteService.swift,
 				Features/Keyboard/Models/KeyboardLanguage.swift,
 				Features/Keyboard/Models/KeyboardSession.swift,
@@ -86,7 +86,6 @@
 				Features/Tapling/Models/HandPosition.swift,
 				Features/Tapling/Models/Tapling.swift,
 				Features/Tapling/Views/TaplingView.swift,
-				Lib/DataContainerMonitor.swift,
 				Lib/QuerySingleton.swift,
 				Lib/SingletonModel.swift,
 			);

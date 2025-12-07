@@ -1,5 +1,5 @@
 //
-//  KeyboardSessionMonitor.swift
+//  KeyboardSessionProcessor.swift
 //  Tapling
 //
 //  Created by Benno on 07.12.25.
@@ -7,29 +7,27 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @MainActor
-final class KeyboardSessionMonitor {
-    private let modelContext: ModelContext
+final class KeyboardSessionProcessor {
+    static let shared = KeyboardSessionProcessor()
 
-    init(
-        modelContext: ModelContext,
-        dataContainerMonitor: DataContainerMonitor,
-        processOnStartup: Bool = true
-    ) {
-        self.modelContext = modelContext
+    private var modelContext: ModelContext {
+        DataContainer.shared.modelContext
+    }
 
-        // Register handler
-        dataContainerMonitor.registerHandler(for: "KeyboardSession") {
-            [weak self] in
-            await self?.processPendingSessions()
+    private init() {}
+
+    func start() {
+        Task { @MainActor in
+            await self.processPendingSessions()
         }
+    }
 
-        // Process any existing sessions
-        if processOnStartup {
-            Task { @MainActor in
-                await self.processPendingSessions()
-            }
+    func processOnAppActive() {
+        Task { @MainActor in
+            await self.processPendingSessions()
         }
     }
 
@@ -45,7 +43,7 @@ final class KeyboardSessionMonitor {
 
         guard let player = fetchPlayer() else {
             AppLogger.shared.error(
-                "KeyboardSessionMonitor: Failed to fetch Player"
+                "KeyboardSessionProcessor: Failed to fetch Player"
             )
             return
         }
