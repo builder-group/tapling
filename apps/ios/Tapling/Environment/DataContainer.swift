@@ -18,6 +18,8 @@ class DataContainer {
     var modelContext: ModelContext {
         modelContainer.mainContext
     }
+    private var dataContainerMonitor: DataContainerMonitor
+    private var keyboardSessionMonitor: KeyboardSessionMonitor?
 
     init(isStoredInMemoryOnly: Bool = false) {
         let configurations = [
@@ -36,9 +38,17 @@ class DataContainer {
                 ),
                 configurations: configurations
             )
+            dataContainerMonitor = DataContainerMonitor()
 
+            // Ensure defaults
             DataContainer.ensureDefaults(in: modelContext)
             KeyboardDataContainer.ensureDefaults(in: modelContext)
+
+            // Setup monitors
+            keyboardSessionMonitor = KeyboardSessionMonitor(
+                modelContext: modelContext,
+                dataContainerMonitor: dataContainerMonitor
+            )
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -73,6 +83,10 @@ class DataContainer {
     }
 
     static func ensureDefaults(in context: ModelContext) {
+        // Ensure Player singleton exists
+        _ = Player.instance(with: context)
+
+        // Ensure default collectibles exist
         let defaultCollectibleIds = ["fur_white", "face_cute"]
 
         for collectibleId in defaultCollectibleIds {
