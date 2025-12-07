@@ -58,10 +58,6 @@ class KeyboardViewController: KeyboardInputViewController {
     override func viewWillSetupKeyboardView() {
         super.viewWillSetupKeyboardView()
 
-        let modelContext = KeyboardDataContainer.shared.modelContext
-        let settings = modelContext.fetchKeyboardSettings()
-        let isEmojiPickerEnabled = settings.emojiPickerEnabled
-
         setupKeyboardView { controller in
             VStack(spacing: 0) {
                 KeyboardView(
@@ -76,7 +72,7 @@ class KeyboardViewController: KeyboardInputViewController {
                 } emojiKeyboard: { params in
                     // EmojiPickerView(controller: controller)
                     //
-                    // NOTE: KeyboardKit's basic emoji keyboard seems to be partially working in the free version?
+                    // NOTE: KeyboardKit's emoji keyboard seems to be partially working in the free version?
                     // This is probably a bug that may not be available in future KeyboardKit versions.
                     params.view
                         .emojiKeyboardSizes(
