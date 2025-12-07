@@ -88,6 +88,7 @@
 				Features/Tapling/Views/TaplingView.swift,
 				Lib/QuerySingleton.swift,
 				Lib/SingletonModel.swift,
+				Models/AppSettings.swift,
 			);
 			target = D3769A3E2EDEDAD20048E728 /* Keyboard */;
 		};

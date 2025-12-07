@@ -121,13 +121,20 @@ final class KeyboardSessionMonitor {
         var keycaps = 0
 
         for session in sessions {
-            // For MVP: 1 keystroke = 1 keycap
-            let sessionKeycaps = session.keystrokeCount
+            let sessionKeycaps = calculateKeycaps(for: session)
             keystrokes += session.keystrokeCount
             keycaps += sessionKeycaps
         }
 
         return (keystrokes, keycaps)
+    }
+
+    private func calculateKeycaps(for session: KeyboardSession) -> Int {
+        // For MVP: 1 keystroke = 1 keycap (Bongo Player job)
+        // Future: Apply job-specific logic here (Chatter, Writer, etc.)
+        // Example: Chatter = first 15 keystrokes * 2, rest * 0.5
+        // Example: Writer = multiplier from 0.8x → 1.2x over 80 keystrokes
+        return session.keystrokeCount
     }
 
     private func fetchPlayer() -> Player? {

@@ -49,6 +49,7 @@ class DataContainer {
 
     static func schema() -> [any PersistentModel.Type] {
         [
+            AppSettings.self,
             OwnedCollectible.self,
             Player.self,
         ]
@@ -76,7 +77,7 @@ class DataContainer {
     }
 
     static func ensureDefaults(in context: ModelContext) {
-        // Ensure Player singleton exists
+        _ = AppSettings.instance(with: context)
         _ = Player.instance(with: context)
 
         // Ensure default collectibles exist

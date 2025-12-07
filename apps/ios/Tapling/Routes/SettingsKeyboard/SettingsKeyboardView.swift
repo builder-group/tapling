@@ -16,16 +16,6 @@ struct SettingsKeyboardView: View {
 
     @FocusState private var isTextFieldFocused: Bool
 
-    private var debugModeBinding: Binding<Bool> {
-        Binding(
-            get: { keyboardSettings.debug },
-            set: { newValue in
-                keyboardSettings.debug = newValue
-                try? modelContext.save()
-            }
-        )
-    }
-
     private var autocompleteEnabledBinding: Binding<Bool> {
         Binding(
             get: { keyboardSettings.autocompleteEnabled },
@@ -88,10 +78,6 @@ struct SettingsKeyboardView: View {
                     Toggle("Autocorrect", isOn: autocorrectEnabledBinding)
                 }
                 Toggle("Emoji Picker", isOn: emojiPickerEnabledBinding)
-            }
-
-            Section("DEVELOPER") {
-                Toggle("Debug Mode", isOn: debugModeBinding)
             }
         }
         .navigationTitle("Keyboard")
