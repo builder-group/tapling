@@ -14,6 +14,20 @@ class KeyboardViewController: KeyboardInputViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateLocaleFromSettings()
+        
+        // Start new keyboard session tracking
+        Task { @MainActor in
+            KeyboardSessionTracker.shared.startSession()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        // Save session when keyboard closes
+        Task { @MainActor in
+            KeyboardSessionTracker.shared.saveSession()
+        }
     }
 
     override func viewDidLoad() {

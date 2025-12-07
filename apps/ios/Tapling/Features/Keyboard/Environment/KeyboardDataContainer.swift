@@ -23,13 +23,15 @@ class KeyboardDataContainer {
         let configurations = [
             KeyboardDataContainer.configuration(
                 isStoredInMemoryOnly: isStoredInMemoryOnly
-            ),
+            )
         ]
 
         do {
             modelContainer = try ModelContainer(
                 // Note: ModelContainer requires full schema even if configuration only uses subset
-                for: Schema(KeyboardDataContainer.schema() + DataContainer.schema()),
+                for: Schema(
+                    KeyboardDataContainer.schema() + DataContainer.schema()
+                ),
                 configurations: configurations
             )
 
@@ -43,6 +45,7 @@ class KeyboardDataContainer {
         [
             KeyboardTaplingSettings.self,
             KeyboardSettings.self,
+            KeyboardSession.self,
         ]
     }
 

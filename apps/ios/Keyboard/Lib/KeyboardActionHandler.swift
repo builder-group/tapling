@@ -21,8 +21,13 @@ class KeyboardActionHandler: KeyboardAction.StandardActionHandler {
     {
         super.handle(gesture, on: action)
 
-        // Notify when any keyboard action is triggered (on release gesture)
+        // Handle keystrokes when any keyboard action is triggered (on release gesture)
         if gesture == .release {
+            Task { @MainActor in
+                // Track in-memory session (will be saved when keyboard closes)
+                KeyboardSessionTracker.shared.trackKeystroke()
+            }
+
             NotificationCenter.default.post(
                 name: .keyboardActionTriggered,
                 object: nil

@@ -13,4 +13,9 @@ extension ModelContext {
         (try? fetch(FetchDescriptor<KeyboardSettings>()).first)
             ?? KeyboardSettings.default
     }
+
+    func fetchKeyboardTaplingSettings() -> KeyboardTaplingSettings {
+        (try? fetch(FetchDescriptor<KeyboardTaplingSettings>()).first)
+            ?? KeyboardTaplingSettings.default
+    }
 }

@@ -26,7 +26,7 @@ struct SettingsTaplingView: View {
         static let offsetStep = 0.5
     }
 
-    private var bannerMessage: Text {
+    private var previewBannerMessage: Text {
         let keyboardIcon = Text(Image(systemName: "keyboard.fill"))
             .foregroundStyle(.blue)
         return Text(
@@ -49,6 +49,17 @@ struct SettingsTaplingView: View {
             get: { taplingSettings.userBottomOffset },
             set: { newValue in
                 taplingSettings.userBottomOffset = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
+    private var trackSessionsBinding: Binding<Bool> {
+        Binding(
+            get: { hasFullAccess && taplingSettings.trackSessions },
+            set: { newValue in
+                guard hasFullAccess else { return }
+                taplingSettings.trackSessions = newValue
                 try? modelContext.save()
             }
         )
@@ -79,6 +90,14 @@ struct SettingsTaplingView: View {
                 disablePreviewMode()
             }
         }
+        .onAppear {
+            checkFullAccess()
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                checkFullAccess()
+            }
+        }
     }
 
     private var settingsForm: some View {
@@ -86,7 +105,7 @@ struct SettingsTaplingView: View {
             if !hasFullAccess && isTextFieldFocused {
                 BannerView(
                     icon: "exclamationmark.triangle.fill",
-                    message: bannerMessage,
+                    message: previewBannerMessage,
                     style: .warning
                 )
                 .padding(.horizontal, 16)
@@ -95,7 +114,7 @@ struct SettingsTaplingView: View {
             }
 
             Form {
-                Section {
+                Section("POSITION") {
                     LabeledSliderView(
                         label: "Scale",
                         value: taplingSettings.userScale,
@@ -113,6 +132,39 @@ struct SettingsTaplingView: View {
                         range: SliderRange.offset,
                         step: SliderRange.offsetStep
                     )
+                }
+
+                Section("EARNINGS") {
+                    Toggle("Enable Earnings", isOn: trackSessionsBinding)
+                        .disabled(!hasFullAccess)
+
+                    if !hasFullAccess {
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.orange)
+                                .font(.caption)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Full Access required to earn keycaps")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.primary)
+
+                                Text(
+                                    "We only count keystrokes—never read what you type."
+                                )
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    } else {
+                        Text(
+                            "Earn keycaps by typing. We only count keystrokes—never read what you type."
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    }
                 }
             }
         }
@@ -156,11 +208,7 @@ struct SettingsTaplingView: View {
     }
 
     private func checkFullAccess() {
-        let status = KeyboardStatusContext(
-            bundleId: "com.buildergroup.Tapling.Keyboard"
-        )
-        status.refresh()
-        hasFullAccess = status.isFullAccessEnabled
+        hasFullAccess = KeyboardStatusContext.hasFullAccess()
     }
 }
 

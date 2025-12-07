@@ -12,6 +12,7 @@ import SwiftData
 final class KeyboardTaplingSettings: SingletonModel {
     var userScale: Double
     var userBottomOffset: Double
+    var trackSessions: Bool
 
     var equippedFurId: String
     var equippedFaceId: String
@@ -20,12 +21,14 @@ final class KeyboardTaplingSettings: SingletonModel {
     init(
         userScale: Double = 1.5,
         userBottomOffset: Double = 4.0,
+        trackSessions: Bool = true,
         equippedFurId: String = "fur_white",
         equippedFaceId: String = "face_cute",
         equippedHatId: String? = nil
     ) {
         self.userScale = userScale
         self.userBottomOffset = userBottomOffset
+        self.trackSessions = trackSessions
         self.equippedFurId = equippedFurId
         self.equippedFaceId = equippedFaceId
         self.equippedHatId = equippedHatId
