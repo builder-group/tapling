@@ -56,6 +56,8 @@ final class KeyboardSessionMonitor {
     }
 
     private func checkAndProcessSessions() async {
+        await cleanupOldSessions()
+
         guard let sessions = fetchPendingSessions() else {
             return
         }
@@ -94,7 +96,7 @@ final class KeyboardSessionMonitor {
         #endif
 
         updatePlayer(player, with: totals)
-        deleteSessions(sessions)
+        markSessionsAsProcessed(sessions)
         try? modelContext.save()
 
         #if DEBUG
@@ -106,6 +108,7 @@ final class KeyboardSessionMonitor {
 
     private func fetchPendingSessions() -> [KeyboardSession]? {
         let descriptor = FetchDescriptor<KeyboardSession>(
+            predicate: #Predicate { $0.processedAt == nil },
             sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
         )
         return try? modelContext.fetch(descriptor)
@@ -146,9 +149,31 @@ final class KeyboardSessionMonitor {
         player.lastActiveDate = Date()
     }
 
-    private func deleteSessions(_ sessions: [KeyboardSession]) {
+    private func markSessionsAsProcessed(_ sessions: [KeyboardSession]) {
+        let now = Date()
         for session in sessions {
+            session.processedAt = now
+        }
+    }
+
+    private func cleanupOldSessions() async {
+        let oneDayAgo = Date().addingTimeInterval(-24 * 60 * 60)
+        let descriptor = FetchDescriptor<KeyboardSession>(
+            predicate: #Predicate {
+                $0.processedAt != nil && $0.processedAt! < oneDayAgo
+            }
+        )
+
+        guard let oldSessions = try? modelContext.fetch(descriptor),
+            !oldSessions.isEmpty
+        else {
+            return
+        }
+
+        for session in oldSessions {
             modelContext.delete(session)
         }
+
+        try? modelContext.save()
     }
 }

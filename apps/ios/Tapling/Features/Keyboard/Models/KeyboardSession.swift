@@ -15,18 +15,21 @@ final class KeyboardSession {
     var endDate: Date
     var keystrokeCount: Int
     var createdAt: Date
+    var processedAt: Date?
 
     init(
         id: UUID = UUID(),
         startDate: Date,
         endDate: Date,
         keystrokeCount: Int,
-        createdAt: Date = Date()
+        createdAt: Date = Date(),
+        processedAt: Date? = nil
     ) {
         self.id = id
         self.startDate = startDate
         self.endDate = endDate
         self.keystrokeCount = keystrokeCount
         self.createdAt = createdAt
+        self.processedAt = processedAt
     }
 }
