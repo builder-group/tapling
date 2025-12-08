@@ -1,5 +1,5 @@
 //
-//  CardboxOpeningView.swift
+//  CardboardBoxOpeningView.swift
 //  Tapling
 //
 //  Created by Benno on 08.12.25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardboxOpeningView: View {
+struct CardboardBoxOpeningView: View {
     @Environment(\.dismiss) private var dismiss
 
     let initialRarity: Rarity
@@ -199,7 +199,7 @@ struct CardboxOpeningView: View {
                         )
                     )
             } else {
-                cardboxSection
+                cardboardBoxSection
                     .transition(.scale.combined(with: .opacity))
             }
         }
@@ -254,8 +254,8 @@ struct CardboxOpeningView: View {
             .modifier(PopInModifier(index: index, visibleCount: starCount))
     }
 
-    private var cardboxSection: some View {
-        Image("cardbox")
+    private var cardboardBoxSection: some View {
+        Image("cardboard-box")
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: boxWidth)
@@ -689,9 +689,9 @@ private struct PreviewWrapper: View {
     @State private var resetKey = 0
 
     var body: some View {
-        CardboxOpeningView(
+        CardboardBoxOpeningView(
             initialRarity: .common,
-            upgradeChances: CardboxOpeningView.UpgradeChances(
+            upgradeChances: CardboardBoxOpeningView.UpgradeChances(
                 toRare: 1.0,
                 toEpic: 1.0,
                 toLegendary: 1.0

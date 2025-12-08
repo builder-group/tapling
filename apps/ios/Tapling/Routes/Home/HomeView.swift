@@ -13,17 +13,17 @@ struct HomeView: View {
 
     @QuerySingleton private var player: Player
 
-    @State private var showCardboxOpening = false
+    @State private var showCardboardBoxOpening = false
 
     var body: some View {
         ZStack(alignment: .topLeading) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Button("Open Cardbox") {
+                    Button("Open Cardboard Box") {
                         var transaction = Transaction()
                         transaction.disablesAnimations = true
                         withTransaction(transaction) {
-                            showCardboxOpening = true
+                            showCardboardBoxOpening = true
                         }
                     }
                     .buttonStyle(.borderedProminent)
@@ -35,8 +35,8 @@ struct HomeView: View {
             keycapDisplay
                 .padding()
         }
-        .fullScreenCover(isPresented: $showCardboxOpening) {
-            CardboxOpeningView(onCollect: handleCollectibleWon)
+        .fullScreenCover(isPresented: $showCardboardBoxOpening) {
+            CardboardBoxOpeningView(onCollect: handleCollectibleWon)
         }
     }
 
@@ -67,7 +67,7 @@ struct HomeView: View {
             modelContext.insert(ownedCollectible)
             try? modelContext.save()
         }
-        showCardboxOpening = false
+        showCardboardBoxOpening = false
     }
 }
 
