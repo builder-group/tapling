@@ -12,71 +12,62 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
 
     @QuerySingleton private var player: Player
-    @Query(sort: \KeyboardSession.createdAt, order: .reverse) private
-        var sessions: [KeyboardSession]
 
     @State private var showCardboxOpening = false
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Player Stats")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Text("Total Keystrokes: \(player.totalKeystrokes)")
-                        .font(.headline)
-
-                    Text("Total Keycaps Earned: \(player.totalKeycapsEarned)")
-                        .font(.headline)
-
-                    Text("Current Keycaps: \(player.currentKeycaps)")
-                        .font(.headline)
-                }
-                .padding()
-
-                Button("Open Cardbox") {
-                    showCardboxOpening = true
-                }
-                .buttonStyle(.borderedProminent)
-                .padding()
-
-                // Debug: Show keyboard sessions count
-                if !sessions.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Keyboard Sessions (Debug)")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.orange)
-
-                        Text("Count: \(sessions.count)")
-                            .font(.headline)
+        ZStack(alignment: .topLeading) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Button("Open Cardbox") {
+                        var transaction = Transaction()
+                        transaction.disablesAnimations = true
+                        withTransaction(transaction) {
+                            showCardboxOpening = true
+                        }
                     }
+                    .buttonStyle(.borderedProminent)
                     .padding()
                 }
+                .padding()
             }
-            .padding()
+
+            keycapDisplay
+                .padding()
         }
-        .sheet(isPresented: $showCardboxOpening) {
+        .fullScreenCover(isPresented: $showCardboxOpening) {
             CardboxOpeningView(onCollect: handleCollectibleWon)
         }
     }
 
-    private func handleCollectibleWon(_ collectible: AnyCollectible) {
-        let ownedCollectible = OwnedCollectible(
-            collectibleId: collectible.id,
-            unlockedAt: Date()
+    private var keycapDisplay: some View {
+        HStack(spacing: 8) {
+            Image("keycap")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
+
+            Text("\(player.currentKeycaps)")
+                .font(.headline)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.gray.opacity(0.2))
         )
-        modelContext.insert(ownedCollectible)
-        try? modelContext.save()
     }
 
-    private func formatDuration(from start: Date, to end: Date) -> String {
-        let duration = end.timeIntervalSince(start)
-        let minutes = Int(duration) / 60
-        let seconds = Int(duration) % 60
-        return String(format: "%dm %ds", minutes, seconds)
+    private func handleCollectibleWon(_ collectible: AnyCollectible?) {
+        if let collectible = collectible {
+            let ownedCollectible = OwnedCollectible(
+                collectibleId: collectible.id,
+                unlockedAt: Date()
+            )
+            modelContext.insert(ownedCollectible)
+            try? modelContext.save()
+        }
+        showCardboxOpening = false
     }
 }
 

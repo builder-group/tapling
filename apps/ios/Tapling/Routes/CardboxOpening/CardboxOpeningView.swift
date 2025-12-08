@@ -12,7 +12,7 @@ struct CardboxOpeningView: View {
 
     let initialRarity: Rarity
     let upgradeChances: UpgradeChances
-    let onCollect: (AnyCollectible) -> Void
+    let onCollect: (AnyCollectible?) -> Void
 
     @State private var currentRarity: Rarity
     @State private var tapCount: Int = 0
@@ -21,12 +21,28 @@ struct CardboxOpeningView: View {
     @State private var particlesTrigger: Int = 0
     @State private var glowIntensity: CGFloat = 0
     @State private var shakeOffset: CGFloat = 0
+    @State private var handPokeOffset: CGFloat = 0
+    @State private var handPokeOpacity: Double = 0
+    @State private var handPokeRotation: Double = 0
+    @State private var screenWidth: CGFloat?
 
     private let maxTaps = 4
     private let maxStars = 4
     private let starSpacing: CGFloat = 65.0
     private let starArchHeight: CGFloat = 40.0
     private let starSize: CGFloat = 36.0
+
+    private let boxWidth: CGFloat = 180
+    private var boxRightEdge: CGFloat {
+        boxWidth / 2
+    }
+
+    private let handPokeWidth: CGFloat = 345
+    private let handPokeHeight: CGFloat = 60
+    private let handPokeRotationAngle: Double = -25
+    private var handPokeIntoBox: CGFloat {
+        -(boxWidth / 3)
+    }
 
     struct UpgradeChances {
         let toRare: Double
@@ -43,7 +59,7 @@ struct CardboxOpeningView: View {
     init(
         initialRarity: Rarity = .common,
         upgradeChances: UpgradeChances = .default,
-        onCollect: @escaping (AnyCollectible) -> Void
+        onCollect: @escaping (AnyCollectible?) -> Void
     ) {
         self.initialRarity = initialRarity
         self.upgradeChances = upgradeChances
@@ -94,50 +110,62 @@ struct CardboxOpeningView: View {
     // MARK: - UI
 
     var body: some View {
-        ZStack {
-            backgroundGlow
+        GeometryReader { geometry in
+            ZStack {
+                backgroundGlow
 
-            VStack(spacing: 0) {
-                Spacer()
+                VStack(spacing: 0) {
+                    Spacer()
 
-                mainContentArea
+                    mainContentArea
 
-                if !isComplete {
-                    progressSection
+                    if !isComplete {
+                        progressSection
+                            .transition(.opacity.combined(with: .scale))
+                    }
+
+                    Spacer()
+
+                    if wonCollectible != nil {
+                        resultSection
+                            .transition(
+                                .move(edge: .bottom).combined(with: .opacity)
+                            )
+                            .padding(.bottom, 40)
+                            .padding(.top, 20)
+                    }
+                }
+                .padding(.horizontal, 32)
+
+                if shouldShowStars {
+                    starsSection
+                        .offset(y: -150)
                         .transition(.opacity.combined(with: .scale))
                 }
 
-                Spacer()
+                if particlesTrigger > 0 {
+                    ParticleEmitterView(
+                        color: currentRarity.color,
+                        trigger: particlesTrigger
+                    )
+                }
 
-                if wonCollectible != nil {
-                    resultSection
-                        .transition(
-                            .move(edge: .bottom).combined(with: .opacity)
-                        )
-                        .padding(.bottom, 40)
-                        .padding(.top, 20)
+                if !isComplete {
+                    pokingHandView
                 }
             }
-            .padding(.horizontal, 32)
-
-            if shouldShowStars {
-                starsSection
-                    .offset(y: -150)
-                    .transition(.opacity.combined(with: .scale))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                guard !isComplete else { return }
+                handleTap()
             }
-
-            if particlesTrigger > 0 {
-                ParticleEmitterView(
-                    color: currentRarity.color,
-                    trigger: particlesTrigger
-                )
+            .onAppear {
+                screenWidth = geometry.size.width
             }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            guard !isComplete else { return }
-            handleTap()
+            .onChange(of: geometry.size.width) { _, newWidth in
+                screenWidth = newWidth
+            }
         }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
@@ -230,7 +258,7 @@ struct CardboxOpeningView: View {
         Image("cardbox")
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 180)
+            .frame(width: boxWidth)
             .scaleEffect(bloatScale)
             .rotationEffect(.degrees(boxRotation))
             .offset(x: shakeOffset)
@@ -248,6 +276,17 @@ struct CardboxOpeningView: View {
                 .spring(response: 0.3, dampingFraction: 0.5),
                 value: boxRotation
             )
+    }
+
+    private var pokingHandView: some View {
+        Image("fur_white_poke")
+            .resizable()
+            .scaledToFit()
+            .frame(width: handPokeWidth, height: handPokeHeight)
+            .opacity(handPokeOpacity)
+            .offset(x: handPokeOffset)
+            .rotationEffect(.degrees(handPokeRotation))
+            .blendMode(.normal)
     }
 
     private func wonItemSection(tapling: Tapling, collectible: AnyCollectible)
@@ -360,6 +399,7 @@ struct CardboxOpeningView: View {
 
     private var resultSection: some View {
         Button {
+            onCollect(wonCollectible)
             dismiss()
         } label: {
             Text("Collect!")
@@ -392,6 +432,7 @@ struct CardboxOpeningView: View {
         impact.impactOccurred()
 
         animateShake()
+        animateHandPoke()
         isAnimating = true
         tapCount += 1
 
@@ -408,6 +449,32 @@ struct CardboxOpeningView: View {
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 isAnimating = false
+            }
+        }
+    }
+
+    private func animateHandPoke() {
+        guard let screenWidth = screenWidth else { return }
+
+        let offScreenStart = screenWidth / 2 + handPokeWidth / 2
+        let leftTipTarget = boxRightEdge + handPokeIntoBox
+        let pokePosition = leftTipTarget + handPokeWidth / 2
+
+        handPokeOffset = offScreenStart
+        handPokeOpacity = 0
+        handPokeRotation = 0
+
+        withAnimation(.easeOut(duration: 0.15)) {
+            handPokeOffset = pokePosition
+            handPokeRotation = handPokeRotationAngle
+            handPokeOpacity = 0.7
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            withAnimation(.easeIn(duration: 0.12)) {
+                handPokeOffset = offScreenStart
+                handPokeRotation = 0
+                handPokeOpacity = 0
             }
         }
     }
@@ -436,9 +503,6 @@ struct CardboxOpeningView: View {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             generateReward()
-            if let collectible = wonCollectible {
-                onCollect(collectible)
-            }
         }
     }
 
@@ -625,29 +689,17 @@ private struct PreviewWrapper: View {
     @State private var resetKey = 0
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            CardboxOpeningView(
-                initialRarity: .common,
-                upgradeChances: CardboxOpeningView.UpgradeChances(
-                    toRare: 1.0,
-                    toEpic: 1.0,
-                    toLegendary: 1.0
-                ),
-                onCollect: { _ in }
-            )
-            .id(resetKey)
-
-            Button {
+        CardboxOpeningView(
+            initialRarity: .common,
+            upgradeChances: CardboxOpeningView.UpgradeChances(
+                toRare: 1.0,
+                toEpic: 1.0,
+                toLegendary: 1.0
+            ),
+            onCollect: { _ in
                 resetKey += 1
-            } label: {
-                Image(systemName: "arrow.clockwise")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(12)
-                    .background(Color.blue.opacity(0.8))
-                    .clipShape(Circle())
             }
-            .padding()
-        }
+        )
+        .id(resetKey)
     }
 }
