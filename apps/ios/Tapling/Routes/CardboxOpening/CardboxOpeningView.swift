@@ -12,6 +12,7 @@ struct CardboxOpeningView: View {
 
     let initialRarity: Rarity
     let upgradeChances: UpgradeChances
+    let onCollect: (AnyCollectible) -> Void
 
     @State private var currentRarity: Rarity
     @State private var tapCount: Int = 0
@@ -41,10 +42,12 @@ struct CardboxOpeningView: View {
 
     init(
         initialRarity: Rarity = .common,
-        upgradeChances: UpgradeChances = .default
+        upgradeChances: UpgradeChances = .default,
+        onCollect: @escaping (AnyCollectible) -> Void
     ) {
         self.initialRarity = initialRarity
         self.upgradeChances = upgradeChances
+        self.onCollect = onCollect
         _currentRarity = State(initialValue: initialRarity)
     }
 
@@ -199,7 +202,7 @@ struct CardboxOpeningView: View {
             ? CGFloat(index) / CGFloat(starCount - 1)
             : 0.5
         let archProgress = (normalizedPosition - 0.5) * 2.0
-        
+
         var y = -(1.0 - archProgress * archProgress) * starArchHeight
         if starCount == 2 {
             y -= starArchHeight * 0.8
@@ -338,7 +341,7 @@ struct CardboxOpeningView: View {
                             ? currentRarity.color
                             : Color.gray.opacity(0.25)
                     )
-                    .frame(width: 18, height: 18)
+                    .frame(width: 12, height: 12)
                     .shadow(
                         color: index < tapCount
                             ? currentRarity.color.opacity(0.6)
@@ -433,6 +436,9 @@ struct CardboxOpeningView: View {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             generateReward()
+            if let collectible = wonCollectible {
+                onCollect(collectible)
+            }
         }
     }
 
@@ -626,7 +632,8 @@ private struct PreviewWrapper: View {
                     toRare: 1.0,
                     toEpic: 1.0,
                     toLegendary: 1.0
-                )
+                ),
+                onCollect: { _ in }
             )
             .id(resetKey)
 

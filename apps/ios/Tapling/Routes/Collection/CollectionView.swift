@@ -47,20 +47,18 @@ struct CollectionView: View {
                 ],
                 spacing: 12
             ) {
-                ForEach(sortedCollectibles(for: selectedType)) { collectible in
+                ForEach(collectibleItems(for: selectedType)) { item in
                     NavigationLink {
                         CollectionItemDetailView(
-                            collectible: collectible,
-                            isUnlocked: isUnlocked(
-                                collectibleId: collectible.id
-                            )
+                            collectible: item.collectible,
+                            isUnlocked: item.isUnlocked,
+                            count: item.count,
+                            firstUnlockedDate: item.firstUnlockedDate
                         )
                     } label: {
                         CollectibleCardView(
-                            collectible: collectible,
-                            isUnlocked: isUnlocked(
-                                collectibleId: collectible.id
-                            )
+                            collectible: item.collectible,
+                            count: item.count
                         )
                     }
                     .buttonStyle(.plain)
@@ -72,24 +70,40 @@ struct CollectionView: View {
 
     // MARK: - Actions
 
-    private func isUnlocked(collectibleId: String) -> Bool {
-        ownedCollectibles.first { $0.collectibleId == collectibleId }?
-            .isUnlocked ?? false
+    private struct CollectibleItem: Identifiable {
+        let id: String
+        let collectible: AnyCollectible
+        let isUnlocked: Bool
+        let count: Int
+        let firstUnlockedDate: Date?
     }
 
-    private func sortedCollectibles(for type: AnyCollectible.SlotType)
-        -> [AnyCollectible]
+    private func collectibleItems(for type: AnyCollectible.SlotType)
+        -> [CollectibleItem]
     {
         let collectibles = registry.collectibles(ofType: type)
-        return collectibles.sorted { collectible1, collectible2 in
-            let unlocked1 = isUnlocked(collectibleId: collectible1.id)
-            let unlocked2 = isUnlocked(collectibleId: collectible2.id)
-
-            if unlocked1 != unlocked2 {
-                return unlocked1
+        return collectibles.map { collectible in
+            let matching = ownedCollectibles.filter {
+                $0.collectibleId == collectible.id && $0.isUnlocked
             }
+            let isUnlocked = !matching.isEmpty
+            let count = matching.count
+            let firstUnlockedDate = matching.compactMap { $0.unlockedAt }.min()
 
-            return collectible1.rarity.sortOrder > collectible2.rarity.sortOrder
+            return CollectibleItem(
+                id: collectible.id,
+                collectible: collectible,
+                isUnlocked: isUnlocked,
+                count: count,
+                firstUnlockedDate: firstUnlockedDate
+            )
+        }
+        .sorted { item1, item2 in
+            if item1.isUnlocked != item2.isUnlocked {
+                return item1.isUnlocked
+            }
+            return item1.collectible.rarity.sortOrder
+                > item2.collectible.rarity.sortOrder
         }
     }
 }

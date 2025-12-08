@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CollectibleCardView: View {
     let collectible: AnyCollectible
-    let isUnlocked: Bool
+    let count: Int
 
     private var previewTapling: Tapling {
         switch collectible {
@@ -67,16 +67,13 @@ struct CollectibleCardView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(8)
 
-            if !isUnlocked {
+            if count > 0 {
+                countBadge
+            } else {
                 lockedOverlay
                 lockBadge
             }
         }
-    }
-
-    private var lockedOverlay: some View {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .fill(.black.opacity(0.3))
     }
 
     private var lockBadge: some View {
@@ -91,11 +88,29 @@ struct CollectibleCardView: View {
             .padding(8)
     }
 
+    private var lockedOverlay: some View {
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .fill(.black.opacity(0.3))
+    }
+
+    private var countBadge: some View {
+        Text("\(count)")
+            .font(.caption)
+            .fontWeight(.bold)
+            .foregroundStyle(.white)
+            .padding(6)
+            .background(
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(.black.opacity(0.7))
+            )
+            .padding(8)
+    }
+
     private var nameLabel: some View {
         Text(collectible.name)
             .font(.caption)
             .fontWeight(.medium)
-            .foregroundStyle(isUnlocked ? .primary : .secondary)
+            .foregroundStyle(count > 0 ? .primary : .secondary)
             .lineLimit(2)
             .multilineTextAlignment(.center)
     }
@@ -112,7 +127,7 @@ struct CollectibleCardView: View {
                     assetVariant: "propeller-hat"
                 )
             ),
-            isUnlocked: true
+            count: 3
         )
 
         CollectibleCardView(
@@ -124,7 +139,7 @@ struct CollectibleCardView: View {
                     assetVariant: "cute"
                 )
             ),
-            isUnlocked: false
+            count: 0
         )
     }
     .fixedSize(horizontal: false, vertical: true)

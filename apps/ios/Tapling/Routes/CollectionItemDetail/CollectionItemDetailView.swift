@@ -10,6 +10,8 @@ import SwiftUI
 struct CollectionItemDetailView: View {
     let collectible: AnyCollectible
     let isUnlocked: Bool
+    let count: Int
+    let firstUnlockedDate: Date?
 
     @State private var leftHand: HandPosition = .up
     @State private var rightHand: HandPosition = .down
@@ -108,6 +110,36 @@ struct CollectionItemDetailView: View {
 
                 rarityBadge
             }
+
+            if isUnlocked {
+                Divider()
+
+                VStack(spacing: 12) {
+                    HStack {
+                        Text("Owned:")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("\(count)x")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.primary)
+                    }
+
+                    if let firstUnlocked = firstUnlockedDate {
+                        HStack {
+                            Text("First Unlocked:")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Text(firstUnlocked, style: .date)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                }
+            }
         }
         .padding()
     }
@@ -144,8 +176,9 @@ struct CollectionItemDetailView: View {
                     assetVariant: "propeller-hat"
                 )
             ),
-            isUnlocked: false
+            isUnlocked: true,
+            count: 3,
+            firstUnlockedDate: Date()
         )
     }
-    .previewDataContainer()
 }

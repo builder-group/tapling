@@ -9,6 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.modelContext) private var modelContext
+
     @QuerySingleton private var player: Player
     @Query(sort: \KeyboardSession.createdAt, order: .reverse) private
         var sessions: [KeyboardSession]
@@ -57,8 +59,17 @@ struct HomeView: View {
             .padding()
         }
         .sheet(isPresented: $showCardboxOpening) {
-            CardboxOpeningView()
+            CardboxOpeningView(onCollect: handleCollectibleWon)
         }
+    }
+
+    private func handleCollectibleWon(_ collectible: AnyCollectible) {
+        let ownedCollectible = OwnedCollectible(
+            collectibleId: collectible.id,
+            unlockedAt: Date()
+        )
+        modelContext.insert(ownedCollectible)
+        try? modelContext.save()
     }
 
     private func formatDuration(from start: Date, to end: Date) -> String {
