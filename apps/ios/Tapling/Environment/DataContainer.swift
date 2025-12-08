@@ -19,14 +19,32 @@ class DataContainer {
         modelContainer.mainContext
     }
     init(isStoredInMemoryOnly: Bool = false) {
-        let configurations = [
-            DataContainer.configuration(
-                isStoredInMemoryOnly: isStoredInMemoryOnly
-            ),
-            KeyboardDataContainer.configuration(
-                isStoredInMemoryOnly: isStoredInMemoryOnly
-            ),
-        ]
+        let configurations: [ModelConfiguration]
+        if isStoredInMemoryOnly {
+            // For in-memory (previews), use a single configuration to avoid
+            // store routing issues in SwiftUI Previews.
+            configurations = [
+                ModelConfiguration(
+                    schema: Schema(
+                        DataContainer.schema() + KeyboardDataContainer.schema()
+                    ),
+                    isStoredInMemoryOnly: true
+                )
+            ]
+        } else {
+            // Otherwise use separate configurations for isolation.
+            // DataContainer: App models (AppSettings, Player, etc.)
+            // KeyboardDataContainer: Keyboard models in shared group container
+            // for keyboard extension access (KeyboardTaplingSettings, KeyboardSettings, etc.)
+            configurations = [
+                DataContainer.configuration(
+                    isStoredInMemoryOnly: false
+                ),
+                KeyboardDataContainer.configuration(
+                    isStoredInMemoryOnly: false
+                ),
+            ]
+        }
 
         do {
             modelContainer = try ModelContainer(
