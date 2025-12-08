@@ -199,7 +199,11 @@ struct CardboxOpeningView: View {
             ? CGFloat(index) / CGFloat(starCount - 1)
             : 0.5
         let archProgress = (normalizedPosition - 0.5) * 2.0
-        let y = -(1.0 - archProgress * archProgress) * starArchHeight
+        
+        var y = -(1.0 - archProgress * archProgress) * starArchHeight
+        if starCount == 2 {
+            y -= starArchHeight * 0.8
+        }
 
         return Image(systemName: "star.fill")
             .foregroundStyle(
