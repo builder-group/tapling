@@ -33,8 +33,11 @@ struct NativeAutocompleteServiceTests {
         #expect(result.suggestions.count <= 3)
     }
 
+    // MARK: - enUS
+
     @Test @MainActor func testHel_enUS_ReturnsHelloHelpHelps() async throws {
-        // Real keyboard: "hel" | hello | help
+        // iOS: "hel" | he'll | help
+        // KbK: "hel" | hello | help
         try await expectAutocomplete(
             input: "hel",
             locale: Locale(identifier: "en_US"),
@@ -58,27 +61,29 @@ struct NativeAutocompleteServiceTests {
         )
     }
 
-    @Test @MainActor func testHel_deDE_ReturnsHelmeHelfeHellblau() async throws
+    @Test @MainActor func testHel_Capitalized_enUS_ReturnsCapitalized()
+        async throws
     {
-        // Real keyboard: "hel" | helfen | hell
+        // iOS: "Hel" | He'll | Help
+        // KbK: "Hel" | Hello | Help
         try await expectAutocomplete(
-            input: "hel",
-            locale: Locale(identifier: "de_DE"),
+            input: "Hel",
+            locale: Locale(identifier: "en_US"),
             expected: [
                 Autocomplete.Suggestion(
-                    text: "hel",
+                    text: "Hel",
                     type: .regular,
-                    title: "\"hel\""
+                    title: "\"Hel\""
                 ),
                 Autocomplete.Suggestion(
-                    text: "helme",
+                    text: "Hello",
                     type: .regular,
-                    title: "helme"
+                    title: "Hello"
                 ),
                 Autocomplete.Suggestion(
-                    text: "helfe",
+                    text: "Help",
                     type: .regular,
-                    title: "helfe"
+                    title: "Help"
                 ),
             ]
         )
@@ -86,8 +91,8 @@ struct NativeAutocompleteServiceTests {
 
     @Test @MainActor func testHelo_enUS_ReturnsHelpAsAutocorrect() async throws
     {
-        // Real keyboard: "helo" | help (autocorrect) | helping
-        // Note: UITextChecker ranks "helps" before "helping", so we match that
+        // iOS: "helo" | help (autocorrect) | helping
+        // KbK: "helo" | help (autocorrect) | hello
         try await expectAutocomplete(
             input: "helo",
             locale: Locale(identifier: "en_US"),
@@ -114,7 +119,8 @@ struct NativeAutocompleteServiceTests {
     @Test @MainActor func testEmpty_enUS_ReturnsEmptyTextSuggestions()
         async throws
     {
-        // Real keyboard: I | The | I'm
+        // iOS: I | The | I'm
+        // Kbk: -
         try await expectAutocomplete(
             input: "",
             locale: Locale(identifier: "en_US"),
@@ -134,36 +140,9 @@ struct NativeAutocompleteServiceTests {
         )
     }
 
-    @Test @MainActor func testEmpty_deDE_ReturnsEmptyTextSuggestions()
-        async throws
-    {
-        // Real keyboard: Ich | Ja | Das
-        try await expectAutocomplete(
-            input: "",
-            locale: Locale(identifier: "de_DE"),
-            expected: [
-                Autocomplete.Suggestion(
-                    text: "Ich",
-                    type: .regular,
-                    title: "Ich"
-                ),
-                Autocomplete.Suggestion(
-                    text: "Ja",
-                    type: .regular,
-                    title: "Ja"
-                ),
-                Autocomplete.Suggestion(
-                    text: "Das",
-                    type: .regular,
-                    title: "Das"
-                ),
-            ]
-        )
-    }
-
     @Test @MainActor func testHelloW_enUS_ExtractsW() async throws {
-        // Real keyboard: "w" | we | what
-        // UITextChecker returns "we" before "what", so we match that
+        // iOS: "w" | what | we
+        // KbK: "w" | we | what
         try await expectAutocomplete(
             input: "Hello w",
             locale: Locale(identifier: "en_US"),
@@ -187,37 +166,11 @@ struct NativeAutocompleteServiceTests {
         )
     }
 
-    @Test @MainActor func testHel_Capitalized_enUS_ReturnsCapitalized()
+    @Test @MainActor func testXyzabc123_UnknownWord_enUS_ReturnsWordInQuotes()
         async throws
     {
-        // Real keyboard: "Hel" | Hello | Help
-        try await expectAutocomplete(
-            input: "Hel",
-            locale: Locale(identifier: "en_US"),
-            expected: [
-                Autocomplete.Suggestion(
-                    text: "Hel",
-                    type: .regular,
-                    title: "\"Hel\""
-                ),
-                Autocomplete.Suggestion(
-                    text: "Hello",
-                    type: .regular,
-                    title: "Hello"
-                ),
-                Autocomplete.Suggestion(
-                    text: "Help",
-                    type: .regular,
-                    title: "Help"
-                ),
-            ]
-        )
-    }
-
-    @Test @MainActor func testXyzabc123_UnknownWord_ReturnsWordInQuotes()
-        async throws
-    {
-        // Real keyboard: "xyzabc123"
+        // iOS: "xyzabc123"
+        // KbK: "xyzabc123"
         try await expectAutocomplete(
             input: "xyzabc123",
             locale: Locale(identifier: "en_US"),
@@ -233,7 +186,8 @@ struct NativeAutocompleteServiceTests {
 
     @Test @MainActor func testThsi_enUS_ReturnsThisAsAutocorrect() async throws
     {
-        // Real keyboard: "thsi" | this (autocorrect)
+        // iOS: "thsi" | this (autocorrect) | their
+        // KbK: "Thsi" | this (autocorrect) | tusi
         try await expectAutocomplete(
             input: "thsi",
             locale: Locale(identifier: "en_US"),
@@ -258,7 +212,8 @@ struct NativeAutocompleteServiceTests {
     }
 
     @Test @MainActor func testHEL_enUS_ReturnsAllCaps() async throws {
-        // Real keyboard: "HEL" | HELLO | HELP
+        // iOS: "HEL" | HELLO | HELP
+        // KbK: "HEL" | HELLO | HELP
         try await expectAutocomplete(
             input: "HEL",
             locale: Locale(identifier: "en_US"),
@@ -285,7 +240,8 @@ struct NativeAutocompleteServiceTests {
     @Test @MainActor func testA_enUS_ReturnsSingleCharacterSuggestions()
         async throws
     {
-        // Real keyboard: "a" | and | are
+        // iOS: "a" | and | are
+        // KbK: "a" | and | are
         try await expectAutocomplete(
             input: "a",
             locale: Locale(identifier: "en_US"),
@@ -309,32 +265,11 @@ struct NativeAutocompleteServiceTests {
         )
     }
 
-    @Test @MainActor func testHallo_deDE_ReturnsHalloCompletions()
-        async throws
-    {
-        // Real keyboard: "hallo" | Hallos | 🙋‍♂️
-        try await expectAutocomplete(
-            input: "hallo",
-            locale: Locale(identifier: "de_DE"),
-            expected: [
-                Autocomplete.Suggestion(
-                    text: "hallo",
-                    type: .regular,
-                    title: "\"hallo\""
-                ),
-                Autocomplete.Suggestion(
-                    text: "hallos",
-                    type: .regular,
-                    title: "hallos"
-                ),
-            ]
-        )
-    }
-
     @Test @MainActor func testH_SingleCapital_enUS_ReturnsCapitalized()
         async throws
     {
-        // Real keyboard: "H" | Hey | How
+        // iOS: "H" | Hey | How
+        // KbK: "H" | He | Hey
         try await expectAutocomplete(
             input: "H",
             locale: Locale(identifier: "en_US"),
@@ -353,6 +288,86 @@ struct NativeAutocompleteServiceTests {
                     text: "Hey",
                     type: .regular,
                     title: "Hey"
+                ),
+            ]
+        )
+    }
+
+    // MARK: - deDE
+
+    @Test @MainActor func testHel_deDE_ReturnsHelmeHelfeHellblau() async throws
+    {
+        // iOS: "hel" | helfen | hell
+        // KbK: "hel" | hey (autocorrect) | tel
+        try await expectAutocomplete(
+            input: "hel",
+            locale: Locale(identifier: "de_DE"),
+            expected: [
+                Autocomplete.Suggestion(
+                    text: "hel",
+                    type: .regular,
+                    title: "\"hel\""
+                ),
+                Autocomplete.Suggestion(
+                    text: "helme",
+                    type: .regular,
+                    title: "helme"
+                ),
+                Autocomplete.Suggestion(
+                    text: "helfe",
+                    type: .regular,
+                    title: "helfe"
+                ),
+            ]
+        )
+    }
+
+    @Test @MainActor func testEmpty_deDE_ReturnsEmptyTextSuggestions()
+        async throws
+    {
+        // iOS: Ich | Ja | Das
+        // KbK: -
+        try await expectAutocomplete(
+            input: "",
+            locale: Locale(identifier: "de_DE"),
+            expected: [
+                Autocomplete.Suggestion(
+                    text: "Ich",
+                    type: .regular,
+                    title: "Ich"
+                ),
+                Autocomplete.Suggestion(
+                    text: "Ja",
+                    type: .regular,
+                    title: "Ja"
+                ),
+                Autocomplete.Suggestion(
+                    text: "Das",
+                    type: .regular,
+                    title: "Das"
+                ),
+            ]
+        )
+    }
+
+    @Test @MainActor func testHallo_deDE_ReturnsHalloCompletions()
+        async throws
+    {
+        // iOS: "hallo" | Hallos | 🙋‍♂️
+        // KbK: "hallo" | Hallos
+        try await expectAutocomplete(
+            input: "hallo",
+            locale: Locale(identifier: "de_DE"),
+            expected: [
+                Autocomplete.Suggestion(
+                    text: "hallo",
+                    type: .regular,
+                    title: "\"hallo\""
+                ),
+                Autocomplete.Suggestion(
+                    text: "hallos",
+                    type: .regular,
+                    title: "hallos"
                 ),
             ]
         )

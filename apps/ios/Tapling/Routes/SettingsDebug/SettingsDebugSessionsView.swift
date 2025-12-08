@@ -64,7 +64,7 @@ private struct SessionRowView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Text("End: \(session.endDate, style: .time)")
+            Text("End: \(session.endDate!, style: .time)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 

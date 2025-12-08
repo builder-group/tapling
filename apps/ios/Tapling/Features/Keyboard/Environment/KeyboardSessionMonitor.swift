@@ -10,16 +10,15 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-@MainActor
 final class KeyboardSessionMonitor {
     static let shared = KeyboardSessionMonitor()
 
+    @MainActor
     private var modelContext: ModelContext {
         DataContainer.shared.modelContext
     }
 
     private var isProcessing = false
-    private var previousSessionCount = 0
     private var observationTask: Task<Void, Never>?
 
     private init() {}
@@ -29,48 +28,37 @@ final class KeyboardSessionMonitor {
     }
 
     func start() {
-        #if DEBUG
-            AppLogger.shared.debug(
-                "KeyboardSessionMonitor: Starting to observe KeyboardSession changes"
-            )
-        #endif
+        AppLogger.shared.debug(
+            "KeyboardSessionMonitor: Starting to observe KeyboardSession changes"
+        )
 
-        // Use NSPersistentStoreRemoteChange instead of ModelContext.didSave because:
-        // - Catches changes from keyboard extension (remote context)
-        // - Also catches local changes (same persistent store)
-        // - Limitation: Can't filter by model type (notification doesn't tell us which model changed)
-        //   We use count-based filtering as a workaround - check if KeyboardSession count changed
-        observationTask = Task { @MainActor [weak self] in
-            guard let self = self else { return }
-
+        // Observe remote changes from keyboard extension
+        // Note: This fires for ALL model changes in the shared store
+        // TODO: Filter by model type (KeyboardSession)
+        observationTask = Task { @MainActor in
             for await _ in NotificationCenter.default.notifications(
                 named: .NSPersistentStoreRemoteChange
             ) {
-                await self.checkAndProcessSessions()
+                await processPendingSessions()
             }
         }
 
-        Task { @MainActor [weak self] in
-            await self?.checkAndProcessSessions()
-        }
-    }
-
-    private func checkAndProcessSessions() async {
-        await cleanupOldSessions()
-
-        guard let sessions = fetchPendingSessions() else {
-            return
-        }
-
-        if sessions.count != previousSessionCount {
-            previousSessionCount = sessions.count
+        // Process any existing pending sessions on startup
+        Task { @MainActor in
             await processPendingSessions()
         }
     }
 
+    @MainActor
     func processPendingSessions() async {
         guard !isProcessing else { return }
-        guard let sessions = fetchPendingSessions(), !sessions.isEmpty else {
+
+        // Fetch sessions that are:
+        // 1. Not yet processed (processedAt == nil)
+        // 2. Completed (endDate != nil)
+        guard let sessions = fetchCompletedUnprocessedSessions(),
+            !sessions.isEmpty
+        else {
             return
         }
 
@@ -79,6 +67,9 @@ final class KeyboardSessionMonitor {
 
         let totals = calculateTotals(from: sessions)
         guard totals.keystrokes > 0 else {
+            AppLogger.shared.debug(
+                "KeyboardSessionMonitor: No keystrokes to process"
+            )
             return
         }
 
@@ -89,27 +80,30 @@ final class KeyboardSessionMonitor {
             return
         }
 
-        #if DEBUG
-            AppLogger.shared.debug(
-                "KeyboardSessionMonitor: Processing \(sessions.count) sessions, totals: \(totals.keystrokes) keystrokes, \(totals.keycaps) keycaps"
-            )
-        #endif
+        AppLogger.shared.debug(
+            "KeyboardSessionMonitor: Processing \(sessions.count) sessions - \(totals.keystrokes) keystrokes → \(totals.keycaps) keycaps"
+        )
 
         updatePlayer(player, with: totals)
         markSessionsAsProcessed(sessions)
         try? modelContext.save()
 
-        #if DEBUG
-            AppLogger.shared.debug(
-                "KeyboardSessionMonitor: Processing complete"
-            )
-        #endif
+        AppLogger.shared.debug(
+            "KeyboardSessionMonitor: Successfully processed sessions. Player now has \(player.currentKeycaps) keycaps"
+        )
+
+        // Clean up old sessions after successful processing
+        await cleanupOldSessions()
     }
 
-    private func fetchPendingSessions() -> [KeyboardSession]? {
+    /// Fetch completed sessions that haven't been processed yet
+    @MainActor
+    private func fetchCompletedUnprocessedSessions() -> [KeyboardSession]? {
         let descriptor = FetchDescriptor<KeyboardSession>(
-            predicate: #Predicate { $0.processedAt == nil },
-            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+            predicate: #Predicate {
+                $0.processedAt == nil && $0.endDate != nil
+            },
+            sortBy: [SortDescriptor(\.createdAt, order: .forward)]
         )
         return try? modelContext.fetch(descriptor)
     }
@@ -117,26 +111,31 @@ final class KeyboardSessionMonitor {
     private func calculateTotals(from sessions: [KeyboardSession]) -> (
         keystrokes: Int, keycaps: Int
     ) {
-        var keystrokes = 0
-        var keycaps = 0
+        var totalKeystrokes = 0
+        var totalKeycaps = 0
 
         for session in sessions {
             let sessionKeycaps = calculateKeycaps(for: session)
-            keystrokes += session.keystrokeCount
-            keycaps += sessionKeycaps
+            totalKeystrokes += session.keystrokeCount
+            totalKeycaps += sessionKeycaps
         }
 
-        return (keystrokes, keycaps)
+        return (totalKeystrokes, totalKeycaps)
     }
 
     private func calculateKeycaps(for session: KeyboardSession) -> Int {
-        // For MVP: 1 keystroke = 1 keycap (Bongo Player job)
-        // Future: Apply job-specific logic here (Chatter, Writer, etc.)
-        // Example: Chatter = first 15 keystrokes * 2, rest * 0.5
-        // Example: Writer = multiplier from 0.8x → 1.2x over 80 keystrokes
+        // MVP: Bongo Player - 1 keystroke = 1 keycap
+        // No special mechanics, straight conversion
+
+        // Future job implementations will go here:
+        // - Chatter: First 15 keystrokes * 2, remaining * reduced rate
+        // - Writer: Multiplier builds from 0.8x to 1.2x over 80 keystrokes
+        // - Coder: Bonuses for brackets, symbols, coding patterns
+
         return session.keystrokeCount
     }
 
+    @MainActor
     private func fetchPlayer() -> Player? {
         let descriptor = FetchDescriptor<Player>()
         return try? modelContext.fetch(descriptor).first
@@ -150,10 +149,17 @@ final class KeyboardSessionMonitor {
         player.totalKeycapsEarned += totals.keycaps
         player.currentKeycaps += totals.keycaps
 
+        // Track first activity date
         if player.firstActiveDate == nil {
             player.firstActiveDate = Date()
         }
+
+        // Always update last activity
         player.lastActiveDate = Date()
+
+        AppLogger.shared.debug(
+            "KeyboardSessionMonitor: Updated player - Total keystrokes: \(player.totalKeystrokes), Current keycaps: \(player.currentKeycaps)"
+        )
     }
 
     private func markSessionsAsProcessed(_ sessions: [KeyboardSession]) {
@@ -163,19 +169,31 @@ final class KeyboardSessionMonitor {
         }
     }
 
+    /// Clean up processed sessions older than 7 days
+    /// Keeps them longer for analytics/debugging purposes
+    @MainActor
     private func cleanupOldSessions() async {
-        let oneDayAgo = Date().addingTimeInterval(-24 * 60 * 60)
+        let sevenDaysAgo =
+            Calendar.current.date(
+                byAdding: .day,
+                value: -7,
+                to: Date()
+            ) ?? Date()
+
         let descriptor = FetchDescriptor<KeyboardSession>(
             predicate: #Predicate {
-                $0.processedAt != nil && $0.processedAt! < oneDayAgo
+                $0.processedAt != nil && $0.processedAt! < sevenDaysAgo
             }
         )
-
         guard let oldSessions = try? modelContext.fetch(descriptor),
             !oldSessions.isEmpty
         else {
             return
         }
+
+        AppLogger.shared.debug(
+            "KeyboardSessionMonitor: Cleaning up \(oldSessions.count) old sessions"
+        )
 
         for session in oldSessions {
             modelContext.delete(session)
