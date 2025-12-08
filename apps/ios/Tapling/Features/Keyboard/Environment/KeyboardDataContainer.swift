@@ -79,12 +79,15 @@ class KeyboardDataContainer {
 
 // MARK: - Preview Support
 
-extension KeyboardDataContainer {
-    static let preview = KeyboardDataContainer(isStoredInMemoryOnly: true)
-}
-
 extension View {
-    func previewKeyboardDataContainer() -> some View {
-        self.modelContainer(KeyboardDataContainer.preview.modelContainer)
+    func previewKeyboardDataContainer(seed: ((ModelContext) -> Void)? = nil)
+        -> some View
+    {
+        let container = KeyboardDataContainer(isStoredInMemoryOnly: true)
+        if let seed = seed {
+            seed(container.modelContext)
+            try? container.modelContext.save()
+        }
+        return self.modelContainer(container.modelContainer)
     }
 }

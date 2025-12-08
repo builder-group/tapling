@@ -125,12 +125,15 @@ class DataContainer {
 
 // MARK: - Preview Support
 
-extension DataContainer {
-    static let preview = DataContainer(isStoredInMemoryOnly: true)
-}
-
 extension View {
-    func previewDataContainer() -> some View {
-        self.modelContainer(DataContainer.preview.modelContainer)
+    func previewDataContainer(seed: ((ModelContext) -> Void)? = nil)
+        -> some View
+    {
+        let container = DataContainer(isStoredInMemoryOnly: true)
+        if let seed = seed {
+            seed(container.modelContext)
+            try? container.modelContext.save()
+        }
+        return self.modelContainer(container.modelContainer)
     }
 }

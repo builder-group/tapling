@@ -82,5 +82,16 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .previewDataContainer()
+        .previewDataContainer { context in
+            let player = Player.instance(with: context)
+            player.currentKeycaps = 150
+            player.totalKeycapsEarned = 500
+            player.totalKeystrokes = 12500
+            player.firstActiveDate = Calendar.current.date(
+                byAdding: .day,
+                value: -30,
+                to: Date()
+            )
+            player.lastActiveDate = Date()
+        }
 }

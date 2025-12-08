@@ -1,5 +1,5 @@
 //
-//  CollectionView.swift
+//  CollectibleView.swift
 //  Tapling
 //
 //  Created by Benno on 04.12.25.
@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct CollectionView: View {
+struct CollectibleView: View {
     @Query private var ownedCollectibles: [OwnedCollectible]
     @State private var selectedType: AnyCollectible.SlotType = .hat
 
@@ -49,7 +49,7 @@ struct CollectionView: View {
             ) {
                 ForEach(collectibleItems(for: selectedType)) { item in
                     NavigationLink {
-                        CollectionItemDetailView(
+                        CollectibleDetailView(
                             collectible: item.collectible,
                             isUnlocked: item.isUnlocked,
                             count: item.count,
@@ -109,6 +109,6 @@ struct CollectionView: View {
 }
 
 #Preview {
-    CollectionView()
+    CollectibleView()
         .previewDataContainer()
 }

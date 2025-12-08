@@ -1,5 +1,5 @@
 //
-//  CollectionItemDetailView.swift
+//  CollectibleDetailView.swift
 //  Tapling
 //
 //  Created by Benno on 04.12.25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CollectionItemDetailView: View {
+struct CollectibleDetailView: View {
     let collectible: AnyCollectible
     let isUnlocked: Bool
     let count: Int
@@ -167,7 +167,7 @@ struct CollectionItemDetailView: View {
 
 #Preview {
     NavigationStack {
-        CollectionItemDetailView(
+        CollectibleDetailView(
             collectible: .hat(
                 Hat(
                     id: "hat_propeller-hat",
