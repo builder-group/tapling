@@ -19,7 +19,7 @@ struct HomeView: View {
         ZStack(alignment: .topLeading) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Button("Open Cardboard Box") {
+                    Button("Open Cardbox") {
                         var transaction = Transaction()
                         transaction.disablesAnimations = true
                         withTransaction(transaction) {
