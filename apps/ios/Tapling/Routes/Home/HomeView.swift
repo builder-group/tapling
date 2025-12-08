@@ -13,6 +13,8 @@ struct HomeView: View {
     @Query(sort: \KeyboardSession.createdAt, order: .reverse) private
         var sessions: [KeyboardSession]
 
+    @State private var showCardboxOpening = false
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -32,6 +34,12 @@ struct HomeView: View {
                 }
                 .padding()
 
+                Button("Open Cardbox") {
+                    showCardboxOpening = true
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+
                 // Debug: Show keyboard sessions count
                 if !sessions.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
@@ -47,6 +55,9 @@ struct HomeView: View {
                 }
             }
             .padding()
+        }
+        .sheet(isPresented: $showCardboxOpening) {
+            CardboxOpeningView()
         }
     }
 
