@@ -80,7 +80,7 @@
 				Features/Keyboard/Models/KeyboardLanguage.swift,
 				Features/Keyboard/Models/KeyboardSession.swift,
 				Features/Keyboard/Models/KeyboardSettings.swift,
-				Features/Keyboard/Models/KeyboardTaplingSettings.swift,
+				Features/Keyboard/Models/KeyboardTapling.swift,
 				Features/Player/Models/Player.swift,
 				Features/Tapling/Environment/TaplingConfig.swift,
 				Features/Tapling/Models/HandPosition.swift,

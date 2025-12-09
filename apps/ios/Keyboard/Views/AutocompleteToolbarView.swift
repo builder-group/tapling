@@ -16,8 +16,8 @@ struct AutocompleteToolbarView: View {
         >
     let autocompleteAction: (Autocomplete.Suggestion) -> Void
 
-    @QuerySingleton private var taplingSettings: KeyboardTaplingSettings
     @QuerySingleton private var keyboardSettings: KeyboardSettings
+    @QuerySingleton private var keyboardTapling: KeyboardTapling
 
     @State private var leftHand: HandPosition = .up
     @State private var rightHand: HandPosition = .down
@@ -31,7 +31,7 @@ struct AutocompleteToolbarView: View {
         return toolbarHeight / baseVisibleHeight
     }
     private var userScale: CGFloat {
-        CGFloat(taplingSettings.userScale)
+        CGFloat(keyboardSettings.taplingScale)
     }
     private var taplingScale: CGFloat { baseScale * userScale }
 
@@ -39,7 +39,7 @@ struct AutocompleteToolbarView: View {
         TaplingConfig.baseSize * taplingScale
     }
     private var userBottomOffset: CGFloat {
-        CGFloat(taplingSettings.userBottomOffset)
+        CGFloat(keyboardSettings.taplingBottomOffset)
     }
     private var taplingBottomOffset: CGFloat {
         TaplingConfig.baseBodyBottomOffset
@@ -48,9 +48,9 @@ struct AutocompleteToolbarView: View {
 
     private var currentTapling: Tapling {
         Tapling(
-            fur: taplingSettings.equippedFur,
-            hat: taplingSettings.equippedHat,
-            face: taplingSettings.equippedFace,
+            fur: keyboardTapling.equippedFur,
+            hat: keyboardTapling.equippedHat,
+            face: keyboardTapling.equippedFace,
             leftHand: leftHand,
             rightHand: rightHand
         )

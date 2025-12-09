@@ -12,10 +12,16 @@ import SwiftData
 final class KeyboardSettings: SingletonModel {
     var debug: Bool
     var isPreviewMode: Bool
+
     var languageCode: String
     var autocorrectEnabled: Bool
     var autocompleteEnabled: Bool
     var emojiPickerEnabled: Bool
+
+    var trackSessions: Bool
+
+    var taplingScale: Double
+    var taplingBottomOffset: Double
 
     var language: KeyboardLanguage {
         get { KeyboardLanguage(rawValue: languageCode) ?? .system }
@@ -28,7 +34,10 @@ final class KeyboardSettings: SingletonModel {
         language: KeyboardLanguage = .system,
         autocorrectEnabled: Bool = true,
         autocompleteEnabled: Bool = true,
-        emojiPickerEnabled: Bool = false
+        emojiPickerEnabled: Bool = false,
+        taplingScale: Double = 1.5,
+        taplingBottomOffset: Double = 4.0,
+        trackSessions: Bool = true
     ) {
         self.debug = debug
         self.isPreviewMode = isPreviewMode
@@ -36,6 +45,9 @@ final class KeyboardSettings: SingletonModel {
         self.autocorrectEnabled = autocorrectEnabled
         self.autocompleteEnabled = autocompleteEnabled
         self.emojiPickerEnabled = emojiPickerEnabled
+        self.taplingScale = taplingScale
+        self.taplingBottomOffset = taplingBottomOffset
+        self.trackSessions = trackSessions
     }
 
     static var `default`: KeyboardSettings {

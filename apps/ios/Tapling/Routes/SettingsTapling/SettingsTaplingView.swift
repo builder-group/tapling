@@ -13,7 +13,6 @@ struct SettingsTaplingView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
 
-    @QuerySingleton private var taplingSettings: KeyboardTaplingSettings
     @QuerySingleton private var keyboardSettings: KeyboardSettings
 
     @FocusState private var isTextFieldFocused: Bool
@@ -36,9 +35,9 @@ struct SettingsTaplingView: View {
 
     private var scaleBinding: Binding<Double> {
         Binding(
-            get: { taplingSettings.userScale },
+            get: { keyboardSettings.taplingScale },
             set: { newValue in
-                taplingSettings.userScale = newValue
+                keyboardSettings.taplingScale = newValue
                 try? modelContext.save()
             }
         )
@@ -46,9 +45,9 @@ struct SettingsTaplingView: View {
 
     private var offsetBinding: Binding<Double> {
         Binding(
-            get: { taplingSettings.userBottomOffset },
+            get: { keyboardSettings.taplingBottomOffset },
             set: { newValue in
-                taplingSettings.userBottomOffset = newValue
+                keyboardSettings.taplingBottomOffset = newValue
                 try? modelContext.save()
             }
         )
@@ -56,10 +55,10 @@ struct SettingsTaplingView: View {
 
     private var trackSessionsBinding: Binding<Bool> {
         Binding(
-            get: { hasFullAccess && taplingSettings.trackSessions },
+            get: { hasFullAccess && keyboardSettings.trackSessions },
             set: { newValue in
                 guard hasFullAccess else { return }
-                taplingSettings.trackSessions = newValue
+                keyboardSettings.trackSessions = newValue
                 try? modelContext.save()
             }
         )
@@ -117,7 +116,7 @@ struct SettingsTaplingView: View {
                 Section("POSITION") {
                     LabeledSliderView(
                         label: "Scale",
-                        value: taplingSettings.userScale,
+                        value: keyboardSettings.taplingScale,
                         format: "%.2f",
                         binding: scaleBinding,
                         range: SliderRange.scale,
@@ -126,7 +125,7 @@ struct SettingsTaplingView: View {
 
                     LabeledSliderView(
                         label: "Bottom Offset",
-                        value: taplingSettings.userBottomOffset,
+                        value: keyboardSettings.taplingBottomOffset,
                         format: "%.1f",
                         binding: offsetBinding,
                         range: SliderRange.offset,

@@ -35,7 +35,7 @@ class DataContainer {
             // Otherwise use separate configurations for isolation.
             // DataContainer: App models (AppSettings, Player, etc.)
             // KeyboardDataContainer: Keyboard models in shared group container
-            // for keyboard extension access (KeyboardTaplingSettings, KeyboardSettings, etc.)
+            // for keyboard extension access (KeyboardTapling, KeyboardSettings, etc.)
             configurations = [
                 DataContainer.configuration(
                     isStoredInMemoryOnly: false

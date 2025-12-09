@@ -28,7 +28,7 @@ final class KeyboardSessionTracker {
     @MainActor
     func startSession() {
         // Refresh settings (user might have toggled tracking in main app)
-        let settings = modelContext.fetchKeyboardTaplingSettings()
+        let settings = modelContext.fetchKeyboardSettings()
         isTrackingEnabled =
             settings.trackSessions && KeyboardStatusContext.hasFullAccess()
 

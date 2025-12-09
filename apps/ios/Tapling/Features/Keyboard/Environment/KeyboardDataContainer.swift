@@ -43,7 +43,7 @@ class KeyboardDataContainer {
 
     static func schema() -> [any PersistentModel.Type] {
         [
-            KeyboardTaplingSettings.self,
+            KeyboardTapling.self,
             KeyboardSettings.self,
             KeyboardSession.self,
         ]
@@ -72,7 +72,7 @@ class KeyboardDataContainer {
     }
 
     static func ensureDefaults(in context: ModelContext) {
-        _ = KeyboardTaplingSettings.instance(with: context)
+        _ = KeyboardTapling.instance(with: context)
         _ = KeyboardSettings.instance(with: context)
     }
 }
