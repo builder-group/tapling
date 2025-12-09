@@ -10,6 +10,8 @@ import SwiftUI
 
 @main
 struct TaplingApp: App {
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some Scene {
         WindowGroup {
             ContentView()

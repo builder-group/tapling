@@ -1,5 +1,5 @@
 //
-//  Logger.swift
+//  AppLogger.swift
 //  Tapling
 //
 //  Created by Benno on 06.12.25.

@@ -14,6 +14,8 @@ struct SettingsView: View {
     @State private var isKeyboardEnabled = false
     @State private var isFullAccessEnabled = false
 
+    @QuerySingleton private var appSettings: AppSettings
+
     private let keyboardStatus = KeyboardStatusContext(
         bundleId: "com.buildergroup.Tapling.Keyboard"
     )
@@ -58,6 +60,12 @@ struct SettingsView: View {
     private var settingsSection: some View {
         Section("SETTINGS") {
             NavigationLink {
+                SettingsAppView()
+            } label: {
+                Label("App", systemImage: "app.badge")
+            }
+
+            NavigationLink {
                 SettingsKeyboardView()
             } label: {
                 Label("Keyboard", systemImage: "keyboard")
@@ -89,6 +97,14 @@ struct SettingsView: View {
                 SettingsCreditsView()
             } label: {
                 Label("Credits", systemImage: "heart")
+            }
+
+            if appSettings.debug {
+                NavigationLink {
+                    SettingsDebugView()
+                } label: {
+                    Label("Debug", systemImage: "ladybug")
+                }
             }
         }
     }

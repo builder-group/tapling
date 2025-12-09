@@ -1,38 +1,31 @@
 //
-//  TaplingSettings.swift
+//  KeyboardTapling.swift
 //  Tapling
 //
-//  Created by Benno on 03.12.25.
+//  Created by Benno on 09.12.25.
 //
 
 import Foundation
 import SwiftData
 
 @Model
-final class TaplingSettings: SingletonModel {
-    var userScale: Double
-    var userBottomOffset: Double
-
+final class KeyboardTapling: SingletonModel {
     var equippedFurId: String
     var equippedFaceId: String
     var equippedHatId: String?
 
     init(
-        userScale: Double = 1.5,
-        userBottomOffset: Double = 4.0,
         equippedFurId: String = "fur_white",
         equippedFaceId: String = "face_cute",
         equippedHatId: String? = nil
     ) {
-        self.userScale = userScale
-        self.userBottomOffset = userBottomOffset
         self.equippedFurId = equippedFurId
         self.equippedFaceId = equippedFaceId
         self.equippedHatId = equippedHatId
     }
 
-    static var `default`: TaplingSettings {
-        TaplingSettings()
+    static var `default`: KeyboardTapling {
+        KeyboardTapling()
     }
 
     var equippedFur: Fur {

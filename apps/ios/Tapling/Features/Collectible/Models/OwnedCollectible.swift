@@ -13,9 +13,12 @@ final class OwnedCollectible {
     var collectibleId: String
     var unlockedAt: Date?
 
-    init(collectibleId: String, unlockedAt: Date? = nil) {
+    var player: Player
+
+    init(collectibleId: String, unlockedAt: Date? = nil, player: Player) {
         self.collectibleId = collectibleId
         self.unlockedAt = unlockedAt
+        self.player = player
     }
 
     var isUnlocked: Bool {

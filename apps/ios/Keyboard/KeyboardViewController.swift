@@ -11,10 +11,6 @@ import SwiftUI
 import UIKit
 
 class KeyboardViewController: KeyboardInputViewController {
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        updateLocaleFromSettings()
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,18 +25,16 @@ class KeyboardViewController: KeyboardInputViewController {
         // Set up keyboard with the shared keyboard app instance
         setup(for: .shared) { result in
             if case .success = result {
-                let modelContext = DataContainer.shared.modelContext
-                let settings = try? modelContext.fetch(
-                    FetchDescriptor<KeyboardSettings>()
-                ).first
-                
+                let modelContext = KeyboardDataContainer.shared.modelContext
+                let settings = modelContext.fetchKeyboardSettings()
+
                 // Set up native autocomplete service using iOS APIs
                 let autocompleteService = NativeAutocompleteService()
                 autocompleteService.locale = self.state.keyboardContext.locale
                 autocompleteService.autocorrectEnabled =
-                    settings?.autocorrectEnabled ?? true
+                    settings.autocorrectEnabled
                 autocompleteService.autocompleteEnabled =
-                    settings?.autocompleteEnabled ?? true
+                    settings.autocompleteEnabled
                 self.services.autocompleteService = autocompleteService
 
                 // Request lexicon asynchronously and register it when ready
@@ -54,6 +48,25 @@ class KeyboardViewController: KeyboardInputViewController {
                     updating: self.state.autocompleteContext
                 )
             }
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateLocaleFromSettings()
+
+        // Start session
+        Task { @MainActor in
+            KeyboardSessionTracker.shared.startSession()
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        // End session
+        Task { @MainActor in
+            KeyboardSessionTracker.shared.endSession()
         }
     }
 
@@ -72,17 +85,29 @@ class KeyboardViewController: KeyboardInputViewController {
                 } collapsedView: { params in
                     params.view
                 } emojiKeyboard: { params in
+                    // EmojiPickerView(controller: controller)
+                    //
+                    // NOTE: KeyboardKit's emoji keyboard seems to be partially working in the free version?
+                    // This is probably a bug that may not be available in future KeyboardKit versions.
                     params.view
+                        .emojiKeyboardSizes(
+                            EmojiKeyboard.Sizes(
+                                emojiFontSize: 36,
+                                emojiFrameWidth: 50,
+                                emojiFrameHeight: 40
+                            )
+                        )
+                        .frame(height: 220)
                 } toolbar: { params in
                     AutocompleteToolbarView(
                         standardToolbar: params.view,
                         autocompleteAction: params.autocompleteAction
                     )
                 }
-                
+
                 PreviewBannerView()
             }
-            .modelContainer(DataContainer.shared.modelContainer)
+            .modelContainer(KeyboardDataContainer.shared.modelContainer)
         }
     }
 
@@ -99,14 +124,11 @@ class KeyboardViewController: KeyboardInputViewController {
         {
             autocompleteService.locale = context.locale
 
-            let modelContext = DataContainer.shared.modelContext
-            let settings = try? modelContext.fetch(
-                FetchDescriptor<KeyboardSettings>()
-            ).first
-            autocompleteService.autocorrectEnabled =
-                settings?.autocorrectEnabled ?? true
+            let modelContext = KeyboardDataContainer.shared.modelContext
+            let settings = modelContext.fetchKeyboardSettings()
+            autocompleteService.autocorrectEnabled = settings.autocorrectEnabled
             autocompleteService.autocompleteEnabled =
-                settings?.autocompleteEnabled ?? true
+                settings.autocompleteEnabled
         }
 
         let baseLayout = KeyboardLayout.baseLayout(
@@ -116,26 +138,34 @@ class KeyboardViewController: KeyboardInputViewController {
             symbolicInputSet: .symbolic(currencies: language.currencies)
         )
 
+        var layout: KeyboardLayout
         if context.deviceType == .pad {
-            return KeyboardLayout.iPadLayout(
+            layout = KeyboardLayout.iPadLayout(
                 from: baseLayout,
                 keyboardContext: context
             )
         } else {
-            return KeyboardLayout.iPhoneLayout(
+            layout = KeyboardLayout.iPhoneLayout(
                 from: baseLayout,
                 keyboardContext: context
             )
         }
+
+        // Remove emoji keyboard button if emoji picker is disabled
+        let modelContext = KeyboardDataContainer.shared.modelContext
+        let settings = modelContext.fetchKeyboardSettings()
+        if !settings.emojiPickerEnabled {
+            layout.remove(.keyboardType(.emojis))
+        }
+
+        return layout
     }
 
     private func updateLocaleFromSettings() {
-        let modelContext = DataContainer.shared.modelContext
-        let settings = try? modelContext.fetch(
-            FetchDescriptor<KeyboardSettings>()
-        ).first
+        let modelContext = KeyboardDataContainer.shared.modelContext
+        let settings = modelContext.fetchKeyboardSettings()
 
-        let language = settings?.language ?? .system
+        let language = settings.language
 
         // Always support all available locales so the globe key works
         self.state.keyboardContext.locales = KeyboardLanguage.allCases
@@ -155,10 +185,9 @@ class KeyboardViewController: KeyboardInputViewController {
         if let autocompleteService = self.services.autocompleteService
             as? NativeAutocompleteService
         {
-            autocompleteService.autocorrectEnabled =
-                settings?.autocorrectEnabled ?? true
+            autocompleteService.autocorrectEnabled = settings.autocorrectEnabled
             autocompleteService.autocompleteEnabled =
-                settings?.autocompleteEnabled ?? true
+                settings.autocompleteEnabled
         }
     }
 }

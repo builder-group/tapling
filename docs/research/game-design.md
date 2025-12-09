@@ -7,14 +7,14 @@ Tapling is an iOS keyboard companion that rewards typing. Your Tapling sits on y
 ## Core Loop
 
 ```
-Type anywhere → Tapling taps → Earn keycaps → Buy chests/upgrades → Customize + Progress → Repeat
+Type anywhere → Tapling taps → Earn keycaps → Buy cardboxes/upgrades → Customize + Progress → Repeat
 ```
 
 ## Currency: Keycaps
 
 - **1 keycap = 1 keystroke** (ALL keys count: letters, shift, delete, everything)
 - Accumulates passively while typing anywhere
-- Used for chests and job upgrades
+- Used for cardboxes and job upgrades
 
 **Why all keys count:** Typing includes corrections, modifiers, and navigation. Tapling celebrates ALL keyboard interactions.
 
@@ -116,7 +116,7 @@ New players get 1 random item from each category (fur, hat, face). Ensures uniqu
 
 Can receive duplicates. Sell them for keycaps based on rarity. Can't sell your last copy of an item. Creates longer progression and makes completing the collection meaningful.
 
-## Chest System
+## Cardbox System
 
 ### Cost: 5,000 Keycaps
 
@@ -124,12 +124,12 @@ Achievable in 1 day for casual users, few hours for active users.
 
 ### Opening: "Lucky Upgrade" Mechanic
 
-Interactive chest opening (inspired by Clash Royale):
+Interactive cardbox opening (inspired by Clash Royale):
 
-1. Player buys chest for 5,000 keycaps
-2. Chest has 5 tap stages
+1. Player buys cardbox for 5,000 keycaps
+2. Cardbox has 5 tap stages
 3. Each tap has chance to upgrade rarity
-4. Visual feedback: chest glows brighter with each upgrade
+4. Visual feedback: cardbox glows brighter with each upgrade
 5. Final tap reveals cosmetic at final rarity
 
 **Example Flow:**
@@ -140,11 +140,6 @@ Interactive chest opening (inspired by Clash Royale):
 - Tap 4: Rare (stays rare)
 - Tap 5: Rare (no change)
 - Result: Receive Rare cosmetic
-
-**Upgrade Chances Per Tap:**
-
-- Common → Rare: 20% chance per tap
-- Rare → Epic: 5% chance per tap
 
 Makes opening fun and interactive, not just "click, receive item."
 
@@ -158,11 +153,11 @@ Makes opening fun and interactive, not just "click, receive item."
 
 ## Progression Timeline
 
-**Day 1:** Tutorial, receive 3 starter cosmetics, choose job, earn 5k keycaps, open first chest
+**Day 1:** Tutorial, receive 3 starter cosmetics, choose job, earn 5k keycaps, open first cardbox
 
-**Week 1 (0-50k):** First job upgrade, 8-10 chests, collect initial cosmetics, sell duplicates, experiment with jobs
+**Week 1 (0-50k):** First job upgrade, 8-10 cardboxes, collect initial cosmetics, sell duplicates, experiment with jobs
 
-**Month 1 (50k-300k):** Level 2 upgrade, 50+ chests, build collection, experience Epic drops, find preferred job
+**Month 1 (50k-300k):** Level 2 upgrade, 50+ cardboxes, build collection, experience Epic drops, find preferred job
 
 **Months 2-3 (300k-1M):** Level 3 upgrade, nearly complete common collection, multiple Epics, unlock future jobs
 
@@ -195,8 +190,8 @@ Makes opening fun and interactive, not just "click, receive item."
 1. Show Tapling on keyboard overlay
 2. "Hi! I'm your Tapling. Type anything and watch me tap!"
 3. User types → earns keycaps
-4. "You earned keycaps! Let's open your first chest"
-5. Give first chest free, walk through tap-to-upgrade
+4. "You earned keycaps! Let's open your first cardbox"
+5. Give first cardbox free, walk through tap-to-upgrade
 6. "Customize me! Mix and match your style"
 7. Show customization screen
 8. "Pick a job that matches your typing style"
@@ -223,7 +218,7 @@ Vanity stats feel good and encourage continued engagement.
 
 - Daily active typing sessions
 - Job distribution (should be relatively even, ~33% each for launch jobs)
-- Cosmetic engagement (chest opening rate)
+- Cosmetic engagement (cardbox opening rate)
 - Duplicate selling rate
 - No single "meta" job emerging (indicates good balance)
 - Player customization variety (are people mixing and matching?)
@@ -239,8 +234,8 @@ Vanity stats feel good and encourage continued engagement.
 - 3 cosmetic categories (Fur, Hat, Face)
 - 16 total cosmetic items (2 furs, 7 hats, 7 faces)
 - 3 starter items given to every player
-- 1 chest type (5,000 keycaps)
-- Interactive tap-to-upgrade chest opening
+- 1 cardbox type (5,000 keycaps)
+- Interactive tap-to-upgrade cardbox opening
 - Rarity system (Common/Rare/Epic/Legendary)
 - Basic stats tracking
 - Onboarding tutorial

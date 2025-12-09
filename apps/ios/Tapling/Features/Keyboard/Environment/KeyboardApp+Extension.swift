@@ -16,3 +16,14 @@ extension KeyboardApp {
         )
     }
 }
+
+extension KeyboardStatusContext {
+    /// Check if Full Access is enabled for the Tapling keyboard
+    static func hasFullAccess() -> Bool {
+        let status = KeyboardStatusContext(
+            bundleId: "com.buildergroup.Tapling.Keyboard"
+        )
+        status.refresh()
+        return status.isFullAccessEnabled
+    }
+}

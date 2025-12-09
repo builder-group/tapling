@@ -18,75 +18,103 @@ class DataContainer {
     var modelContext: ModelContext {
         modelContainer.mainContext
     }
-
     init(isStoredInMemoryOnly: Bool = false) {
-        let schema = Schema([
-            TaplingSettings.self,
-            KeyboardSettings.self,
-            OwnedCollectible.self,
-        ])
-
-        let modelConfiguration: ModelConfiguration
+        let configurations: [ModelConfiguration]
         if isStoredInMemoryOnly {
-            // Configure for in-memory only
-            modelConfiguration = ModelConfiguration(
-                schema: schema,
-                isStoredInMemoryOnly: true
-            )
+            // For in-memory (previews), use a single configuration to avoid
+            // store routing issues in SwiftUI Previews.
+            configurations = [
+                ModelConfiguration(
+                    schema: Schema(
+                        DataContainer.schema() + KeyboardDataContainer.schema()
+                    ),
+                    isStoredInMemoryOnly: true
+                )
+            ]
         } else {
-            // Configure for App Group
-            modelConfiguration = ModelConfiguration(
-                "TaplingData",
-                schema: schema,
-                isStoredInMemoryOnly: false,
-                allowsSave: true,
-                groupContainer: .identifier("group.com.buildergroup.Tapling"),
-                cloudKitDatabase: .none
-            )
+            // Otherwise use separate configurations for isolation.
+            // DataContainer: App models (AppSettings, Player, etc.)
+            // KeyboardDataContainer: Keyboard models in shared group container
+            // for keyboard extension access (KeyboardTapling, KeyboardSettings, etc.)
+            configurations = [
+                DataContainer.configuration(
+                    isStoredInMemoryOnly: false
+                ),
+                KeyboardDataContainer.configuration(
+                    isStoredInMemoryOnly: false
+                ),
+            ]
         }
 
         do {
             modelContainer = try ModelContainer(
-                for: schema,
-                configurations: [modelConfiguration]
+                for: Schema(
+                    DataContainer.schema() + KeyboardDataContainer.schema()
+                ),
+                configurations: configurations
             )
 
-            // Initialize singletons
-            DataContainer.ensureSingletons(in: modelContext)
+            // Ensure defaults
+            DataContainer.ensureDefaults(in: modelContext)
+            KeyboardDataContainer.ensureDefaults(in: modelContext)
 
-            // Initialize default unlocked items
-            DataContainer.ensureDefaultItems(in: modelContext)
+            // Start monitors
+            KeyboardSessionMonitor.shared.start()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }
 
-    /// Ensures singleton models exist in the given context
-    static func ensureSingletons(in context: ModelContext) {
-        _ = TaplingSettings.instance(with: context)
-        _ = KeyboardSettings.instance(with: context)
+    static func schema() -> [any PersistentModel.Type] {
+        [
+            AppSettings.self,
+            OwnedCollectible.self,
+            Player.self,
+        ]
     }
 
-    /// Ensures default collectibles are unlocked (white fur, cute face)
-    static func ensureDefaultItems(in context: ModelContext) {
+    static func configuration(isStoredInMemoryOnly: Bool = false)
+        -> ModelConfiguration
+    {
+        let schema = Schema(DataContainer.schema())
+
+        if isStoredInMemoryOnly {
+            return ModelConfiguration(
+                schema: schema,
+                isStoredInMemoryOnly: true
+            )
+        } else {
+            return ModelConfiguration(
+                "TaplingData",
+                schema: schema,
+                isStoredInMemoryOnly: false,
+                allowsSave: true,
+                cloudKitDatabase: .none
+            )
+        }
+    }
+
+    static func ensureDefaults(in context: ModelContext) {
+        _ = AppSettings.instance(with: context)
+        let player = Player.instance(with: context)
+
+        // Ensure default collectibles exist
         let defaultCollectibleIds = ["fur_white", "face_cute"]
 
         for collectibleId in defaultCollectibleIds {
-            // Check if already exists
             let descriptor = FetchDescriptor<OwnedCollectible>(
                 predicate: #Predicate { $0.collectibleId == collectibleId }
             )
 
             if let existing = try? context.fetch(descriptor).first {
-                // If exists but not unlocked, unlock it
                 if existing.unlockedAt == nil {
                     existing.unlockedAt = Date()
                 }
             } else {
-                // Create new unlocked collectible
                 let ownedCollectible = OwnedCollectible(
                     collectibleId: collectibleId,
-                    unlockedAt: Date()
+                    unlockedAt: Date(),
+                    player: player
                 )
                 context.insert(ownedCollectible)
             }
@@ -98,14 +126,15 @@ class DataContainer {
 
 // MARK: - Preview Support
 
-extension DataContainer {
-    /// In-memory container for SwiftUI previews
-    static let preview = DataContainer(isStoredInMemoryOnly: true)
-}
-
 extension View {
-    /// Applies preview data container for SwiftUI previews
-    func previewDataContainer() -> some View {
-        self.modelContainer(DataContainer.preview.modelContainer)
+    func previewDataContainer(seed: ((ModelContext) -> Void)? = nil)
+        -> some View
+    {
+        let container = DataContainer(isStoredInMemoryOnly: true)
+        if let seed = seed {
+            seed(container.modelContext)
+            try? container.modelContext.save()
+        }
+        return self.modelContainer(container.modelContainer)
     }
 }

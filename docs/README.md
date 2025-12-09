@@ -25,11 +25,17 @@ Technical research and findings.
 - [App Distribution](./research/app-distribution.md) - TestFlight and App Store
 - [Autocomplete](./research/autocomplete.md) - Custom keyboard suggestions
 
+## 💡 Good to Know
+
+Quick tips, gotchas, and troubleshooting notes.
+
+- [Good to Know](./good-to-know.md) - Tips and troubleshooting
+
 ## 📝 Contributing to Docs
 
 **Conventions:** How we do things (updated as patterns emerge)  
 **Decisions:** Why we chose this approach (stable, archived when made)  
 **Research:** What we learned (findings and references)
+**Good to Know:** Tips, gotchas, and troubleshooting (add as you discover)
 
 Keep it concise - essential context only, no bloat.
-

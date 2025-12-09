@@ -7,9 +7,27 @@
 
 import SwiftUI
 
-struct CollectibleCardView: View {
+struct CollectibleCardView<BottomContent: View>: View {
     let collectible: AnyCollectible
-    let isUnlocked: Bool
+    let count: Int?
+    let bottomContent: (() -> BottomContent)?
+
+    init(
+        collectible: AnyCollectible,
+        count: Int? = nil,
+        @ViewBuilder bottomContent: @escaping () -> BottomContent
+    ) {
+        self.collectible = collectible
+        self.count = count
+        self.bottomContent = bottomContent
+    }
+
+    init(collectible: AnyCollectible, count: Int? = nil)
+    where BottomContent == EmptyView {
+        self.collectible = collectible
+        self.count = count
+        self.bottomContent = nil
+    }
 
     private var previewTapling: Tapling {
         switch collectible {
@@ -47,36 +65,40 @@ struct CollectibleCardView: View {
     // MARK: - UI
 
     var body: some View {
-        VStack(spacing: 8) {
-            previewCard
-            nameLabel
-        }
-    }
-
-    private var previewCard: some View {
         ZStack(alignment: .topTrailing) {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(rarityColor.opacity(0.15))
+                .fill(.white)
                 .aspectRatio(1, contentMode: .fit)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(rarityColor, lineWidth: 2)
+                        .fill(rarityColor.opacity(0.15))
                 )
 
-            TaplingView(tapling: previewTapling)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(8)
+            VStack(spacing: 0) {
+                TaplingView(tapling: previewTapling)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(8)
 
-            if !isUnlocked {
-                lockedOverlay
-                lockBadge
+                if let bottomContent = bottomContent {
+                    bottomContent()
+                }
+            }
+
+            if let count = count {
+                if count > 0 {
+                    countBadge(count: count)
+                } else {
+                    lockedOverlay
+                    lockBadge
+                }
             }
         }
-    }
-
-    private var lockedOverlay: some View {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .fill(.black.opacity(0.3))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(rarityColor, lineWidth: 2)
+        )
+        .frame(maxWidth: .infinity)
+        .aspectRatio(1, contentMode: .fit)
     }
 
     private var lockBadge: some View {
@@ -91,13 +113,22 @@ struct CollectibleCardView: View {
             .padding(8)
     }
 
-    private var nameLabel: some View {
-        Text(collectible.name)
+    private var lockedOverlay: some View {
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .fill(.black.opacity(0.3))
+    }
+
+    private func countBadge(count: Int) -> some View {
+        Text("\(count)")
             .font(.caption)
-            .fontWeight(.medium)
-            .foregroundStyle(isUnlocked ? .primary : .secondary)
-            .lineLimit(2)
-            .multilineTextAlignment(.center)
+            .fontWeight(.bold)
+            .foregroundStyle(.white)
+            .padding(6)
+            .background(
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(.black.opacity(0.7))
+            )
+            .padding(8)
     }
 }
 
@@ -112,22 +143,29 @@ struct CollectibleCardView: View {
                     assetVariant: "propeller-hat"
                 )
             ),
-            isUnlocked: true
+            count: 3
         )
-
+        CollectibleCardView(
+            collectible: .face(
+                Face(
+                    id: "face_pilot",
+                    name: "Pilot",
+                    rarity: .legendary,
+                    assetVariant: "pilot"
+                )
+            ),
+            count: 0
+        )
         CollectibleCardView(
             collectible: .face(
                 Face(
                     id: "face_cute",
                     name: "Cute",
-                    rarity: .legendary,
+                    rarity: .common,
                     assetVariant: "cute"
                 )
             ),
-            isUnlocked: false
+            count: nil
         )
-    }
-    .fixedSize(horizontal: false, vertical: true)
-    .frame(maxWidth: .infinity)
-    .padding()
+    }.padding()
 }
