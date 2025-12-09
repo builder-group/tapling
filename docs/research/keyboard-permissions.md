@@ -32,6 +32,7 @@ What works with/without Full Access.
 - Required for any network requests
 
 **File writes:**
+
 - FileManager writes to App Group containers ✅
 - SwiftData writes ✅
 

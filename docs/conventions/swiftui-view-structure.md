@@ -27,7 +27,7 @@ struct MyView: View {
     @State private var isEnabled = false
     @QuerySingleton private var settings: Settings
     private let registry = CollectibleRegistry.shared
-    
+
     private var computedValue: Int { 42 }
     private var isEnabledBinding: Binding<Bool> {
         Binding(
@@ -60,11 +60,13 @@ private struct HelperView: View {
 ```
 
 **3-Layer Structure:**
+
 1. **Variables** (top, no MARK) - State, Environment, Computed, Bindings
 2. **UI** (middle, MARK) - body + all View components
 3. **Actions** (bottom, MARK) - All functions (mutating and pure helpers)
 
 **When to use MARK:**
+
 - Use for medium+ views to separate UI from Actions
 - Skip for small views (<5 components and <3 actions)
 - **Never add more than these 2 MARKs** - if you need feature-based sections (e.g., "Search UI", "Filter UI"), split the view into separate components or extract a ViewModel instead
@@ -163,10 +165,10 @@ struct ComplexView: View {
 // ✅ Or extract ViewModel for heavy logic
 struct ComplexView: View {
     @StateObject private var viewModel = ComplexViewModel()
-    
+
     // MARK: - UI
     var body: some View { }
-    
+
     // MARK: - Actions
     private func handleAction() { viewModel.handle() }
 }

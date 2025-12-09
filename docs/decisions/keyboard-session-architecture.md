@@ -30,11 +30,13 @@ This protects user privacy. For MVP, we only track `keystrokeCount`. Future jobs
 ### Separation of Concerns
 
 **Keyboard Extension (lean):**
+
 - Tracks keystrokes in-memory during session
 - Writes session data to SwiftData on keyboard close
 - No game logic, no keycap calculation
 
 **Main App (game logic):**
+
 - Reads sessions from SwiftData
 - Applies job bonuses and multipliers
 - Calculates keycaps earned
@@ -67,6 +69,7 @@ Direct `Player` mutation would require tracking every keystroke individually, ma
 ### Decouples Keyboard from Main App Models
 
 The keyboard extension doesn't need access to the main app's `Player` model, which contains:
+
 - `currentKeycaps`, `totalKeycapsEarned`
 - `totalKeystrokes`
 - `firstActiveDate`, `lastActiveDate`
@@ -81,6 +84,7 @@ Keeping `KeyboardSession` in the keyboard's data container (`KeyboardDataContain
 **Approach:** Keyboard extension directly increments `Player.totalKeystrokes` and `Player.currentKeycaps` on each keystroke.
 
 **Rejected because:**
+
 - Keyboard needs access to main app's `Player` model (tight coupling)
 - No session awareness (can't support Chatter/Writer job mechanics)
 - Harder to debug (no session history)
@@ -92,6 +96,7 @@ Keeping `KeyboardSession` in the keyboard's data container (`KeyboardDataContain
 **Approach:** Create a `KeyboardGameState` singleton model in the keyboard's data container that mirrors `Player` fields.
 
 **Rejected because:**
+
 - Duplicates `Player` state (two sources of truth)
 - Requires complex sync logic between `KeyboardGameState` and `Player`
 - Still doesn't support session-based mechanics
@@ -102,6 +107,7 @@ Keeping `KeyboardSession` in the keyboard's data container (`KeyboardDataContain
 **Approach:** Store each keystroke as a separate record with timestamp.
 
 **Rejected because:**
+
 - Privacy concern (stores every keystroke individually)
 - Unbounded data growth (millions of records)
 - Performance overhead (queries, storage)
@@ -112,6 +118,7 @@ Keeping `KeyboardSession` in the keyboard's data container (`KeyboardDataContain
 ### Additional Processing Step
 
 Main app must process sessions to calculate keycaps and update `Player`. This adds a processing step but enables:
+
 - Flexible job mechanics
 - Batch operations
 - Easy recalculation if needed
@@ -134,4 +141,3 @@ Sessions require Full Access to write from the keyboard extension. This is a use
 ---
 
 See: [Keyboard Extension Permissions](../research/keyboard-permissions.md)
-

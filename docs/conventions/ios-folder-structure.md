@@ -161,11 +161,12 @@ SettingsKeyboardView (Route)
 | App screen        | `Routes/`              | `LoginView.swift`     |
 | Domain components | `Features/Auth/Views/` | `LoginFormView.swift` |
 | Generic UI        | `Views/`               | `ActionRowView.swift` |
-| Global config      | `Environment/Configs/`  | `AppConfig.swift`      |
+| Global config     | `Environment/Configs/` | `AppConfig.swift`     |
 | Utilities         | `Lib/`                 | `StringHelpers.swift` |
 
 ---
 
 **Related:**
+
 - [SwiftUI View Structure](./swiftui-view-structure.md) - Code structure within views
 - [Flat Route Structure Decision](../decisions/flat-route-structure.md) - Why flat vs nested

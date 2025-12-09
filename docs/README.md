@@ -35,8 +35,7 @@ Quick tips, gotchas, and troubleshooting notes.
 
 **Conventions:** How we do things (updated as patterns emerge)  
 **Decisions:** Why we chose this approach (stable, archived when made)  
-**Research:** What we learned (findings and references)  
+**Research:** What we learned (findings and references)
 **Good to Know:** Tips, gotchas, and troubleshooting (add as you discover)
 
 Keep it concise - essential context only, no bloat.
-
