@@ -96,7 +96,7 @@ class DataContainer {
 
     static func ensureDefaults(in context: ModelContext) {
         _ = AppSettings.instance(with: context)
-        _ = Player.instance(with: context)
+        let player = Player.instance(with: context)
 
         // Ensure default collectibles exist
         let defaultCollectibleIds = ["fur_white", "face_cute"]
@@ -113,7 +113,8 @@ class DataContainer {
             } else {
                 let ownedCollectible = OwnedCollectible(
                     collectibleId: collectibleId,
-                    unlockedAt: Date()
+                    unlockedAt: Date(),
+                    player: player
                 )
                 context.insert(ownedCollectible)
             }

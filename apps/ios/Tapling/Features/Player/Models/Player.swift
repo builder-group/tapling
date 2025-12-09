@@ -17,9 +17,10 @@ final class Player: SingletonModel {
     var totalKeystrokes: Int
     var firstActiveDate: Date?
     var lastActiveDate: Date?
+    var onboardingCompletedAt: Date?
 
-    //    @Relationship(deleteRule: .cascade, inverse: \OwnedCollectible.player)
-    //    var ownedCollectibles: [OwnedCollectible]
+    @Relationship(deleteRule: .cascade, inverse: \OwnedCollectible.player)
+    var ownedCollectibles: [OwnedCollectible] = []
 
     init(
         currentKeycaps: Int = 0,
@@ -27,14 +28,16 @@ final class Player: SingletonModel {
         totalKeystrokes: Int = 0,
         firstActiveDate: Date? = nil,
         lastActiveDate: Date? = nil,
-        // ownedCollectibles: [OwnedCollectible]
+        onboardingCompletedAt: Date? = nil,
+        ownedCollectibles: [OwnedCollectible] = []
     ) {
         self.currentKeycaps = currentKeycaps
         self.totalKeycapsEarned = totalKeycapsEarned
         self.totalKeystrokes = totalKeystrokes
         self.firstActiveDate = firstActiveDate
         self.lastActiveDate = lastActiveDate
-        // self.ownedCollectibles = ownedCollectibles
+        self.onboardingCompletedAt = onboardingCompletedAt
+        self.ownedCollectibles = ownedCollectibles
     }
 
     static var `default`: Player {

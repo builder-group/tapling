@@ -62,7 +62,8 @@ struct HomeView: View {
         if let collectible = collectible {
             let ownedCollectible = OwnedCollectible(
                 collectibleId: collectible.id,
-                unlockedAt: Date()
+                unlockedAt: Date(),
+                player: player
             )
             modelContext.insert(ownedCollectible)
             try? modelContext.save()
