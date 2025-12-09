@@ -15,7 +15,8 @@ struct CardCollectionView: View {
         sort: \OwnedCollectible.collectibleId
     ) private var ownedCollectibles: [OwnedCollectible]
     @QuerySingleton private var keyboardTapling: KeyboardTapling
-    @State private var selectedCardId: String?
+    @Binding var selectedCardId: String?
+    let onShowDetail: (AnyCollectible) -> Void
 
     private let registry = CollectibleRegistry.shared
 
@@ -26,11 +27,13 @@ struct CardCollectionView: View {
             $0.collectibleId
         }
 
-        let equippedIds: Set<String> = Set([
-            keyboardTapling.equippedFurId,
-            keyboardTapling.equippedFaceId,
-            keyboardTapling.equippedHatId,
-        ].compactMap { $0 })
+        let equippedIds: Set<String> = Set(
+            [
+                keyboardTapling.equippedFurId,
+                keyboardTapling.equippedFaceId,
+                keyboardTapling.equippedHatId,
+            ].compactMap { $0 }
+        )
 
         return registry.allCollectibles
             .filter { grouped[$0.id] != nil }
@@ -62,7 +65,7 @@ struct CardCollectionView: View {
                                 CollectibleInfoUseActionButtons(
                                     cardSize: cardSize,
                                     onInfo: {
-                                        print("ℹ️ Info: \(collectible.name)")
+                                        onShowDetail(collectible)
                                     },
                                     onUse: {
                                         equipCollectible(collectible)
@@ -113,7 +116,7 @@ struct CardCollectionView: View {
 }
 
 #Preview {
-    CardCollectionView()
+    CardCollectionView(selectedCardId: .constant(nil), onShowDetail: { _ in })
         .previewDataContainer { context in
             let player = Player.instance(with: context)
 

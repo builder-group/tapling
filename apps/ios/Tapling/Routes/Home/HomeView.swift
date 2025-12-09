@@ -12,6 +12,8 @@ struct HomeView: View {
     @QuerySingleton private var player: Player
     @State private var showCardboardBoxOpening = false
     @State private var scrollOffset: CGFloat = 0
+    @State private var selectedCardId: String?
+    @State private var selectedCollectibleForDetail: AnyCollectible?
 
     private let maxHeaderHeight: CGFloat = 100
     private let minHeaderHeight: CGFloat = 50
@@ -25,26 +27,39 @@ struct HomeView: View {
     // MARK: - UI
 
     var body: some View {
-        VStack(spacing: 0) {
-            HomeHeaderView(
-                headerHeight: headerHeight,
-                taplingScale: 1.5
-            )
-            .background(Color.green)
-            .overlay(alignment: .topLeading) {
-                keycapDisplay
-                    .padding(.top, 8)
-                    .padding(.leading, 16)
-            }
+        NavigationStack {
+            VStack(spacing: 0) {
+                HomeHeaderView(
+                    headerHeight: headerHeight,
+                    taplingScale: 1.5
+                )
+                .background(Color.green)
+                .overlay(alignment: .topLeading) {
+                    keycapDisplay
+                        .padding(.top, 8)
+                        .padding(.leading, 16)
+                }
 
-            if #available(iOS 18.0, *) {
-                scrollViewModern
-            } else {
-                scrollViewLegacy
+                if #available(iOS 18.0, *) {
+                    scrollViewModern
+                } else {
+                    scrollViewLegacy
+                }
             }
-        }
-        .fullScreenCover(isPresented: $showCardboardBoxOpening) {
-            CardboardBoxOpeningView(onCollect: handleCollectibleWon)
+            .fullScreenCover(isPresented: $showCardboardBoxOpening) {
+                CardboardBoxOpeningView(onCollect: handleCollectibleWon)
+            }
+            .navigationDestination(item: $selectedCollectibleForDetail) {
+                (collectible: AnyCollectible) in
+                CollectibleDetailView(
+                    collectible: collectible,
+                    isUnlocked: true,
+                    count: collectibleDetailCount(for: collectible),
+                    firstUnlockedDate: collectibleDetailFirstUnlockedDate(
+                        for: collectible
+                    )
+                )
+            }
         }
     }
 
@@ -81,10 +96,29 @@ struct HomeView: View {
 
     private var contentView: some View {
         VStack(alignment: .leading, spacing: 20) {
-            EquippedView()
-            CardCollectionView()
+            EquippedView(
+                selectedCardId: $selectedCardId,
+                onShowDetail: { collectible in
+                    selectedCollectibleForDetail = collectible
+                }
+            )
+            .zIndex(5)
+            CardCollectionView(
+                selectedCardId: $selectedCardId,
+                onShowDetail: { collectible in
+                    selectedCollectibleForDetail = collectible
+                }
+            )
+            .zIndex(0)
         }
         .padding()
+        .contentShape(Rectangle())
+        .onTapGesture {
+            // Only deselect if tapping on empty space (not on a card)
+            if selectedCardId != nil {
+                selectedCardId = nil
+            }
+        }
     }
 
     private var keycapDisplay: some View {
@@ -119,6 +153,30 @@ struct HomeView: View {
             try? modelContext.save()
         }
         showCardboardBoxOpening = false
+    }
+
+    private func collectibleDetailCount(for collectible: AnyCollectible) -> Int
+    {
+        let collectibleId = collectible.id
+        let descriptor = FetchDescriptor<OwnedCollectible>(
+            predicate: #Predicate {
+                $0.collectibleId == collectibleId && $0.unlockedAt != nil
+            }
+        )
+        return (try? modelContext.fetch(descriptor).count) ?? 0
+    }
+
+    private func collectibleDetailFirstUnlockedDate(
+        for collectible: AnyCollectible
+    ) -> Date? {
+        let collectibleId = collectible.id
+        let descriptor = FetchDescriptor<OwnedCollectible>(
+            predicate: #Predicate {
+                $0.collectibleId == collectibleId && $0.unlockedAt != nil
+            },
+            sortBy: [SortDescriptor(\.unlockedAt)]
+        )
+        return try? modelContext.fetch(descriptor).first?.unlockedAt
     }
 }
 

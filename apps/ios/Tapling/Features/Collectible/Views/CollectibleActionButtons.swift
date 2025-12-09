@@ -49,7 +49,7 @@ struct CollectibleInfoUseActionButtons: View {
             }
         }
         .padding(.horizontal, 8)
-        .padding(.vertical, 8)
+        .padding(.bottom, 8)
         .frame(width: cardSize)
     }
 }
@@ -100,7 +100,7 @@ struct CollectibleInfoRemoveActionButtons: View {
             .disabled(!canRemove)
         }
         .padding(.horizontal, 8)
-        .padding(.vertical, 8)
+        .padding(.bottom, 8)
         .frame(width: cardSize)
     }
 }

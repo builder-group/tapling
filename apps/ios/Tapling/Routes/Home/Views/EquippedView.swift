@@ -11,7 +11,8 @@ import SwiftUI
 struct EquippedView: View {
     @Environment(\.modelContext) private var modelContext
     @QuerySingleton private var keyboardTapling: KeyboardTapling
-    @State private var selectedCardId: String?
+    @Binding var selectedCardId: String?
+    let onShowDetail: (AnyCollectible) -> Void
 
     // MARK: - UI
 
@@ -75,7 +76,7 @@ struct EquippedView: View {
                 CollectibleInfoRemoveActionButtons(
                     cardSize: cardSize,
                     onInfo: {
-                        print("ℹ️ Info: \(collectible.name)")
+                        onShowDetail(collectible)
                     },
                     onRemove: {
                         removeCollectible(collectible)
@@ -136,6 +137,6 @@ struct EquippedView: View {
 }
 
 #Preview {
-    EquippedView()
+    EquippedView(selectedCardId: .constant(nil), onShowDetail: { _ in })
         .previewDataContainer()
 }

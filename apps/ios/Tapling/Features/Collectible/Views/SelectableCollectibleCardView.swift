@@ -44,6 +44,7 @@ struct SelectableCollectibleCardView<ActionButtons: View>: View {
                         count: count
                     )
                     .frame(width: cardSize, height: cardSize)
+                    .scaleEffect(isSelected ? 0.85 : 1.0)
                     .zIndex(1)
 
                     if isSelected {
