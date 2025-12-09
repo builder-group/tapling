@@ -18,10 +18,15 @@ struct HomeView: View {
     private let maxHeaderHeight: CGFloat = 100
     private let minHeaderHeight: CGFloat = 50
     private let scrollThreshold: CGFloat = 80
+    private let chestCost: Int = 100
 
     private var headerHeight: CGFloat {
         let progress = min(max(scrollOffset / scrollThreshold, 0), 1)
         return maxHeaderHeight - (maxHeaderHeight - minHeaderHeight) * progress
+    }
+
+    private var canAffordChest: Bool {
+        player.currentKeycaps >= chestCost
     }
 
     // MARK: - UI
@@ -35,9 +40,12 @@ struct HomeView: View {
                 )
                 .background(Color.green)
                 .overlay(alignment: .topLeading) {
-                    keycapDisplay
-                        .padding(.top, 8)
-                        .padding(.leading, 16)
+                    HStack(spacing: 12) {
+                        keycapDisplay
+                        chestButton
+                    }
+                    .padding(.top, 8)
+                    .padding(.leading, 16)
                 }
 
                 if #available(iOS 18.0, *) {
@@ -140,7 +148,41 @@ struct HomeView: View {
         )
     }
 
+    private var chestButton: some View {
+        Button {
+            openChest()
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: "shippingbox.fill")
+                    .font(.system(size: 18))
+                    .foregroundColor(.white)
+                Text("\(chestCost)")
+                    .font(.headline)
+                    .foregroundColor(.white)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(
+                        canAffordChest
+                            ? Color.orange.opacity(0.8)
+                            : Color.gray.opacity(0.4)
+                    )
+            )
+        }
+        .disabled(!canAffordChest)
+    }
+
     // MARK: - Actions
+
+    private func openChest() {
+        guard canAffordChest else { return }
+
+        player.currentKeycaps -= chestCost
+        try? modelContext.save()
+        showCardboardBoxOpening = true
+    }
 
     private func handleCollectibleWon(_ collectible: AnyCollectible?) {
         if let collectible = collectible {

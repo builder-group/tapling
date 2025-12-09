@@ -12,7 +12,9 @@ struct HomeHeaderView: View {
     var headerHeight: CGFloat = 200
     var taplingScale: CGFloat = 1.0
 
+    @Environment(\.modelContext) private var modelContext
     @QuerySingleton private var keyboardTapling: KeyboardTapling
+    @QuerySingleton private var player: Player
 
     @State private var leftHand: HandPosition = .up
     @State private var rightHand: HandPosition = .down
@@ -73,6 +75,10 @@ struct HomeHeaderView: View {
     private func toggleHands() {
         leftHand = leftHand == .down ? .up : .down
         rightHand = rightHand == .down ? .up : .down
+
+        // Increment keycaps
+        player.currentKeycaps += 1
+        try? modelContext.save()
     }
 }
 
