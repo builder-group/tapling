@@ -54,19 +54,20 @@ struct HomeView: View {
             contentView
         }
         .onScrollGeometryChange(for: CGFloat.self) { geometry in
-            return geometry.contentOffset.y
+            geometry.contentOffset.y
         } action: { _, newValue in
             scrollOffset = max(newValue, 0)
         }
     }
 
+    @available(iOS 13.0, *)
     private var scrollViewLegacy: some View {
         ScrollView {
             VStack(spacing: 0) {
                 GeometryReader { geometry in
                     let offset = geometry.frame(in: .named("scrollView")).minY
                     Color.clear
-                        .onChange(of: offset) { oldValue, newValue in
+                        .onChange(of: offset) { _, newValue in
                             scrollOffset = max(-newValue, 0)
                         }
                 }
@@ -80,14 +81,8 @@ struct HomeView: View {
 
     private var contentView: some View {
         VStack(alignment: .leading, spacing: 20) {
-            ForEach(0..<20) { index in
-                Text("Item \(index + 1)")
-                    .font(.title3)
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-            }
+            EquippedView()
+            CardCollectionView()
         }
         .padding()
     }
@@ -140,5 +135,15 @@ struct HomeView: View {
                 to: Date()
             )
             player.lastActiveDate = Date()
+
+            let registry = CollectibleRegistry.shared
+            for collectible in registry.allCollectibles {
+                let ownedCollectible = OwnedCollectible(
+                    collectibleId: collectible.id,
+                    unlockedAt: Date(),
+                    player: player
+                )
+                context.insert(ownedCollectible)
+            }
         }
 }

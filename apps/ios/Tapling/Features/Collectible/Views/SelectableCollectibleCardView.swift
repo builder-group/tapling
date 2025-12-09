@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SelectableCollectibleCardView: View {
     let collectible: AnyCollectible
-    let count: Int
+    let count: Int?
     let isSelected: Bool
     let onTap: () -> Void
     let onInfo: () -> Void
@@ -144,7 +144,7 @@ struct SelectableCollectibleCardView: View {
                         ForEach(collectibles) { collectible in
                             SelectableCollectibleCardView(
                                 collectible: collectible,
-                                count: 3,
+                                count: nil,
                                 isSelected: selectedCardId == collectible.id,
                                 onTap: {
                                     selectedCardId =

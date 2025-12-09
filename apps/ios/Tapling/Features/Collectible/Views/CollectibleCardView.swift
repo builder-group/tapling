@@ -9,12 +9,12 @@ import SwiftUI
 
 struct CollectibleCardView<BottomContent: View>: View {
     let collectible: AnyCollectible
-    let count: Int
+    let count: Int?
     let bottomContent: (() -> BottomContent)?
 
     init(
         collectible: AnyCollectible,
-        count: Int,
+        count: Int? = nil,
         @ViewBuilder bottomContent: @escaping () -> BottomContent
     ) {
         self.collectible = collectible
@@ -22,7 +22,7 @@ struct CollectibleCardView<BottomContent: View>: View {
         self.bottomContent = bottomContent
     }
 
-    init(collectible: AnyCollectible, count: Int)
+    init(collectible: AnyCollectible, count: Int? = nil)
     where BottomContent == EmptyView {
         self.collectible = collectible
         self.count = count
@@ -84,17 +84,21 @@ struct CollectibleCardView<BottomContent: View>: View {
                 }
             }
 
-            if count > 0 {
-                countBadge
-            } else {
-                lockedOverlay
-                lockBadge
+            if let count = count {
+                if count > 0 {
+                    countBadge(count: count)
+                } else {
+                    lockedOverlay
+                    lockBadge
+                }
             }
         }
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(rarityColor, lineWidth: 2)
         )
+        .frame(maxWidth: .infinity)
+        .aspectRatio(1, contentMode: .fit)
     }
 
     private var lockBadge: some View {
@@ -114,7 +118,7 @@ struct CollectibleCardView<BottomContent: View>: View {
             .fill(.black.opacity(0.3))
     }
 
-    private var countBadge: some View {
+    private func countBadge(count: Int) -> some View {
         Text("\(count)")
             .font(.caption)
             .fontWeight(.bold)
@@ -129,41 +133,39 @@ struct CollectibleCardView<BottomContent: View>: View {
 }
 
 #Preview {
-    ScrollView {
-        HStack {
-            CollectibleCardView(
-                collectible: .hat(
-                    Hat(
-                        id: "hat_propeller-hat",
-                        name: "Propeller Hat",
-                        rarity: .epic,
-                        assetVariant: "propeller-hat"
-                    )
-                ),
-                count: 3
-            )
-            CollectibleCardView(
-                collectible: .face(
-                    Face(
-                        id: "face_pilot",
-                        name: "Pilot",
-                        rarity: .legendary,
-                        assetVariant: "pilot"
-                    )
-                ),
-                count: 0
-            )
-            CollectibleCardView(
-                collectible: .face(
-                    Face(
-                        id: "face_cute",
-                        name: "Cute",
-                        rarity: .common,
-                        assetVariant: "cute"
-                    )
-                ),
-                count: 200
-            )
-        }.padding()
-    }
+    HStack {
+        CollectibleCardView(
+            collectible: .hat(
+                Hat(
+                    id: "hat_propeller-hat",
+                    name: "Propeller Hat",
+                    rarity: .epic,
+                    assetVariant: "propeller-hat"
+                )
+            ),
+            count: 3
+        )
+        CollectibleCardView(
+            collectible: .face(
+                Face(
+                    id: "face_pilot",
+                    name: "Pilot",
+                    rarity: .legendary,
+                    assetVariant: "pilot"
+                )
+            ),
+            count: 0
+        )
+        CollectibleCardView(
+            collectible: .face(
+                Face(
+                    id: "face_cute",
+                    name: "Cute",
+                    rarity: .common,
+                    assetVariant: "cute"
+                )
+            ),
+            count: nil
+        )
+    }.padding()
 }
