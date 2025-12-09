@@ -18,6 +18,7 @@ struct CardCollectionView: View {
     @Binding var selectedCardId: String?
     let onShowDetail: (AnyCollectible) -> Void
 
+    @Namespace private var namespace
     private let registry = CollectibleRegistry.shared
 
     // MARK: - UI
@@ -52,28 +53,60 @@ struct CardCollectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             headerSection
-            Grid(horizontalSpacing: 12, verticalSpacing: 12) {
-                ForEach(gridRows, id: \.self) { row in
-                    GridRow {
-                        ForEach(row) { collectible in
-                            SelectableCollectibleCardView(
-                                collectible: collectible,
-                                count: nil,
-                                isSelected: selectedCardId == collectible.id,
-                                onTap: { toggleSelection(collectible.id) }
-                            ) { cardSize in
-                                CollectibleInfoUseActionButtons(
-                                    cardSize: cardSize,
-                                    onInfo: {
-                                        onShowDetail(collectible)
-                                    },
-                                    onUse: {
-                                        equipCollectible(collectible)
-                                    }
-                                )
-                            }
-                            .zIndex(selectedCardId == collectible.id ? 5 : 0)
+            // NOTE: We use matchedGeometryEffect workaround for LazyVGrid zIndex support.
+            // LazyVGrid doesn't properly update zIndex when selection changes, but zIndex works
+            // correctly in a ZStack overlay. This approach:
+            // 1. Uses invisible placeholders in LazyVGrid to define grid positions
+            // 2. Renders actual cards in an overlay ZStack where zIndex works properly
+            // 3. Uses matchedGeometryEffect to keep cards aligned with their grid positions
+            // See: https://stackoverflow.com/questions/79428920/cant-change-zindex-of-lazyvgrid-element-to-bring-it-to-the-front-with-animation
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible(), spacing: 12),
+                    GridItem(.flexible(), spacing: 12),
+                    GridItem(.flexible(), spacing: 12),
+                ],
+                alignment: .leading,
+                spacing: 12
+            ) {
+                // Placeholders for positioning
+                ForEach(collectibles) { collectible in
+                    Color.clear
+                        .aspectRatio(1, contentMode: .fit)
+                        .matchedGeometryEffect(
+                            id: collectible.id,
+                            in: namespace
+                        )
+                }
+            }
+            .overlay {
+                // Actual visible cards in ZStack (zIndex works here)
+                ZStack {
+                    ForEach(collectibles) { collectible in
+                        let isSelected = selectedCardId == collectible.id
+
+                        SelectableCollectibleCardView(
+                            collectible: collectible,
+                            count: nil,
+                            isSelected: isSelected,
+                            onTap: { toggleSelection(collectible.id) }
+                        ) { cardSize in
+                            CollectibleInfoUseActionButtons(
+                                cardSize: cardSize,
+                                onInfo: {
+                                    onShowDetail(collectible)
+                                },
+                                onUse: {
+                                    equipCollectible(collectible)
+                                }
+                            )
                         }
+                        .zIndex(isSelected ? 5 : 0)
+                        .matchedGeometryEffect(
+                            id: collectible.id,
+                            in: namespace,
+                            isSource: false
+                        )
                     }
                 }
             }
@@ -87,12 +120,6 @@ struct CardCollectionView: View {
             .font(.title2)
             .fontWeight(.semibold)
             .foregroundStyle(.primary)
-    }
-
-    private var gridRows: [[AnyCollectible]] {
-        stride(from: 0, to: collectibles.count, by: 3).map {
-            Array(collectibles[$0..<min($0 + 3, collectibles.count)])
-        }
     }
 
     // MARK: - Actions
@@ -116,7 +143,22 @@ struct CardCollectionView: View {
 }
 
 #Preview {
-    CardCollectionView(selectedCardId: .constant(nil), onShowDetail: { _ in })
+    struct PreviewWrapper: View {
+        @State private var selectedCardId: String?
+
+        var body: some View {
+            ScrollView {
+                CardCollectionView(
+                    selectedCardId: $selectedCardId,
+                    onShowDetail: { collectible in
+                        print("Info: \(collectible.name)")
+                    }
+                )
+            }
+        }
+    }
+
+    return PreviewWrapper()
         .previewDataContainer { context in
             let player = Player.instance(with: context)
 

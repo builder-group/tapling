@@ -80,7 +80,7 @@ struct SelectableCollectibleCardView<ActionButtons: View>: View {
 }
 
 #Preview {
-    struct PreviewWithState: View {
+    struct PreviewWrapper: View {
         @State private var selectedCardId: String?
 
         private let collectibles: [AnyCollectible] = [
@@ -144,5 +144,5 @@ struct SelectableCollectibleCardView<ActionButtons: View>: View {
         }
     }
 
-    return PreviewWithState()
+    return PreviewWrapper()
 }
