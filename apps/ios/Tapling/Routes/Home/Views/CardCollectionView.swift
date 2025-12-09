@@ -9,10 +9,12 @@ import SwiftData
 import SwiftUI
 
 struct CardCollectionView: View {
+    @Environment(\.modelContext) private var modelContext
     @Query(
         filter: #Predicate<OwnedCollectible> { $0.unlockedAt != nil },
         sort: \OwnedCollectible.collectibleId
     ) private var ownedCollectibles: [OwnedCollectible]
+    @QuerySingleton private var keyboardTapling: KeyboardTapling
     @State private var selectedCardId: String?
 
     private let registry = CollectibleRegistry.shared
@@ -24,8 +26,15 @@ struct CardCollectionView: View {
             $0.collectibleId
         }
 
+        let equippedIds: Set<String> = Set([
+            keyboardTapling.equippedFurId,
+            keyboardTapling.equippedFaceId,
+            keyboardTapling.equippedHatId,
+        ].compactMap { $0 })
+
         return registry.allCollectibles
             .filter { grouped[$0.id] != nil }
+            .filter { !equippedIds.contains($0.id) }
             .sorted { collectible1, collectible2 in
                 if collectible1.rarity.sortOrder
                     != collectible2.rarity.sortOrder
@@ -48,14 +57,18 @@ struct CardCollectionView: View {
                                 collectible: collectible,
                                 count: nil,
                                 isSelected: selectedCardId == collectible.id,
-                                onTap: { toggleSelection(collectible.id) },
-                                onInfo: {
-                                    print("ℹ️ Info: \(collectible.name)")
-                                },
-                                onUse: {
-                                    print("✅ Use: \(collectible.name)")
-                                }
-                            )
+                                onTap: { toggleSelection(collectible.id) }
+                            ) { cardSize in
+                                CollectibleInfoUseActionButtons(
+                                    cardSize: cardSize,
+                                    onInfo: {
+                                        print("ℹ️ Info: \(collectible.name)")
+                                    },
+                                    onUse: {
+                                        equipCollectible(collectible)
+                                    }
+                                )
+                            }
                             .zIndex(selectedCardId == collectible.id ? 5 : 0)
                         }
                     }
@@ -83,6 +96,19 @@ struct CardCollectionView: View {
 
     private func toggleSelection(_ id: String) {
         selectedCardId = (selectedCardId == id) ? nil : id
+    }
+
+    private func equipCollectible(_ collectible: AnyCollectible) {
+        switch collectible.slotType {
+        case .fur:
+            keyboardTapling.equippedFurId = collectible.id
+        case .face:
+            keyboardTapling.equippedFaceId = collectible.id
+        case .hat:
+            keyboardTapling.equippedHatId = collectible.id
+        }
+        try? modelContext.save()
+        selectedCardId = nil
     }
 }
 

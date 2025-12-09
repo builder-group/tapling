@@ -9,7 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct EquippedView: View {
+    @Environment(\.modelContext) private var modelContext
     @QuerySingleton private var keyboardTapling: KeyboardTapling
+    @State private var selectedCardId: String?
 
     // MARK: - UI
 
@@ -30,45 +32,106 @@ struct EquippedView: View {
 
     private var traitsRow: some View {
         HStack(spacing: 12) {
-            VStack(spacing: 8) {
-                EquippedCollectibleCardView(
-                    collectible: .fur(keyboardTapling.equippedFur)
+            if let furCollectible = equippedFurCollectible {
+                equippedCard(
+                    collectible: furCollectible,
+                    title: "Fur",
+                    canRemove: false
                 )
-                .frame(maxWidth: .infinity)
-
-                Text("Fur")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
             }
 
-            VStack(spacing: 8) {
-                EquippedCollectibleCardView(
-                    collectible: .face(keyboardTapling.equippedFace)
+            if let faceCollectible = equippedFaceCollectible {
+                equippedCard(
+                    collectible: faceCollectible,
+                    title: "Face",
+                    canRemove: false
                 )
-                .frame(maxWidth: .infinity)
-
-                Text("Face")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
             }
 
-            VStack(spacing: 8) {
-                EquippedCollectibleCardView(
-                    collectible: keyboardTapling.equippedHat.map { .hat($0) }
+            if let hatCollectible = equippedHatCollectible {
+                equippedCard(
+                    collectible: hatCollectible,
+                    title: "Hat",
+                    canRemove: true
                 )
-                .frame(maxWidth: .infinity)
-
-                Text("Hat")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(
-                        keyboardTapling.equippedHat == nil
-                            ? .secondary : .primary
-                    )
+            } else {
+                emptySlot(title: "Hat")
             }
         }
+    }
+
+    private func equippedCard(
+        collectible: AnyCollectible,
+        title: String,
+        canRemove: Bool
+    ) -> some View {
+        VStack(spacing: 8) {
+            SelectableCollectibleCardView(
+                collectible: collectible,
+                count: nil,
+                isSelected: selectedCardId == collectible.id,
+                onTap: { toggleSelection(collectible.id) }
+            ) { cardSize in
+                CollectibleInfoRemoveActionButtons(
+                    cardSize: cardSize,
+                    onInfo: {
+                        print("ℹ️ Info: \(collectible.name)")
+                    },
+                    onRemove: {
+                        removeCollectible(collectible)
+                    },
+                    canRemove: canRemove
+                )
+            }
+            .frame(maxWidth: .infinity)
+            .zIndex(selectedCardId == collectible.id ? 5 : 0)
+
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
+        }
+    }
+
+    private func emptySlot(title: String) -> some View {
+        VStack(spacing: 8) {
+            EquippedCollectibleCardView(collectible: nil)
+                .frame(maxWidth: .infinity)
+
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var equippedFurCollectible: AnyCollectible? {
+        .fur(keyboardTapling.equippedFur)
+    }
+
+    private var equippedFaceCollectible: AnyCollectible? {
+        .face(keyboardTapling.equippedFace)
+    }
+
+    private var equippedHatCollectible: AnyCollectible? {
+        keyboardTapling.equippedHat.map { .hat($0) }
+    }
+
+    // MARK: - Actions
+
+    private func toggleSelection(_ id: String) {
+        selectedCardId = (selectedCardId == id) ? nil : id
+    }
+
+    private func removeCollectible(_ collectible: AnyCollectible) {
+        switch collectible.slotType {
+        case .hat:
+            keyboardTapling.equippedHatId = nil
+        case .fur, .face:
+            break
+        }
+        try? modelContext.save()
+        selectedCardId = nil
     }
 }
 

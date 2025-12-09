@@ -7,13 +7,26 @@
 
 import SwiftUI
 
-struct SelectableCollectibleCardView: View {
+struct SelectableCollectibleCardView<ActionButtons: View>: View {
     let collectible: AnyCollectible
     let count: Int?
     let isSelected: Bool
     let onTap: () -> Void
-    let onInfo: () -> Void
-    let onUse: () -> Void
+    let actionButtons: (CGFloat) -> ActionButtons
+
+    init(
+        collectible: AnyCollectible,
+        count: Int? = nil,
+        isSelected: Bool,
+        onTap: @escaping () -> Void,
+        @ViewBuilder actionButtons: @escaping (CGFloat) -> ActionButtons
+    ) {
+        self.collectible = collectible
+        self.count = count
+        self.isSelected = isSelected
+        self.onTap = onTap
+        self.actionButtons = actionButtons
+    }
 
     // MARK: - UI
 
@@ -34,7 +47,7 @@ struct SelectableCollectibleCardView: View {
                     .zIndex(1)
 
                     if isSelected {
-                        actionButtons(cardSize: cardSize)
+                        actionButtons(cardSize)
                             .transition(
                                 .move(edge: .top).combined(with: .opacity)
                             )
@@ -62,47 +75,6 @@ struct SelectableCollectibleCardView: View {
         }
         .aspectRatio(1, contentMode: .fit)
         .onTapGesture(perform: onTap)
-    }
-
-    private func actionButtons(cardSize: CGFloat) -> some View {
-        VStack(spacing: 4) {
-            Button(action: onUse) {
-                Text("Use")
-                    .font(.body)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.orange, Color.orange.opacity(0.8)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .cornerRadius(8)
-            }
-
-            Button(action: onInfo) {
-                Text("Info")
-                    .font(.body)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.blue, Color.blue.opacity(0.8)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .cornerRadius(8)
-            }
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 8)
-        .frame(width: cardSize)
     }
 }
 
@@ -150,14 +122,18 @@ struct SelectableCollectibleCardView: View {
                                     selectedCardId =
                                         (selectedCardId == collectible.id)
                                         ? nil : collectible.id
-                                },
-                                onInfo: {
-                                    print("Info: \(collectible.name)")
-                                },
-                                onUse: {
-                                    print("Use: \(collectible.name)")
                                 }
-                            )
+                            ) { cardSize in
+                                CollectibleInfoUseActionButtons(
+                                    cardSize: cardSize,
+                                    onInfo: {
+                                        print("Info: \(collectible.name)")
+                                    },
+                                    onUse: {
+                                        print("Use: \(collectible.name)")
+                                    }
+                                )
+                            }
                             .zIndex(selectedCardId == collectible.id ? 10 : 0)
                         }
                     }
