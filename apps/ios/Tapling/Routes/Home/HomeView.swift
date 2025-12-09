@@ -16,24 +16,32 @@ struct HomeView: View {
     @State private var showCardboardBoxOpening = false
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    Button("Open Cardbox") {
-                        var transaction = Transaction()
-                        transaction.disablesAnimations = true
-                        withTransaction(transaction) {
-                            showCardboardBoxOpening = true
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .padding()
+        VStack(spacing: 0) {
+            HomeHeaderView(headerHeight: 100, taplingScale: 1.5)
+                .background(Color.green)
+                .overlay(alignment: .topLeading) {
+                    keycapDisplay
+                        .padding(.top, 8)
+                        .padding(.leading, 16)
                 }
-                .padding()
+            ScrollView {
+                Text("Test")
             }
 
-            keycapDisplay
-                .padding()
+            //            ScrollView {
+            //                VStack(alignment: .leading, spacing: 20) {
+            //                    Button("Open Cardbox") {
+            //                        var transaction = Transaction()
+            //                        transaction.disablesAnimations = true
+            //                        withTransaction(transaction) {
+            //                            showCardboardBoxOpening = true
+            //                        }
+            //                    }
+            //                    .buttonStyle(.borderedProminent)
+            //                    .padding()
+            //                }
+            //                .padding()
+            //            }.background(Color.red)
         }
         .fullScreenCover(isPresented: $showCardboardBoxOpening) {
             CardboardBoxOpeningView(onCollect: handleCollectibleWon)
@@ -41,20 +49,22 @@ struct HomeView: View {
     }
 
     private var keycapDisplay: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             Image("keycap")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 24, height: 24)
+                .frame(width: 20, height: 20)
+                .foregroundColor(.white)
 
             Text("\(player.currentKeycaps)")
                 .font(.headline)
+                .foregroundColor(.white)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color.gray.opacity(0.2))
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color.black.opacity(0.4))
         )
     }
 
