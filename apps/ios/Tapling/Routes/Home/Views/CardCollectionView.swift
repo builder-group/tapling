@@ -21,6 +21,11 @@ struct CardCollectionView: View {
     @Namespace private var namespace
     private let registry = CollectibleRegistry.shared
 
+    // Track visible items to prevent overlay items from expanding during rubber-band scrolling.
+    // When placeholders scroll out of view, matchedGeometryEffect loses its source, causing
+    // overlay items to expand and fill the grid area.
+    @State private var visibleIds: Set<String> = []
+
     // MARK: - UI
 
     private var collectibles: [AnyCollectible] {
@@ -86,12 +91,19 @@ struct CardCollectionView: View {
                         id: collectible.id,
                         in: namespace
                     )
+                    .onAppear {
+                        visibleIds.insert(collectible.id)
+                    }
+                    .onDisappear {
+                        visibleIds.remove(collectible.id)
+                    }
             }
         }
         .overlay {
             // Actual visible cards in ZStack (zIndex works here)
+            // Only render items whose placeholders are mounted
             ZStack {
-                ForEach(collectibles) { collectible in
+                ForEach(collectibles.filter { visibleIds.contains($0.id) }) { collectible in
                     let isSelected = selectedCardId == collectible.id
 
                     SelectableCollectibleCardView(
