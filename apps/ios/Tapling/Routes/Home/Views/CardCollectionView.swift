@@ -53,66 +53,91 @@ struct CardCollectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             headerSection
-            // NOTE: We use matchedGeometryEffect workaround for LazyVGrid zIndex support.
-            // LazyVGrid doesn't properly update zIndex when selection changes, but zIndex works
-            // correctly in a ZStack overlay. This approach:
-            // 1. Uses invisible placeholders in LazyVGrid to define grid positions
-            // 2. Renders actual cards in an overlay ZStack where zIndex works properly
-            // 3. Uses matchedGeometryEffect to keep cards aligned with their grid positions
-            // See: https://stackoverflow.com/questions/79428920/cant-change-zindex-of-lazyvgrid-element-to-bring-it-to-the-front-with-animation
-            LazyVGrid(
-                columns: [
-                    GridItem(.flexible(), spacing: 12),
-                    GridItem(.flexible(), spacing: 12),
-                    GridItem(.flexible(), spacing: 12),
-                ],
-                alignment: .leading,
-                spacing: 12
-            ) {
-                // Placeholders for positioning
-                ForEach(collectibles) { collectible in
-                    Color.clear
-                        .aspectRatio(1, contentMode: .fit)
-                        .matchedGeometryEffect(
-                            id: collectible.id,
-                            in: namespace
-                        )
-                }
+            if collectibles.isEmpty {
+                emptyStateView
+            } else {
+                collectionGridView
             }
-            .overlay {
-                // Actual visible cards in ZStack (zIndex works here)
-                ZStack {
-                    ForEach(collectibles) { collectible in
-                        let isSelected = selectedCardId == collectible.id
+        }
+    }
 
-                        SelectableCollectibleCardView(
-                            collectible: collectible,
-                            count: nil,
-                            isSelected: isSelected,
-                            onTap: { toggleSelection(collectible.id) }
-                        ) { cardSize in
-                            CollectibleInfoUseActionButtons(
-                                cardSize: cardSize,
-                                onInfo: {
-                                    onShowDetail(collectible)
-                                },
-                                onUse: {
-                                    equipCollectible(collectible)
-                                }
-                            )
-                        }
-                        .zIndex(isSelected ? 5 : 0)
-                        .matchedGeometryEffect(
-                            id: collectible.id,
-                            in: namespace,
-                            isSource: false
+    private var collectionGridView: some View {
+        // NOTE: We use matchedGeometryEffect workaround for LazyVGrid zIndex support.
+        // LazyVGrid doesn't properly update zIndex when selection changes, but zIndex works
+        // correctly in a ZStack overlay. This approach:
+        // 1. Uses invisible placeholders in LazyVGrid to define grid positions
+        // 2. Renders actual cards in an overlay ZStack where zIndex works properly
+        // 3. Uses matchedGeometryEffect to keep cards aligned with their grid positions
+        // See: https://stackoverflow.com/questions/79428920/cant-change-zindex-of-lazyvgrid-element-to-bring-it-to-the-front-with-animation
+        LazyVGrid(
+            columns: [
+                GridItem(.flexible(), spacing: 12),
+                GridItem(.flexible(), spacing: 12),
+                GridItem(.flexible(), spacing: 12),
+            ],
+            alignment: .leading,
+            spacing: 12
+        ) {
+            // Placeholders for positioning
+            ForEach(collectibles) { collectible in
+                Color.clear
+                    .aspectRatio(1, contentMode: .fit)
+                    .matchedGeometryEffect(
+                        id: collectible.id,
+                        in: namespace
+                    )
+            }
+        }
+        .overlay {
+            // Actual visible cards in ZStack (zIndex works here)
+            ZStack {
+                ForEach(collectibles) { collectible in
+                    let isSelected = selectedCardId == collectible.id
+
+                    SelectableCollectibleCardView(
+                        collectible: collectible,
+                        count: nil,
+                        isSelected: isSelected,
+                        onTap: { toggleSelection(collectible.id) }
+                    ) { cardSize in
+                        CollectibleInfoUseActionButtons(
+                            cardSize: cardSize,
+                            onInfo: {
+                                onShowDetail(collectible)
+                            },
+                            onUse: {
+                                equipCollectible(collectible)
+                            }
                         )
                     }
+                    .zIndex(isSelected ? 5 : 0)
+                    .matchedGeometryEffect(
+                        id: collectible.id,
+                        in: namespace,
+                        isSource: false
+                    )
                 }
             }
-            .padding(.bottom, 100)
         }
-        .padding(.horizontal, 16)
+        .padding(.bottom, 100)
+    }
+
+    private var emptyStateView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "tray")
+                .font(.system(size: 48))
+                .foregroundStyle(.secondary)
+            Text("No collectibles yet")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
+            Text("Open cardboxes to start collecting taplings")
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 60)
     }
 
     private var headerSection: some View {
@@ -154,6 +179,7 @@ struct CardCollectionView: View {
                         print("Info: \(collectible.name)")
                     }
                 )
+                .padding()
             }
         }
     }
@@ -172,4 +198,25 @@ struct CardCollectionView: View {
                 context.insert(ownedCollectible)
             }
         }
+}
+
+#Preview("Empty State") {
+    struct PreviewWrapper: View {
+        @State private var selectedCardId: String?
+
+        var body: some View {
+            ScrollView {
+                CardCollectionView(
+                    selectedCardId: $selectedCardId,
+                    onShowDetail: { collectible in
+                        print("Info: \(collectible.name)")
+                    }
+                )
+            }
+        }
+    }
+
+    return PreviewWrapper()
+        .previewDataContainer()
+        .padding()
 }

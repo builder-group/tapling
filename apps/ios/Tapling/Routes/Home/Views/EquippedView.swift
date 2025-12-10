@@ -21,7 +21,6 @@ struct EquippedView: View {
             headerSection
             traitsRow
         }
-        .padding(.horizontal, 16)
     }
 
     private var headerSection: some View {
@@ -139,4 +138,5 @@ struct EquippedView: View {
 #Preview {
     EquippedView(selectedCardId: .constant(nil), onShowDetail: { _ in })
         .previewDataContainer()
+        .padding()
 }

@@ -91,12 +91,12 @@ struct CollectibleRegistry {
             rarity: .common,
             assetVariant: "white"
         ),
-        Fur(
-            id: "fur_mask",
-            name: "Mask",
-            rarity: .legendary,
-            assetVariant: "mask"
-        ),
+//        Fur(
+//            id: "fur_mask",
+//            name: "Mask",
+//            rarity: .legendary,
+//            assetVariant: "mask"
+//        ),
     ]
 
     // MARK: - Defaults

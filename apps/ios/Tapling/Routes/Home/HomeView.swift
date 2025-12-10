@@ -119,7 +119,7 @@ struct HomeView: View {
             )
             .zIndex(0)
         }
-        .padding(.top)
+        .padding()
         .contentShape(Rectangle())
         .onTapGesture {
             // Only deselect if tapping on empty space (not on a card)
