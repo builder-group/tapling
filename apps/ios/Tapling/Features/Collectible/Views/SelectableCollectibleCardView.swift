@@ -31,51 +31,74 @@ struct SelectableCollectibleCardView<ActionButtons: View>: View {
     // MARK: - UI
 
     var body: some View {
-        ZStack(alignment: .top) {
-            Color.clear
-                .aspectRatio(1, contentMode: .fit)
+        GeometryReader { geo in
+            let cardSize = geo.size.width
 
-            GeometryReader { geo in
-                let cardSize = geo.size.width
+            VStack(spacing: 0) {
+                CollectibleCardView(
+                    collectible: collectible,
+                    count: count
+                )
+                .frame(width: cardSize, height: cardSize)
+                .scaleEffect(isSelected ? 0.88 : 1.0)
+                .zIndex(1)
 
-                VStack(spacing: 0) {
-                    CollectibleCardView(
-                        collectible: collectible,
-                        count: count
-                    )
-                    .frame(width: cardSize, height: cardSize)
-                    .scaleEffect(isSelected ? 0.85 : 1.0)
-                    .zIndex(1)
-
-                    if isSelected {
-                        actionButtons(cardSize)
-                            .transition(
-                                .move(edge: .top).combined(with: .opacity)
+                if isSelected {
+                    actionButtons(cardSize)
+                        .transition(
+                            .asymmetric(
+                                insertion: .move(edge: .top)
+                                    .combined(with: .opacity),
+                                removal: .opacity.animation(nil)
                             )
-                            .zIndex(0)
-                    }
-                }
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.white)
-                        .shadow(
-                            color: isSelected ? .black.opacity(0.2) : .clear,
-                            radius: isSelected ? 8 : 0,
-                            y: isSelected ? 4 : 0
                         )
-                )
-                .scaleEffect(isSelected ? 1.1 : 1.0)
-                .animation(
-                    isSelected
-                        ? .spring(response: 0.3, dampingFraction: 0.7)
-                        : nil,
-                    value: isSelected
-                )
-
+                        .zIndex(0)
+                }
             }
+            .background(selectedCardBackground)
+            .overlay(selectedCardBorder)
+            .scaleEffect(isSelected ? 1.08 : 1.0)
+            .animation(
+                isSelected
+                    ? .spring(
+                        response: 0.35,
+                        dampingFraction: 0.75
+                    )
+                    : nil,
+                value: isSelected
+            )
         }
         .aspectRatio(1, contentMode: .fit)
-        .onTapGesture(perform: onTap)
+        .onTapGesture {
+            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.impactOccurred()
+            onTap()
+        }
+    }
+
+    @ViewBuilder
+    private var selectedCardBackground: some View {
+        if isSelected {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(.regularMaterial)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(collectible.rarity.color.opacity(0.1))
+                }
+                .shadow(
+                    color: .primary.opacity(0.2),
+                    radius: 12,
+                    y: 6
+                )
+        }
+    }
+
+    @ViewBuilder
+    private var selectedCardBorder: some View {
+        if isSelected {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(.quaternary, lineWidth: 1)
+        }
     }
 }
 

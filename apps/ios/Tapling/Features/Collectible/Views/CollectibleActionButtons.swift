@@ -13,43 +13,40 @@ struct CollectibleInfoUseActionButtons: View {
     let onUse: () -> Void
 
     var body: some View {
-        VStack(spacing: 4) {
-            Button(action: onInfo) {
+        VStack(spacing: 6) {
+            Button(action: {
+                let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                impactFeedback.impactOccurred()
+                onInfo()
+            }) {
                 Text("Info")
-                    .font(.body)
+                    .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.blue, Color.blue.opacity(0.8)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .cornerRadius(8)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(.blue)
+            .controlSize(.small)
 
-            Button(action: onUse) {
+            Button(action: {
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
+                onUse()
+            }) {
                 Text("Use")
-                    .font(.body)
+                    .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.orange, Color.orange.opacity(0.8)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .cornerRadius(8)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(.orange)
+            .controlSize(.small)
         }
-        .padding(.horizontal, 8)
-        .padding(.bottom, 8)
+        .padding(.horizontal, 12)
+        .padding(.top, 8)
+        .padding(.bottom, 12)
         .frame(width: cardSize)
     }
 }
@@ -61,46 +58,41 @@ struct CollectibleInfoRemoveActionButtons: View {
     let canRemove: Bool
 
     var body: some View {
-        VStack(spacing: 4) {
-            Button(action: onInfo) {
+        VStack(spacing: 6) {
+            Button(action: {
+                let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                impactFeedback.impactOccurred()
+                onInfo()
+            }) {
                 Text("Info")
-                    .font(.body)
+                    .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.blue, Color.blue.opacity(0.8)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .cornerRadius(8)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(.blue)
+            .controlSize(.small)
 
-            Button(action: onRemove) {
+            Button(action: {
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
+                onRemove()
+            }) {
                 Text("Remove")
-                    .font(.body)
+                    .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
-                    .background(
-                        LinearGradient(
-                            colors: canRemove
-                                ? [Color.red, Color.red.opacity(0.8)]
-                                : [Color.gray, Color.gray.opacity(0.8)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .cornerRadius(8)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(canRemove ? .red : .gray)
+            .controlSize(.small)
             .disabled(!canRemove)
         }
-        .padding(.horizontal, 8)
-        .padding(.bottom, 8)
+        .padding(.horizontal, 12)
+        .padding(.top, 8)
+        .padding(.bottom, 12)
         .frame(width: cardSize)
     }
 }
