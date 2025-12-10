@@ -75,7 +75,9 @@ struct HomeView: View {
     private var scrollViewModern: some View {
         ScrollView {
             contentView
+            footerContent
         }
+        .ignoresSafeArea(edges: .bottom)
         .onScrollGeometryChange(for: CGFloat.self) { geometry in
             geometry.contentOffset.y
         } action: { _, newValue in
@@ -97,8 +99,10 @@ struct HomeView: View {
                 .frame(height: 0)
 
                 contentView
+                footerContent
             }
         }
+        .ignoresSafeArea(edges: .bottom)
         .coordinateSpace(name: "scrollView")
     }
 
@@ -172,6 +176,17 @@ struct HomeView: View {
             )
         }
         .disabled(!canAffordChest)
+    }
+
+    private var footerContent: some View {
+        VStack {
+            Spacer()
+            HomeFooterView()
+        }
+        // Workaround: Footer pushed down to full screen height to hide header scaling bug.
+        // Our custom scaling header interferes with iOS rubber band scrolling when content
+        // is too short to be scrollable. This ensures content is always scrollable.
+        .frame(height: UIScreen.main.bounds.height)
     }
 
     // MARK: - Actions
