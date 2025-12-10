@@ -117,7 +117,7 @@ struct CardCollectionView: View {
 
     private var headerSection: some View {
         Text("Collection")
-            .font(.title2)
+            .font(.title)
             .fontWeight(.semibold)
             .foregroundStyle(.primary)
     }

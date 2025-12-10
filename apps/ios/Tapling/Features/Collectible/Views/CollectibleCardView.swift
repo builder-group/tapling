@@ -67,7 +67,7 @@ struct CollectibleCardView<BottomContent: View>: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(.white)
+                .fill(.regularMaterial)
                 .aspectRatio(1, contentMode: .fit)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)

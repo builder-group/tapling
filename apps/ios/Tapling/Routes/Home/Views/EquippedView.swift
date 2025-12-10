@@ -26,7 +26,7 @@ struct EquippedView: View {
 
     private var headerSection: some View {
         Text("Equipped")
-            .font(.title2)
+            .font(.title)
             .fontWeight(.semibold)
             .foregroundStyle(.primary)
     }
