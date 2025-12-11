@@ -13,13 +13,6 @@ struct HomeFooterView: View {
 
     @QuerySingleton private var keyboardTapling: KeyboardTapling
 
-    private var taplingSize: CGFloat {
-        TaplingConfig.baseSize * taplingScale
-    }
-    private var taplingBottomOffset: CGFloat {
-        TaplingConfig.baseBodyBottomOffset
-            * (taplingSize / TaplingConfig.baseSize)
-    }
     private var currentTapling: Tapling {
         Tapling(
             fur: keyboardTapling.equippedFur,
@@ -33,10 +26,7 @@ struct HomeFooterView: View {
     // MARK: - UI
 
     var body: some View {
-        TaplingView(tapling: currentTapling)
-            .frame(width: taplingSize, height: taplingSize)
-            .offset(y: taplingBottomOffset)
-            .allowsHitTesting(false)
+        BottomAlignedTaplingView(tapling: currentTapling, scale: taplingScale)
     }
 }
 

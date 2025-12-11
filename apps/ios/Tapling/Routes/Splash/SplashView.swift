@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct SplashView: View {
+    var scale: CGFloat = 0.75
+
     @State private var leftHand: HandPosition = .up
     @State private var rightHand: HandPosition = .down
     @State private var timer: Timer?
     @State private var randomFur: Fur = .default
     @State private var randomHat: Hat?
     @State private var randomFace: Face = .default
+
+    private var taplingSize: CGFloat {
+        TaplingConfig.baseSize * scale
+    }
 
     private var currentTapling: Tapling {
         Tapling(
@@ -34,8 +40,8 @@ struct SplashView: View {
 
             TaplingView(tapling: currentTapling)
                 .frame(
-                    width: TaplingConfig.baseSize,
-                    height: TaplingConfig.baseSize
+                    width: taplingSize,
+                    height: taplingSize
                 )
         }
         .onAppear {
