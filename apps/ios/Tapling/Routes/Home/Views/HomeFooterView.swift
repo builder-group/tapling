@@ -27,6 +27,29 @@ struct HomeFooterView: View {
 
     var body: some View {
         BottomAlignedTaplingView(tapling: currentTapling, scale: taplingScale)
+            .overlay(alignment: .bottom) {
+                SpeechBubble(radius: 12, tailPosition: .bottom)
+                    .fill(Color.white.opacity(0.9))
+                    .overlay(
+                        SpeechBubble(radius: 12, tailPosition: .bottom)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                    )
+                    .frame(width: 120, height: 60)
+                    .overlay(
+                        Text("meow meow")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                    )
+                    .offset(
+                        x: 20,
+                        y:
+                            -(TaplingConfig.baseSize
+                            - TaplingConfig.baseBodyBottomOffset - 60)
+                            * taplingScale
+                    )
+            }
     }
 }
 
