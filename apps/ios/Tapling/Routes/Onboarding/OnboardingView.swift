@@ -12,6 +12,14 @@ struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
     @QuerySingleton private var player: Player
 
+    let isCancelable: Bool
+    let onComplete: (() -> Void)?
+
+    init(isCancelable: Bool = false, onComplete: (() -> Void)? = nil) {
+        self.isCancelable = isCancelable
+        self.onComplete = onComplete
+    }
+
     private enum OnboardingStep: Int, CaseIterable {
         case welcome = 0
         case enableKeyboard = 1
@@ -38,7 +46,10 @@ struct OnboardingView: View {
             case .fullAccess:
                 OnboardingFullAccessView(onNext: nextStep)
             case .cardbox:
-                OnboardingCardboxView(onNext: completeOnboarding)
+                OnboardingCardboxView(
+                    isCancelable: isCancelable,
+                    onNext: completeOnboarding
+                )
             case .none:
                 EmptyView()
             }
@@ -61,9 +72,13 @@ struct OnboardingView: View {
     }
 
     private func completeOnboarding() {
-        player.onboardingCompletedAt = Date()
+        if !isCancelable {
+            player.onboardingCompletedAt = Date()
+        }
         player.onboardingStep = nil
         try? modelContext.save()
+
+        onComplete?()
     }
 }
 

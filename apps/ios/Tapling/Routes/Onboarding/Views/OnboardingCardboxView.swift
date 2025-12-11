@@ -12,11 +12,17 @@ struct OnboardingCardboxView: View {
     @Environment(\.modelContext) private var modelContext
     @QuerySingleton private var player: Player
 
+    let isCancelable: Bool
     let onNext: () -> Void
 
     @State private var isOpeningCardbox = false
     @State private var leftHand: HandPosition = .up
     @State private var rightHand: HandPosition = .down
+
+    init(isCancelable: Bool = false, onNext: @escaping () -> Void) {
+        self.isCancelable = isCancelable
+        self.onNext = onNext
+    }
 
     private var currentTapling: Tapling {
         Tapling(
@@ -84,8 +90,8 @@ struct OnboardingCardboxView: View {
                 )
             }
             .zIndex(1)
-            Button(action: startCardboxOpening) {
-                Text("Claim cardbox")
+            Button(action: isCancelable ? onNext : startCardboxOpening) {
+                Text(isCancelable ? "Next" : "Claim cardbox")
                     .font(.headline)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
@@ -125,6 +131,6 @@ struct OnboardingCardboxView: View {
 }
 
 #Preview {
-    OnboardingCardboxView(onNext: {})
+    OnboardingCardboxView(isCancelable: false, onNext: {})
         .previewDataContainer()
 }

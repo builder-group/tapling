@@ -28,7 +28,7 @@ struct OnboardingSelectKeyboardView: View {
     }
 
     private var canProceed: Bool {
-        totalKeystrokes >= 20
+        totalKeystrokes >= 10
     }
 
     // MARK: - UI
