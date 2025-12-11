@@ -1,5 +1,5 @@
 //
-//  OnboardingEnableKeyboardView.swift
+//  OnboardingFullAccessView.swift
 //  Tapling
 //
 //  Created by Benno on 11.12.25.
@@ -8,12 +8,12 @@
 import KeyboardKit
 import SwiftUI
 
-struct OnboardingEnableKeyboardView: View {
+struct OnboardingFullAccessView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     let onNext: () -> Void
 
-    @State private var isKeyboardEnabled = false
+    @State private var isFullAccessEnabled = false
     @State private var leftHand: HandPosition = .up
     @State private var rightHand: HandPosition = .down
 
@@ -40,7 +40,7 @@ struct OnboardingEnableKeyboardView: View {
                 subtitleSection
             }
 
-            keyboardStatusSection
+            fullAccessStatusSection
 
             Spacer()
 
@@ -52,17 +52,17 @@ struct OnboardingEnableKeyboardView: View {
             toggleHands()
         }
         .onAppear {
-            checkKeyboardStatus()
+            checkFullAccessStatus()
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {
-                checkKeyboardStatus()
+                checkFullAccessStatus()
             }
         }
     }
 
     private var titleSection: some View {
-        Text("Let’s get started")
+        Text("Full access for keycap counting")
             .font(.largeTitle)
             .fontWeight(.bold)
             .multilineTextAlignment(.center)
@@ -70,25 +70,25 @@ struct OnboardingEnableKeyboardView: View {
 
     private var subtitleSection: some View {
         Text(
-            "Tapling needs a keyboard to join you. Enable the Tapling keyboard so your little friend can tap along wherever you type."
+            "To count every keystroke and earn keycaps, Tapling needs full access to the keyboard. Tapling never reads what you type and all data stays on your device. Full access just lets your Tapling keep growing as you type."
         )
         .font(.body)
         .foregroundStyle(.secondary)
         .multilineTextAlignment(.center)
     }
 
-    private var keyboardStatusSection: some View {
+    private var fullAccessStatusSection: some View {
         Button(action: openSystemSettings) {
             HStack(spacing: 12) {
                 Image(
-                    systemName: isKeyboardEnabled
+                    systemName: isFullAccessEnabled
                         ? "checkmark.circle.fill"
                         : "exclamationmark.circle.fill"
                 )
-                .foregroundStyle(isKeyboardEnabled ? .green : .yellow)
+                .foregroundStyle(isFullAccessEnabled ? .green : .yellow)
                 .font(.title3)
 
-                Text("Keyboard Enabled")
+                Text("Full Access Enabled")
                     .foregroundStyle(.primary)
 
                 Spacer()
@@ -117,21 +117,19 @@ struct OnboardingEnableKeyboardView: View {
             }
             .zIndex(1)
             Button(action: onNext) {
-                Text("Next")
-                    .font(.headline)
-                    .foregroundStyle(isKeyboardEnabled ? .white : .primary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(
-                                isKeyboardEnabled
-                                    ? Color.blue
-                                    : Color.gray.opacity(0.1)
-                            )
-                    )
+                Text(
+                    isFullAccessEnabled
+                        ? "Next" : "Continue without earning keycaps"
+                )
+                .font(.headline)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(Color.blue)
+                )
             }
-            .disabled(!isKeyboardEnabled)
         }
     }
 
@@ -142,9 +140,9 @@ struct OnboardingEnableKeyboardView: View {
         rightHand = rightHand == .down ? .up : .down
     }
 
-    private func checkKeyboardStatus() {
+    private func checkFullAccessStatus() {
         keyboardStatus.refresh()
-        isKeyboardEnabled = keyboardStatus.isKeyboardEnabled
+        isFullAccessEnabled = keyboardStatus.isFullAccessEnabled
     }
 
     private func openSystemSettings() {
@@ -156,5 +154,5 @@ struct OnboardingEnableKeyboardView: View {
 }
 
 #Preview {
-    OnboardingEnableKeyboardView(onNext: {})
+    OnboardingFullAccessView(onNext: {})
 }

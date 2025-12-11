@@ -9,11 +9,13 @@ import SwiftUI
 
 struct OnboardingSelectKeyboardView: View {
     @FocusState private var isTextFieldFocused: Bool
-    @State private var inputText = ""
-    @State private var leftHand: HandPosition = .up
-    @State private var rightHand: HandPosition = .down
 
     let onNext: () -> Void
+
+    @State private var inputText = ""
+    @State private var totalKeystrokes = 0
+    @State private var leftHand: HandPosition = .up
+    @State private var rightHand: HandPosition = .down
 
     private var currentTapling: Tapling {
         Tapling(
@@ -26,7 +28,7 @@ struct OnboardingSelectKeyboardView: View {
     }
 
     private var canProceed: Bool {
-        isTextFieldFocused || !inputText.isEmpty
+        totalKeystrokes >= 20
     }
 
     // MARK: - UI
@@ -70,27 +72,39 @@ struct OnboardingSelectKeyboardView: View {
     private var textInputSection: some View {
         TextField(
             "Type something to say hi...",
-            text: $inputText,
-            axis: .vertical
+            text: $inputText
         )
         .focused($isTextFieldFocused)
         .textFieldStyle(.roundedBorder)
-        .lineLimit(3...6)
+        .submitLabel(.done)
+        .onSubmit {
+            isTextFieldFocused = false
+        }
         .font(.body)
+        .onChange(of: inputText) { oldValue, newValue in
+            let newLength = newValue.count
+            let oldLength = oldValue.count
+
+            if newLength > oldLength {
+                totalKeystrokes += newLength - oldLength
+            }
+        }
     }
 
     private var nextButton: some View {
         VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                BottomAlignedTaplingView(
-                    tapling: currentTapling,
-                    scale: 0.5
-                )
+            if !isTextFieldFocused {
+                HStack {
+                    Spacer()
+                    BottomAlignedTaplingView(
+                        tapling: currentTapling,
+                        scale: 0.5
+                    )
+                }
+                .zIndex(1)
             }
-            .zIndex(1)
             Button(action: onNext) {
-                Text("Next")
+                Text(canProceed ? "Next" : "Type a bit to continue")
                     .font(.headline)
                     .foregroundStyle(canProceed ? .white : .primary)
                     .frame(maxWidth: .infinity)

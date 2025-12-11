@@ -17,6 +17,8 @@ struct OnboardingView: View {
         case welcome = 0
         case enableKeyboard = 1
         case selectKeyboard = 2
+        case fullAccess = 3
+        case cardbox = 4
     }
 
     // MARK: - UI
@@ -29,7 +31,11 @@ struct OnboardingView: View {
             case .enableKeyboard:
                 OnboardingEnableKeyboardView(onNext: nextStep)
             case .selectKeyboard:
-                OnboardingSelectKeyboardView(onNext: completeOnboarding)
+                OnboardingSelectKeyboardView(onNext: nextStep)
+            case .fullAccess:
+                OnboardingFullAccessView(onNext: nextStep)
+            case .cardbox:
+                OnboardingCardboxView(onNext: completeOnboarding)
             case .none:
                 EmptyView()
             }
