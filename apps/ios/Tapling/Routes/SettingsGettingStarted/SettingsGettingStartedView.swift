@@ -34,9 +34,10 @@ struct SettingsGettingStartedView: View {
             NavigationStack {
                 OnboardingView(
                     isCancelable: true,
-                ) {
-                    showOnboarding = false
-                }
+                    onComplete: {
+                        showOnboarding = false
+                    }
+                )
             }
         }
     }
