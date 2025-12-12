@@ -33,15 +33,15 @@ struct CollectibleCardView<BottomContent: View>: View {
         switch collectible {
         case .hat(let hat):
             return Tapling(
-                fur: .default,
+                fur: .placeholder,
                 hat: hat,
-                face: .default,
+                face: .placeholder,
                 leftHand: .down,
                 rightHand: .down
             )
         case .face(let face):
             return Tapling(
-                fur: .default,
+                fur: .placeholder,
                 hat: nil,
                 face: face,
                 leftHand: .down,
@@ -51,7 +51,7 @@ struct CollectibleCardView<BottomContent: View>: View {
             return Tapling(
                 fur: fur,
                 hat: nil,
-                face: .default,
+                face: .placeholder,
                 leftHand: .down,
                 rightHand: .down
             )

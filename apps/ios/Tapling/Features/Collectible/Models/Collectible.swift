@@ -35,6 +35,7 @@ extension Collectible where Slot == HatSlot {
 extension Collectible where Slot == FaceSlot {
     static var all: [Face] { CollectibleRegistry.shared.faces }
     static var `default`: Face { CollectibleRegistry.shared.defaultFace }
+    static var placeholder: Face { CollectibleRegistry.shared.placeholderFace }
 
     static func get(_ id: String) -> Face? {
         CollectibleRegistry.shared.face(id: id)
@@ -50,6 +51,7 @@ extension Collectible where Slot == FaceSlot {
 extension Collectible where Slot == FurSlot {
     static var all: [Fur] { CollectibleRegistry.shared.furs }
     static var `default`: Fur { CollectibleRegistry.shared.defaultFur }
+    static var placeholder: Fur { CollectibleRegistry.shared.placeholderFur }
 
     static func get(_ id: String) -> Fur? {
         CollectibleRegistry.shared.fur(id: id)

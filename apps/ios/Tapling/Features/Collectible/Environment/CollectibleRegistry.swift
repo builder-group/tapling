@@ -80,6 +80,12 @@ struct CollectibleRegistry {
             rarity: .legendary,
             assetVariant: "pixel-cool"
         ),
+        Face(
+            id: "face_placeholder",
+            name: "Placeholder",
+            rarity: .legendary,
+            assetVariant: "placeholder"
+        ),
     ]
 
     // MARK: - Furs
@@ -91,12 +97,18 @@ struct CollectibleRegistry {
             rarity: .common,
             assetVariant: "white"
         ),
-//        Fur(
-//            id: "fur_mask",
-//            name: "Mask",
-//            rarity: .legendary,
-//            assetVariant: "mask"
-//        ),
+        Fur(
+            id: "fur_mask",
+            name: "Mask",
+            rarity: .legendary,
+            assetVariant: "mask"
+        ),
+        Fur(
+            id: "fur_placeholder",
+            name: "Placeholder",
+            rarity: .legendary,
+            assetVariant: "placeholder"
+        ),
     ]
 
     // MARK: - Defaults
@@ -105,8 +117,16 @@ struct CollectibleRegistry {
         furs.first { $0.id == "fur_white" } ?? furs[0]
     }
 
+    var placeholderFur: Fur {
+        furs.first { $0.id == "fur_placeholder" } ?? furs[0]
+    }
+
     var defaultFace: Face {
         faces.first { $0.id == "face_cute" } ?? faces[0]
+    }
+
+    var placeholderFace: Face {
+        faces.first { $0.id == "face_placeholder" } ?? faces[0]
     }
 
     // MARK: - Lookup
