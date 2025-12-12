@@ -46,7 +46,24 @@ struct OnboardingFullAccessView: View {
     }
 
     private var nextButton: some View {
-        AnimatedTaplingOverlay(scale: 0.5) {
+        AnimatedTaplingOverlay(
+            tapling: isFullAccessEnabled
+                ? Tapling(
+                    fur: .default,
+                    hat: nil,
+                    face: Face.get("face_pilot")!,
+                    leftHand: .up,
+                    rightHand: .down
+                )
+                : Tapling(
+                    fur: .default,
+                    hat: nil,
+                    face: Face.get("face_dead")!,
+                    leftHand: .up,
+                    rightHand: .down
+                ),
+            scale: 0.5
+        ) {
             Button(action: onNext) {
                 Text(
                     isFullAccessEnabled

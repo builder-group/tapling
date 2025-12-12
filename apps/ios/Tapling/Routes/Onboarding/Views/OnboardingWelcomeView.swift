@@ -33,7 +33,16 @@ struct OnboardingWelcomeView: View {
     }
 
     private var meetTaplingButton: some View {
-        AnimatedTaplingOverlay(scale: 0.5) {
+        AnimatedTaplingOverlay(
+            tapling: Tapling(
+                fur: .default,
+                hat: Hat.get("hat_lil-duck"),
+                face: Face.get("face_cute")!,
+                leftHand: .up,
+                rightHand: .down
+            ),
+            scale: 0.5
+        ) {
             Button(action: onNext) {
                 Text("Meet your Tapling")
                     .font(.headline)

@@ -46,7 +46,16 @@ struct OnboardingEnableKeyboardView: View {
     }
 
     private var nextButton: some View {
-        AnimatedTaplingOverlay(scale: 0.5) {
+        AnimatedTaplingOverlay(
+            tapling: Tapling(
+                fur: .default,
+                hat: Hat.get("hat_propeller-hat"),
+                face: Face.get("face_cute")!,
+                leftHand: .up,
+                rightHand: .down
+            ),
+            scale: 0.5
+        ) {
             Button(action: onNext) {
                 Text("Next")
                     .font(.headline)

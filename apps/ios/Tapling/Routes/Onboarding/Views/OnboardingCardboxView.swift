@@ -57,7 +57,16 @@ struct OnboardingCardboxView: View {
     }
 
     private var claimButton: some View {
-        AnimatedTaplingOverlay(scale: 0.5) {
+        AnimatedTaplingOverlay(
+            tapling: Tapling(
+                fur: .default,
+                hat: nil,
+                face: Face.get("face_pixel-cool")!,
+                leftHand: .up,
+                rightHand: .down
+            ),
+            scale: 0.5
+        ) {
             Button(action: isCancelable ? onNext : startCardboxOpening) {
                 Group {
                     if isCancelable {

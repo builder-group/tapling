@@ -19,6 +19,10 @@ struct OnboardingSelectKeyboardView: View {
         totalKeystrokes >= 10
     }
 
+    private var remainingKeystrokes: Int {
+        max(0, 10 - totalKeystrokes)
+    }
+
     // MARK: - UI
 
     var body: some View {
@@ -33,6 +37,10 @@ struct OnboardingSelectKeyboardView: View {
         .padding()
         .navigationTitle("Start typing")
         .navigationBarTitleDisplayMode(.large)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isTextFieldFocused = false
+        }
     }
 
     private var subtitleSection: some View {
@@ -49,11 +57,9 @@ struct OnboardingSelectKeyboardView: View {
     private var textInputSection: some View {
         TextField(
             "Type something to say hi...",
-            text: $inputText,
-            axis: .vertical
+            text: $inputText
         )
         .focused($isTextFieldFocused)
-        .lineLimit(3...6)
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background(
@@ -87,7 +93,16 @@ struct OnboardingSelectKeyboardView: View {
             if isTextFieldFocused {
                 plainButton
             } else {
-                AnimatedTaplingOverlay(scale: 0.5) {
+                AnimatedTaplingOverlay(
+                    tapling: Tapling(
+                        fur: .default,
+                        hat: Hat.get("hat_heart"),
+                        face: Face.get("face_cute")!,
+                        leftHand: .up,
+                        rightHand: .down
+                    ),
+                    scale: 0.5
+                ) {
                     plainButton
                 }
             }
@@ -96,19 +111,25 @@ struct OnboardingSelectKeyboardView: View {
 
     private var plainButton: some View {
         Button(action: onNext) {
-            Text(canProceed ? "Next" : "Type a bit to continue")
-                .font(.headline)
-                .foregroundStyle(canProceed ? .white : .primary)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(
-                            canProceed
-                                ? Color.blue
-                                : Color.gray.opacity(0.1)
-                        )
-                )
+            Group {
+                if canProceed {
+                    Text("Next")
+                } else {
+                    Text("Type a bit to continue (\(remainingKeystrokes))")
+                }
+            }
+            .font(.headline)
+            .foregroundStyle(canProceed ? .white : .primary)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(
+                        canProceed
+                            ? Color.blue
+                            : Color.gray.opacity(0.1)
+                    )
+            )
         }
         .disabled(!canProceed)
     }
