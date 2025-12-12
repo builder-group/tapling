@@ -18,7 +18,6 @@ struct HomeView: View {
     private let maxHeaderHeight: CGFloat = 100
     private let minHeaderHeight: CGFloat = 50
     private let scrollThreshold: CGFloat = 80
-    private let chestCost: Int = 100
 
     private var headerHeight: CGFloat {
         let progress = min(max(scrollOffset / scrollThreshold, 0), 1)
@@ -26,7 +25,7 @@ struct HomeView: View {
     }
 
     private var canAffordChest: Bool {
-        player.currentKeycaps >= chestCost
+        player.currentKeycaps >= GameConfig.cardboardBoxCost
     }
 
     // MARK: - UI
@@ -160,7 +159,7 @@ struct HomeView: View {
                 Image(systemName: "shippingbox.fill")
                     .font(.system(size: 18))
                     .foregroundColor(.white)
-                Text("\(chestCost)")
+                Text("\(GameConfig.cardboardBoxCost)")
                     .font(.headline)
                     .foregroundColor(.white)
             }
@@ -194,7 +193,7 @@ struct HomeView: View {
     private func openChest() {
         guard canAffordChest else { return }
 
-        player.currentKeycaps -= chestCost
+        player.currentKeycaps -= GameConfig.cardboardBoxCost
         try? modelContext.save()
         showCardboardBoxOpening = true
     }

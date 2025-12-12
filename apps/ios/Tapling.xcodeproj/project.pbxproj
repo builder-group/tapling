@@ -66,6 +66,7 @@
 				Assets.xcassets,
 				Environment/AppLogger.swift,
 				Environment/Configs/AppConfig.swift,
+				Environment/Configs/GameConfig.swift,
 				Environment/DataContainer.swift,
 				Features/Collectible/Environment/CollectibleRegistry.swift,
 				Features/Collectible/Models/AnyCollectible.swift,
@@ -481,7 +482,8 @@
 				DEVELOPMENT_TEAM = 9RQRHCCMVL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_CFBundleDisplayName = Tapling;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -520,7 +522,8 @@
 				DEVELOPMENT_TEAM = 9RQRHCCMVL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_CFBundleDisplayName = Tapling;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

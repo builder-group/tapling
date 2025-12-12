@@ -18,17 +18,19 @@ final class Player: SingletonModel {
     var firstActiveDate: Date?
     var lastActiveDate: Date?
     var onboardingCompletedAt: Date?
+    var onboardingStep: Int?
 
     @Relationship(deleteRule: .cascade, inverse: \OwnedCollectible.player)
     var ownedCollectibles: [OwnedCollectible] = []
 
     init(
-        currentKeycaps: Int = 0,
+        currentKeycaps: Int = GameConfig.initialKeycaps,
         totalKeycapsEarned: Int = 0,
         totalKeystrokes: Int = 0,
         firstActiveDate: Date? = nil,
         lastActiveDate: Date? = nil,
         onboardingCompletedAt: Date? = nil,
+        onboardingStep: Int? = nil,
         ownedCollectibles: [OwnedCollectible] = []
     ) {
         self.currentKeycaps = currentKeycaps
@@ -37,6 +39,7 @@ final class Player: SingletonModel {
         self.firstActiveDate = firstActiveDate
         self.lastActiveDate = lastActiveDate
         self.onboardingCompletedAt = onboardingCompletedAt
+        self.onboardingStep = onboardingStep
         self.ownedCollectibles = ownedCollectibles
     }
 
