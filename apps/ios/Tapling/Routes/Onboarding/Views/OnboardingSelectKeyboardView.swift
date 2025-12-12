@@ -47,7 +47,7 @@ struct OnboardingSelectKeyboardView: View {
         let globeIcon = Text(Image(systemName: "globe"))
             .foregroundStyle(.blue)
         return Text(
-            "Switch to the Tapling keyboard using the (\(globeIcon)) icon. Type anything and watch Tapling tap along, collecting keycaps with you as you write, chat, or work."
+            "Switch to the Tapling keyboard using the (\(globeIcon)) icon at the bottom of your keyboard. Type anything and watch Tapling tap along with you as you write, chat, or work."
         )
         .font(.body)
         .foregroundStyle(.secondary)

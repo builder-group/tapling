@@ -48,8 +48,10 @@ struct OnboardingCardboxView: View {
     private var subtitleSection: some View {
         let cardboxIcon = Text(Image(systemName: "shippingbox.fill"))
             .foregroundStyle(Color.brown)
+        let keycapIcon = Text(Image("keycap_inline"))
+            .baselineOffset(-2)
         return Text(
-            "Your Tapling loves surprises. Open cardboxes (\(cardboxIcon)) to find new furs, hats, and faces. Every key you type helps you earn more keycaps to unlock these fun cosmetics and personalize your Tapling."
+            "Your Tapling loves surprises. Open cardboxes (\(cardboxIcon)) to find new furs, hats, and faces. Every key you type helps you earn more keycaps (\(keycapIcon)) to unlock these fun cosmetics and personalize your Tapling."
         )
         .font(.body)
         .foregroundStyle(.secondary)
