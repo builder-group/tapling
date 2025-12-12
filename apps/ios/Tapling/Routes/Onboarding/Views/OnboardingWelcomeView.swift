@@ -25,9 +25,7 @@ struct OnboardingWelcomeView: View {
 
     private var subtitleSection: some View {
         let keycapIcon = Text(Image("keycap_inline"))
-            .baselineOffset(-2)
         let duckIcon = Text(Image("lil-duck-hat_inline"))
-            .baselineOffset(-2)
         return Text(
             "Meet your tiny keyboard companion. Tapling taps along as you type, turning every keystroke into keycaps (\(keycapIcon)) you can use to unlock cute cosmetics, like the lil duck (\(duckIcon))."
         )

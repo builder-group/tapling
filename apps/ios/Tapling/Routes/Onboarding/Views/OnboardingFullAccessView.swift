@@ -38,7 +38,6 @@ struct OnboardingFullAccessView: View {
 
     private var subtitleSection: some View {
         let keycapIcon = Text(Image("keycap_inline"))
-            .baselineOffset(-2)
         return Text(
             "To count every keystroke and earn keycaps (\(keycapIcon)), Tapling needs full access to the keyboard. Tapling never reads what you type and all data stays on your device."
         )
