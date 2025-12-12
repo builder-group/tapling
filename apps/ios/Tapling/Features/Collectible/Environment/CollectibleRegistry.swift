@@ -77,7 +77,7 @@ struct CollectibleRegistry {
         Face(
             id: "face_pixel-cool",
             name: "Pixel Cool",
-            rarity: .epic,
+            rarity: .legendary,
             assetVariant: "pixel-cool"
         ),
     ]

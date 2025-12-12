@@ -27,7 +27,15 @@ struct OnboardingCardboxView: View {
     var body: some View {
         Group {
             if isOpeningCardbox {
-                CardboardBoxOpeningView(onCollect: handleCollectibleWon)
+                CardboardBoxOpeningView(
+                    initialRarity: .common,
+                    upgradeChances: CardboardBoxOpeningView.UpgradeChances(
+                        toRare: 0.45,
+                        toEpic: 0.45,
+                        toLegendary: 0.25
+                    ),
+                    onCollect: handleCollectibleWon
+                )
             } else {
                 introView
             }
@@ -70,25 +78,15 @@ struct OnboardingCardboxView: View {
             scale: 0.5
         ) {
             Button(action: isCancelable ? onNext : startCardboxOpening) {
-                Group {
-                    if isCancelable {
-                        Text("Next")
-                    } else {
-                        let cardboxIcon = Text(
-                            Image(systemName: "shippingbox.fill")
-                        )
-                        .foregroundStyle(.white)
-                        Text("Claim cardbox (\(cardboxIcon))")
-                    }
-                }
-                .font(.headline)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color.blue)
-                )
+                Text(isCancelable ? "Next" : "Claim cardbox")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(Color.blue)
+                    )
             }
         }
     }

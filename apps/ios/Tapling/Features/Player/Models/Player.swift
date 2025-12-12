@@ -24,7 +24,7 @@ final class Player: SingletonModel {
     var ownedCollectibles: [OwnedCollectible] = []
 
     init(
-        currentKeycaps: Int = 0,
+        currentKeycaps: Int = GameConfig.initialKeycaps,
         totalKeycapsEarned: Int = 0,
         totalKeystrokes: Int = 0,
         firstActiveDate: Date? = nil,

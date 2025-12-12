@@ -49,12 +49,10 @@ struct CardboardBoxOpeningView: View {
         let toEpic: Double
         let toLegendary: Double
 
-        /// Upgrade chances per tap. Target distribution: Common ~60%, Rare ~25%, Epic ~12%, Legendary ~3%
-        /// Sequential chain over 4 taps: Common → Rare → Epic → Legendary
         static let `default` = UpgradeChances(
-            toRare: 0.12,
-            toEpic: 0.275,
-            toLegendary: 0.275
+            toRare: GameConfig.upgradeChanceToRare,
+            toEpic: GameConfig.upgradeChanceToEpic,
+            toLegendary: GameConfig.upgradeChanceToLegendary
         )
     }
 

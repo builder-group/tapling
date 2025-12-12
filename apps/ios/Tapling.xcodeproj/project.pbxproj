@@ -66,6 +66,7 @@
 				Assets.xcassets,
 				Environment/AppLogger.swift,
 				Environment/Configs/AppConfig.swift,
+				Environment/Configs/GameConfig.swift,
 				Environment/DataContainer.swift,
 				Features/Collectible/Environment/CollectibleRegistry.swift,
 				Features/Collectible/Models/AnyCollectible.swift,

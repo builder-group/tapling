@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct HomeFooterView: View {
-    var taplingScale: CGFloat = 1.0
+    var taplingScale: CGFloat = 0.75
 
     @QuerySingleton private var keyboardTapling: KeyboardTapling
 
