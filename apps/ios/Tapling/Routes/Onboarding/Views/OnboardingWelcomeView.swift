@@ -27,7 +27,7 @@ struct OnboardingWelcomeView: View {
         let keycapIcon = Text(Image("keycap_inline"))
         let duckIcon = Text(Image("lil-duck-hat_inline"))
         return Text(
-            "Meet your tiny keyboard companion. Tapling taps along as you type, turning every keystroke into keycaps (\(keycapIcon)) you can use to unlock cute cosmetics, like the lil duck (\(duckIcon))."
+            "Meet your tiny keyboard companion. Tapling taps along as you type, turning every keystroke into keycaps (\(keycapIcon)) you can use to unlock cute cosmetics, like this lil duck (\(duckIcon))."
         )
         .font(.body)
         .foregroundStyle(.secondary)

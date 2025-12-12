@@ -32,14 +32,14 @@ struct OnboardingFullAccessView: View {
             nextButton
         }
         .padding()
-        .navigationTitle("Full access for keycap counting")
+        .navigationTitle("Earn keycaps everywhere")
         .navigationBarTitleDisplayMode(.large)
     }
 
     private var subtitleSection: some View {
         let keycapIcon = Text(Image("keycap_inline"))
         return Text(
-            "To count every keystroke and earn keycaps (\(keycapIcon)), Tapling needs full access to the keyboard. Tapling never reads what you type and all data stays on your device."
+            "Enable full access to earn keycaps (\(keycapIcon)) everywhere you type. Tapling never reads what you type and all data stays on your device."
         )
         .font(.body)
         .foregroundStyle(.secondary)
