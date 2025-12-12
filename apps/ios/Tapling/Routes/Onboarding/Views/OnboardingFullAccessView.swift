@@ -9,63 +9,31 @@ import KeyboardKit
 import SwiftUI
 
 struct OnboardingFullAccessView: View {
-    @Environment(\.scenePhase) private var scenePhase
-
     let onNext: () -> Void
 
     @State private var isFullAccessEnabled = false
-    @State private var leftHand: HandPosition = .up
-    @State private var rightHand: HandPosition = .down
-
-    private let keyboardStatus = KeyboardStatusContext(
-        bundleId: "com.buildergroup.Tapling.Keyboard"
-    )
-
-    private var currentTapling: Tapling {
-        Tapling(
-            fur: .default,
-            hat: Hat.get("hat_lil-duck"),
-            face: Face.get("face_cute")!,
-            leftHand: leftHand,
-            rightHand: rightHand
-        )
-    }
 
     // MARK: - UI
 
     var body: some View {
         VStack {
-            VStack(spacing: 16) {
-                titleSection
+            VStack(spacing: 32) {
                 subtitleSection
+                KeyboardStatusView(
+                    showKeyboardEnabled: false,
+                    showFullAccess: true,
+                    style: .standalone,
+                    onStatusChange: { _, isFullAccessEnabled in
+                        self.isFullAccessEnabled = isFullAccessEnabled
+                    }
+                )
             }
-
-            fullAccessStatusSection
-
             Spacer()
-
             nextButton
         }
         .padding()
-        .contentShape(Rectangle())
-        .onTapGesture {
-            toggleHands()
-        }
-        .onAppear {
-            checkFullAccessStatus()
-        }
-        .onChange(of: scenePhase) { oldPhase, newPhase in
-            if newPhase == .active {
-                checkFullAccessStatus()
-            }
-        }
-    }
-
-    private var titleSection: some View {
-        Text("Full access for keycap counting")
-            .font(.largeTitle)
-            .fontWeight(.bold)
-            .multilineTextAlignment(.center)
+        .navigationTitle("Full access for keycap counting")
+        .navigationBarTitleDisplayMode(.large)
     }
 
     private var subtitleSection: some View {
@@ -74,48 +42,11 @@ struct OnboardingFullAccessView: View {
         )
         .font(.body)
         .foregroundStyle(.secondary)
-        .multilineTextAlignment(.center)
-    }
-
-    private var fullAccessStatusSection: some View {
-        Button(action: openSystemSettings) {
-            HStack(spacing: 12) {
-                Image(
-                    systemName: isFullAccessEnabled
-                        ? "checkmark.circle.fill"
-                        : "exclamationmark.circle.fill"
-                )
-                .foregroundStyle(isFullAccessEnabled ? .green : .yellow)
-                .font(.title3)
-
-                Text("Full Access Enabled")
-                    .foregroundStyle(.primary)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 16)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.gray.opacity(0.1))
-            )
-        }
+        .multilineTextAlignment(.leading)
     }
 
     private var nextButton: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                BottomAlignedTaplingView(
-                    tapling: currentTapling,
-                    scale: 0.5
-                )
-            }
-            .zIndex(1)
+        AnimatedTaplingOverlay(scale: 0.5) {
             Button(action: onNext) {
                 Text(
                     isFullAccessEnabled
@@ -132,27 +63,10 @@ struct OnboardingFullAccessView: View {
             }
         }
     }
-
-    // MARK: - Actions
-
-    private func toggleHands() {
-        leftHand = leftHand == .down ? .up : .down
-        rightHand = rightHand == .down ? .up : .down
-    }
-
-    private func checkFullAccessStatus() {
-        keyboardStatus.refresh()
-        isFullAccessEnabled = keyboardStatus.isFullAccessEnabled
-    }
-
-    private func openSystemSettings() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else {
-            return
-        }
-        UIApplication.shared.open(url)
-    }
 }
 
 #Preview {
-    OnboardingFullAccessView(onNext: {})
+    NavigationStack {
+        OnboardingFullAccessView(onNext: {})
+    }
 }

@@ -35,29 +35,31 @@ struct OnboardingView: View {
     // MARK: - UI
 
     var body: some View {
-        Group {
-            switch OnboardingStep(rawValue: currentStep) {
-            case .welcome:
-                OnboardingWelcomeView(onNext: nextStep)
-            case .enableKeyboard:
-                OnboardingEnableKeyboardView(onNext: nextStep)
-            case .selectKeyboard:
-                OnboardingSelectKeyboardView(onNext: nextStep)
-            case .fullAccess:
-                OnboardingFullAccessView(onNext: nextStep)
-            case .cardbox:
-                OnboardingCardboxView(
-                    isCancelable: isCancelable,
-                    onNext: completeOnboarding
-                )
-            case .none:
-                EmptyView()
+        NavigationStack {
+            Group {
+                switch OnboardingStep(rawValue: currentStep) {
+                case .welcome:
+                    OnboardingWelcomeView(onNext: nextStep)
+                case .enableKeyboard:
+                    OnboardingEnableKeyboardView(onNext: nextStep)
+                case .selectKeyboard:
+                    OnboardingSelectKeyboardView(onNext: nextStep)
+                case .fullAccess:
+                    OnboardingFullAccessView(onNext: nextStep)
+                case .cardbox:
+                    OnboardingCardboxView(
+                        isCancelable: isCancelable,
+                        onNext: completeOnboarding
+                    )
+                case .none:
+                    EmptyView()
+                }
             }
-        }
-        .onAppear {
-            if player.onboardingStep == nil {
-                player.onboardingStep = 0
-                try? modelContext.save()
+            .onAppear {
+                if player.onboardingStep == nil {
+                    player.onboardingStep = 0
+                    try? modelContext.save()
+                }
             }
         }
     }

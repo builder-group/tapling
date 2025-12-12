@@ -14,18 +14,6 @@ struct OnboardingSelectKeyboardView: View {
 
     @State private var inputText = ""
     @State private var totalKeystrokes = 0
-    @State private var leftHand: HandPosition = .up
-    @State private var rightHand: HandPosition = .down
-
-    private var currentTapling: Tapling {
-        Tapling(
-            fur: .default,
-            hat: Hat.get("hat_lil-duck"),
-            face: Face.get("face_cute")!,
-            leftHand: leftHand,
-            rightHand: rightHand
-        )
-    }
 
     private var canProceed: Bool {
         totalKeystrokes >= 10
@@ -35,52 +23,55 @@ struct OnboardingSelectKeyboardView: View {
 
     var body: some View {
         VStack {
-            VStack(spacing: 16) {
-                titleSection
+            VStack(spacing: 32) {
                 subtitleSection
+                textInputSection
             }
-
-            textInputSection
-
             Spacer()
-
             nextButton
         }
         .padding()
-        .contentShape(Rectangle())
-        .onTapGesture {
-            toggleHands()
-        }
-    }
-
-    private var titleSection: some View {
-        Text("Start typing with Tapling")
-            .font(.largeTitle)
-            .fontWeight(.bold)
-            .multilineTextAlignment(.center)
+        .navigationTitle("Start typing")
+        .navigationBarTitleDisplayMode(.large)
     }
 
     private var subtitleSection: some View {
-        Text(
-            "Switch to the Tapling keyboard using the globe icon. Type anything and watch Tapling tap along, collecting keycaps with you as you write, chat, or work."
+        let globeIcon = Text(Image(systemName: "globe"))
+            .foregroundStyle(.blue)
+        return Text(
+            "Switch to the Tapling keyboard using the (\(globeIcon)) icon. Type anything and watch Tapling tap along, collecting keycaps with you as you write, chat, or work."
         )
         .font(.body)
         .foregroundStyle(.secondary)
-        .multilineTextAlignment(.center)
+        .multilineTextAlignment(.leading)
     }
 
     private var textInputSection: some View {
         TextField(
             "Type something to say hi...",
-            text: $inputText
+            text: $inputText,
+            axis: .vertical
         )
         .focused($isTextFieldFocused)
-        .textFieldStyle(.roundedBorder)
+        .lineLimit(3...6)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.gray.opacity(0.1))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(
+                    isTextFieldFocused ? Color.blue : Color.clear,
+                    lineWidth: 2
+                )
+        )
+        .font(.body)
         .submitLabel(.done)
         .onSubmit {
             isTextFieldFocused = false
         }
-        .font(.body)
         .onChange(of: inputText) { oldValue, newValue in
             let newLength = newValue.count
             let oldLength = oldValue.count
@@ -92,44 +83,39 @@ struct OnboardingSelectKeyboardView: View {
     }
 
     private var nextButton: some View {
-        VStack(spacing: 0) {
-            if !isTextFieldFocused {
-                HStack {
-                    Spacer()
-                    BottomAlignedTaplingView(
-                        tapling: currentTapling,
-                        scale: 0.5
-                    )
+        Group {
+            if isTextFieldFocused {
+                plainButton
+            } else {
+                AnimatedTaplingOverlay(scale: 0.5) {
+                    plainButton
                 }
-                .zIndex(1)
             }
-            Button(action: onNext) {
-                Text(canProceed ? "Next" : "Type a bit to continue")
-                    .font(.headline)
-                    .foregroundStyle(canProceed ? .white : .primary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(
-                                canProceed
-                                    ? Color.blue
-                                    : Color.gray.opacity(0.1)
-                            )
-                    )
-            }
-            .disabled(!canProceed)
         }
     }
 
-    // MARK: - Actions
-
-    private func toggleHands() {
-        leftHand = leftHand == .down ? .up : .down
-        rightHand = rightHand == .down ? .up : .down
+    private var plainButton: some View {
+        Button(action: onNext) {
+            Text(canProceed ? "Next" : "Type a bit to continue")
+                .font(.headline)
+                .foregroundStyle(canProceed ? .white : .primary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(
+                            canProceed
+                                ? Color.blue
+                                : Color.gray.opacity(0.1)
+                        )
+                )
+        }
+        .disabled(!canProceed)
     }
 }
 
 #Preview {
-    OnboardingSelectKeyboardView(onNext: {})
+    NavigationStack {
+        OnboardingSelectKeyboardView(onNext: {})
+    }
 }
