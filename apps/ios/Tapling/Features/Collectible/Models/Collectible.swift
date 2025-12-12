@@ -14,6 +14,21 @@ struct Collectible<Slot>: Identifiable, Hashable, Codable {
     let name: String
     let rarity: Rarity
     let assetVariant: String
+    let isHidden: Bool
+
+    init(
+        id: String,
+        name: String,
+        rarity: Rarity,
+        assetVariant: String,
+        isHidden: Bool = false
+    ) {
+        self.id = id
+        self.name = name
+        self.rarity = rarity
+        self.assetVariant = assetVariant
+        self.isHidden = isHidden
+    }
 }
 
 // MARK: - Hat

@@ -39,6 +39,14 @@ enum AnyCollectible: Identifiable, Hashable {
         }
     }
 
+    var isHidden: Bool {
+        switch self {
+        case .hat(let c): return c.isHidden
+        case .face(let c): return c.isHidden
+        case .fur(let c): return c.isHidden
+        }
+    }
+
     var slotType: SlotType {
         switch self {
         case .hat: return .hat

@@ -56,9 +56,12 @@ struct SplashView: View {
     // MARK: - Actions
 
     private func randomizeAccessories() {
-        randomFur = Fur.all.randomElement() ?? .default
-        randomHat = Bool.random() ? Hat.all.randomElement() : nil
-        randomFace = Face.all.randomElement() ?? .default
+        randomFur = Fur.all.filter { !$0.isHidden }.randomElement() ?? .default
+        randomHat =
+            Bool.random()
+            ? Hat.all.filter { !$0.isHidden }.randomElement() : nil
+        randomFace =
+            Face.all.filter { !$0.isHidden }.randomElement() ?? .default
     }
 
     private func startTappingAnimation() {

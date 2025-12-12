@@ -84,7 +84,8 @@ struct CollectibleRegistry {
             id: "face_placeholder",
             name: "Placeholder",
             rarity: .legendary,
-            assetVariant: "placeholder"
+            assetVariant: "placeholder",
+            isHidden: true
         ),
     ]
 
@@ -101,13 +102,15 @@ struct CollectibleRegistry {
             id: "fur_mask",
             name: "Mask",
             rarity: .legendary,
-            assetVariant: "mask"
+            assetVariant: "mask",
+            isHidden: true
         ),
         Fur(
             id: "fur_placeholder",
             name: "Placeholder",
             rarity: .legendary,
-            assetVariant: "placeholder"
+            assetVariant: "placeholder",
+            isHidden: true
         ),
     ]
 
@@ -146,18 +149,21 @@ struct CollectibleRegistry {
     // MARK: - Type-Erased (for UI lists)
 
     var allCollectibles: [AnyCollectible] {
-        hats.map { .hat($0) }
+        (hats.map { .hat($0) }
             + faces.map { .face($0) }
-            + furs.map { .fur($0) }
+            + furs.map { .fur($0) })
+            .filter { !$0.isHidden }
     }
 
     func collectibles(ofType type: AnyCollectible.SlotType) -> [AnyCollectible]
     {
+        let collectibles: [AnyCollectible]
         switch type {
-        case .hat: return hats.map { .hat($0) }
-        case .face: return faces.map { .face($0) }
-        case .fur: return furs.map { .fur($0) }
+        case .hat: collectibles = hats.map { .hat($0) }
+        case .face: collectibles = faces.map { .face($0) }
+        case .fur: collectibles = furs.map { .fur($0) }
         }
+        return collectibles.filter { !$0.isHidden }
     }
 
     func collectible(id: String) -> AnyCollectible? {
