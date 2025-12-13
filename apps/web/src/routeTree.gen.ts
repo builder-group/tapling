@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as HelpRouteRouteImport } from './routes/help/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalTermsRouteRouteImport } from './routes/legal.terms/route'
 import { Route as LegalPrivacyRouteRouteImport } from './routes/legal.privacy/route'
 
+const HelpRouteRoute = HelpRouteRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +37,47 @@ const LegalPrivacyRouteRoute = LegalPrivacyRouteRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/help': typeof HelpRouteRoute
   '/legal/privacy': typeof LegalPrivacyRouteRoute
   '/legal/terms': typeof LegalTermsRouteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/help': typeof HelpRouteRoute
   '/legal/privacy': typeof LegalPrivacyRouteRoute
   '/legal/terms': typeof LegalTermsRouteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/help': typeof HelpRouteRoute
   '/legal/privacy': typeof LegalPrivacyRouteRoute
   '/legal/terms': typeof LegalTermsRouteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/legal/privacy' | '/legal/terms'
+  fullPaths: '/' | '/help' | '/legal/privacy' | '/legal/terms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/legal/privacy' | '/legal/terms'
-  id: '__root__' | '/' | '/legal/privacy' | '/legal/terms'
+  to: '/' | '/help' | '/legal/privacy' | '/legal/terms'
+  id: '__root__' | '/' | '/help' | '/legal/privacy' | '/legal/terms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HelpRouteRoute: typeof HelpRouteRoute
   LegalPrivacyRouteRoute: typeof LegalPrivacyRouteRoute
   LegalTermsRouteRoute: typeof LegalTermsRouteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HelpRouteRoute: HelpRouteRoute,
   LegalPrivacyRouteRoute: LegalPrivacyRouteRoute,
   LegalTermsRouteRoute: LegalTermsRouteRoute,
 }

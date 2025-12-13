@@ -34,14 +34,14 @@ function RouteComponent() {
 
 	if (tapling == null) {
 		return (
-			<div className="flex min-h-screen items-center justify-center">
+			<div className="flex min-h-screen items-center justify-center bg-[#267DF7]">
 				<div style={{ height: taplingConfig.size, width: taplingConfig.size }} />
 			</div>
 		);
 	}
 
 	return (
-		<div className="flex min-h-screen items-center justify-center">
+		<div className="flex min-h-screen items-center justify-center bg-[#267DF7]">
 			<Tapling
 				tapling={tapling}
 				style={{ height: taplingConfig.size, width: taplingConfig.size }}
