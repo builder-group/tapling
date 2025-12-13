@@ -1,1 +1,1 @@
-export * from './Tapling';
+export * from './display';

@@ -1,3 +1,4 @@
+import mdx from '@mdx-js/rollup';
 import tailwindcss from '@tailwindcss/vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
@@ -13,6 +14,7 @@ export default defineConfig(async () => ({
 		tsConfigPaths({
 			projects: ['./tsconfig.json']
 		}),
+		mdx(),
 		tanstackStart({
 			srcDirectory: 'src'
 		}),
