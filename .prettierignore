@@ -1,0 +1,6 @@
+# iOS App
+apps/ios/
+
+# Generated files
+**/routeTree.gen.ts
+
