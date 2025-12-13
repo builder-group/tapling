@@ -26,22 +26,22 @@
 		"update:latest": "pnpm update --latest"
 	},
 	"dependencies": {
-		"@tanstack/react-router": "^1.139.12",
-		"@tanstack/react-router-devtools": "^1.139.12",
-		"@tanstack/react-start": "^1.139.12",
+		"@tanstack/react-router": "^1.141.2",
+		"@tanstack/react-router-devtools": "^1.141.2",
+		"@tanstack/react-start": "^1.141.3",
 		"clsx": "^2.1.1",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0",
+		"react": "^19.2.3",
+		"react-dom": "^19.2.3",
 		"tailwind-merge": "^3.4.0",
 		"zod": "^4.1.13"
 	},
 	"devDependencies": {
-		"@tailwindcss/vite": "^4.1.17",
-		"@types/node": "^24.10.1",
+		"@tailwindcss/vite": "^4.1.18",
+		"@types/node": "^25.0.1",
 		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
-		"@vitejs/plugin-react": "^5.1.1",
-		"tailwindcss": "^4.1.17",
+		"@vitejs/plugin-react": "^5.1.2",
+		"tailwindcss": "^4.1.18",
 		"vite-tsconfig-paths": "^5.1.4"
 	}
 }
