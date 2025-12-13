@@ -1,1 +1,1 @@
-export * from './tapling.config';
+export * from './configs';
