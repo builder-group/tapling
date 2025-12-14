@@ -60,23 +60,42 @@ struct AutocompleteToolbarView: View {
 
     var body: some View {
         HStack(spacing: 8) {
+            if keyboardSettings.taplingPosition.isLeft {
+                // Reserve width for Tapling (invisible) when on left
+                Color.clear
+                    .frame(width: taplingSize)
+                    .overlay {
+                        if keyboardSettings.debug {
+                            Rectangle()
+                                .fill(Color.blue.opacity(0.1))
+                                .stroke(.blue, lineWidth: 1)
+                                .allowsHitTesting(false)
+                        }
+                    }
+            }
+
             // Standard autocomplete toolbar
             standardToolbar
 
-            // Reserve width for Tapling (invisible)
-            Color.clear
-                .frame(width: taplingSize)
-                .overlay {
-                    if keyboardSettings.debug {
-                        Rectangle()
-                            .fill(Color.blue.opacity(0.1))
-                            .stroke(.blue, lineWidth: 1)
-                            .allowsHitTesting(false)
+            if keyboardSettings.taplingPosition.isRight {
+                // Reserve width for Tapling (invisible) when on right
+                Color.clear
+                    .frame(width: taplingSize)
+                    .overlay {
+                        if keyboardSettings.debug {
+                            Rectangle()
+                                .fill(Color.blue.opacity(0.1))
+                                .stroke(.blue, lineWidth: 1)
+                                .allowsHitTesting(false)
+                        }
                     }
-                }
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .background(alignment: .topTrailing) {
+        .frame(
+            maxWidth: .infinity,
+            alignment: keyboardSettings.taplingPosition.alignment
+        )
+        .background(alignment: keyboardSettings.taplingPosition.topAlignment) {
             // Hitbox (invisible)
             Button {
                 print("Tapling hitbox tapped")
@@ -102,9 +121,13 @@ struct AutocompleteToolbarView: View {
         ) { _ in
             toggleHands()
         }
-        .overlay(alignment: .bottomTrailing) {
+        .overlay(alignment: keyboardSettings.taplingPosition.bottomAlignment) {
             // Tapling
             TaplingView(tapling: currentTapling)
+                .scaleEffect(
+                    x: keyboardSettings.taplingOrientation.scaleX,
+                    y: 1
+                )
                 .overlay {
                     if keyboardSettings.debug {
                         Rectangle()

@@ -84,7 +84,6 @@
 				Features/Keyboard/Models/KeyboardTapling.swift,
 				Features/Player/Models/Player.swift,
 				Features/Tapling/Environment/TaplingConfig.swift,
-				Features/Tapling/Models/HandPosition.swift,
 				Features/Tapling/Models/Tapling.swift,
 				Features/Tapling/Views/TaplingView.swift,
 				Lib/QuerySingleton.swift,

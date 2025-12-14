@@ -8,7 +8,7 @@
 import Foundation
 import KeyboardKit
 
-enum KeyboardLanguage: String, CaseIterable, Identifiable {
+enum KeyboardLanguage: String, Codable, CaseIterable, Identifiable {
     case system = "system"
     case english = "en"
     case german = "de"

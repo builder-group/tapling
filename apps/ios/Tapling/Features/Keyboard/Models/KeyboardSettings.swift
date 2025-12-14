@@ -7,13 +7,14 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 final class KeyboardSettings: SingletonModel {
     var debug: Bool
     var isPreviewMode: Bool
 
-    var languageCode: String
+    var language: KeyboardLanguage
     var autocorrectEnabled: Bool
     var autocompleteEnabled: Bool
     var emojiPickerEnabled: Bool
@@ -22,11 +23,8 @@ final class KeyboardSettings: SingletonModel {
 
     var taplingScale: Double
     var taplingBottomOffset: Double
-
-    var language: KeyboardLanguage {
-        get { KeyboardLanguage(rawValue: languageCode) ?? .system }
-        set { languageCode = newValue.rawValue }
-    }
+    var taplingPosition: KeyboardTaplingPosition
+    var taplingOrientation: KeyboardTaplingOrientation
 
     init(
         debug: Bool = false,
@@ -37,20 +35,84 @@ final class KeyboardSettings: SingletonModel {
         emojiPickerEnabled: Bool = false,
         taplingScale: Double = 1.5,
         taplingBottomOffset: Double = 4.0,
+        taplingPosition: KeyboardTaplingPosition = .right,
+        taplingOrientation: KeyboardTaplingOrientation = .left,
         trackSessions: Bool = true
     ) {
         self.debug = debug
         self.isPreviewMode = isPreviewMode
-        self.languageCode = language.rawValue
+        self.language = language
         self.autocorrectEnabled = autocorrectEnabled
         self.autocompleteEnabled = autocompleteEnabled
         self.emojiPickerEnabled = emojiPickerEnabled
         self.taplingScale = taplingScale
         self.taplingBottomOffset = taplingBottomOffset
+        self.taplingPosition = taplingPosition
+        self.taplingOrientation = taplingOrientation
         self.trackSessions = trackSessions
     }
 
     static var `default`: KeyboardSettings {
         KeyboardSettings()
+    }
+}
+
+enum KeyboardTaplingPosition: String, Codable, CaseIterable {
+    case left
+    case right
+
+    var displayName: String {
+        switch self {
+        case .left: return "Left"
+        case .right: return "Right"
+        }
+    }
+
+    var isLeft: Bool {
+        self == .left
+    }
+
+    var isRight: Bool {
+        self == .right
+    }
+
+    var alignment: Alignment {
+        switch self {
+        case .left: return .leading
+        case .right: return .trailing
+        }
+    }
+
+    var topAlignment: Alignment {
+        switch self {
+        case .left: return .topLeading
+        case .right: return .topTrailing
+        }
+    }
+
+    var bottomAlignment: Alignment {
+        switch self {
+        case .left: return .bottomLeading
+        case .right: return .bottomTrailing
+        }
+    }
+}
+
+enum KeyboardTaplingOrientation: String, Codable, CaseIterable {
+    case left
+    case right
+
+    var displayName: String {
+        switch self {
+        case .left: return "Left"
+        case .right: return "Right"
+        }
+    }
+
+    var scaleX: CGFloat {
+        switch self {
+        case .left: return 1
+        case .right: return -1
+        }
     }
 }

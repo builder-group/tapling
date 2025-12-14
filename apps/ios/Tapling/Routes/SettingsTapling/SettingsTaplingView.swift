@@ -64,6 +64,26 @@ struct SettingsTaplingView: View {
         )
     }
 
+    private var positionBinding: Binding<KeyboardTaplingPosition> {
+        Binding(
+            get: { keyboardSettings.taplingPosition },
+            set: { newValue in
+                keyboardSettings.taplingPosition = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
+    private var orientationBinding: Binding<KeyboardTaplingOrientation> {
+        Binding(
+            get: { keyboardSettings.taplingOrientation },
+            set: { newValue in
+                keyboardSettings.taplingOrientation = newValue
+                try? modelContext.save()
+            }
+        )
+    }
+
     // MARK: - UI
 
     var body: some View {
@@ -114,6 +134,21 @@ struct SettingsTaplingView: View {
 
             Form {
                 Section("POSITION") {
+                    Picker("Side", selection: positionBinding) {
+                        ForEach(KeyboardTaplingPosition.allCases, id: \.self) {
+                            position in
+                            Text(position.displayName).tag(position)
+                        }
+                    }
+
+                    Picker("Facing", selection: orientationBinding) {
+                        ForEach(KeyboardTaplingOrientation.allCases, id: \.self)
+                        {
+                            direction in
+                            Text(direction.displayName).tag(direction)
+                        }
+                    }
+
                     LabeledSliderView(
                         label: "Scale",
                         value: keyboardSettings.taplingScale,

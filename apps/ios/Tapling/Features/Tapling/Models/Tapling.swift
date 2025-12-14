@@ -14,3 +14,8 @@ struct Tapling {
     let leftHand: HandPosition
     let rightHand: HandPosition
 }
+
+enum HandPosition: String {
+    case up
+    case down
+}
