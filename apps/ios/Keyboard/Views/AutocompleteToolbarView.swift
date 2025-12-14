@@ -60,8 +60,8 @@ struct AutocompleteToolbarView: View {
 
     var body: some View {
         HStack(spacing: 8) {
+            // Reserve width for Tapling (invisible) when on left
             if keyboardSettings.taplingPosition.isLeft {
-                // Reserve width for Tapling (invisible) when on left
                 Color.clear
                     .frame(width: taplingSize)
                     .overlay {
@@ -77,8 +77,8 @@ struct AutocompleteToolbarView: View {
             // Standard autocomplete toolbar
             standardToolbar
 
+            // Reserve width for Tapling (invisible) when on right
             if keyboardSettings.taplingPosition.isRight {
-                // Reserve width for Tapling (invisible) when on right
                 Color.clear
                     .frame(width: taplingSize)
                     .overlay {
@@ -93,9 +93,13 @@ struct AutocompleteToolbarView: View {
         }
         .frame(
             maxWidth: .infinity,
-            alignment: keyboardSettings.taplingPosition.alignment
+            alignment: keyboardSettings.taplingPosition.isLeft
+                ? .leading : .trailing
         )
-        .background(alignment: keyboardSettings.taplingPosition.topAlignment) {
+        .background(
+            alignment: keyboardSettings.taplingPosition.isLeft
+                ? .topLeading : .topTrailing
+        ) {
             // Hitbox (invisible)
             Button {
                 print("Tapling hitbox tapped")
@@ -121,7 +125,10 @@ struct AutocompleteToolbarView: View {
         ) { _ in
             toggleHands()
         }
-        .overlay(alignment: keyboardSettings.taplingPosition.bottomAlignment) {
+        .overlay(
+            alignment: keyboardSettings.taplingPosition.isLeft
+                ? .bottomLeading : .bottomTrailing
+        ) {
             // Tapling
             TaplingView(tapling: currentTapling)
                 .scaleEffect(

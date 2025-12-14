@@ -75,27 +75,6 @@ enum KeyboardTaplingPosition: String, Codable, CaseIterable {
     var isRight: Bool {
         self == .right
     }
-
-    var alignment: Alignment {
-        switch self {
-        case .left: return .leading
-        case .right: return .trailing
-        }
-    }
-
-    var topAlignment: Alignment {
-        switch self {
-        case .left: return .topLeading
-        case .right: return .topTrailing
-        }
-    }
-
-    var bottomAlignment: Alignment {
-        switch self {
-        case .left: return .bottomLeading
-        case .right: return .bottomTrailing
-        }
-    }
 }
 
 enum KeyboardTaplingOrientation: String, Codable, CaseIterable {
