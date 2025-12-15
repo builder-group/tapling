@@ -1,4 +1,4 @@
-import { storyLoader } from '@/features/chat-story';
+import { storyLoader } from '@/features/story';
 import { bot } from '../bot';
 
 bot.command('start', async (ctx) => {
@@ -9,9 +9,9 @@ bot.command('start', async (ctx) => {
 👋 Welcome!
 
 Available commands:
-/story:start [id] - Start a chat story
+/storystart [id] - Start a chat story
   Available: ${storyList}
-/story:end - End current story session
+/storyend - End current story session
 /version - Show bot version
 `);
 });

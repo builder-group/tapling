@@ -33,6 +33,7 @@
 		"update:latest": "pnpm update --latest"
 	},
 	"dependencies": {
+		"@grammyjs/storage-file": "^2.5.1",
 		"feature-logger": "^0.0.45",
 		"grammy": "^1.38.4",
 		"tuple-result": "^0.0.10",

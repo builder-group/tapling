@@ -1,22 +1,22 @@
-import type { Context } from 'grammy';
+import type { BotContext } from '@/bot/bot';
 
 // Telegram typing indicators expire after ~5 seconds, so we refresh every 4 seconds
 const TYPING_INTERVAL_MS = 4000;
 
 export async function sendWithTypingIndicator(
-	ctx: Context,
+	ctx: BotContext,
 	text: string,
 	delayMs: number = 0
-): Promise<void> {
+): Promise<{ message_id: number } | undefined> {
 	if (delayMs <= 0) {
-		await ctx.reply(text);
-		return;
+		const reply = await ctx.reply(text);
+		return reply;
 	}
 
 	const chatId = ctx.chat?.id;
 	if (chatId == null) {
-		await ctx.reply(text);
-		return;
+		const reply = await ctx.reply(text);
+		return reply;
 	}
 
 	const totalIntervals = Math.ceil(delayMs / TYPING_INTERVAL_MS);
@@ -30,5 +30,6 @@ export async function sendWithTypingIndicator(
 		await new Promise((resolve) => setTimeout(resolve, waitTime));
 	}
 
-	await ctx.reply(text);
+	const reply = await ctx.reply(text);
+	return reply;
 }

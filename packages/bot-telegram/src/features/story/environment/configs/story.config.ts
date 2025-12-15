@@ -1,5 +1,5 @@
 import * as path from 'path';
 
 export const storyConfig = {
-	dataDir: path.join(process.cwd(), 'data')
+	storiesDir: path.join(process.cwd(), 'public', 'stories')
 };

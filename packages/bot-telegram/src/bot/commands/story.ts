@@ -1,9 +1,22 @@
-import { storyLoader, storySession } from '@/features/chat-story';
+import { tAsync } from 'tuple-result';
+import {
+	addBotMessage,
+	clearBotMessages,
+	endStorySession,
+	getBotMessageIds,
+	getStorySession,
+	startStorySession,
+	storyLoader
+} from '@/features/story';
 import { bot } from '../bot';
 
-bot.command('story:start', async (ctx) => {
+bot.command('storystart', async (ctx) => {
 	const args = ctx.message?.text?.split(' ').slice(1);
-	const storyId = args?.[0] || 'story-1';
+	const storyId = args?.[0];
+	if (storyId == null) {
+		await ctx.reply('Please provide a story ID.');
+		return;
+	}
 
 	const [areIdsOk, , ids] = storyLoader.getAllIds();
 	if (!areIdsOk) {
@@ -16,51 +29,57 @@ bot.command('story:start', async (ctx) => {
 		await ctx.reply(`
 Invalid story ID. Available: ${validIds.join(', ')}
 
-Usage: /story:start [${validIds.join('|')}]
+Usage: /storystart [${validIds.join('|')}]
 `);
 		return;
 	}
 
-	const userId = ctx.from?.id;
 	const chatId = ctx.chat?.id;
-	if (userId == null || chatId == null) {
+	if (chatId == null) {
 		return;
 	}
 
-	const existingSession = storySession.get(userId);
+	const existingSession = getStorySession(ctx);
 	if (existingSession != null) {
-		storySession.end(userId);
+		const previousBotMessageIds = getBotMessageIds(ctx);
+		for (const messageId of previousBotMessageIds) {
+			await tAsync(ctx.api.deleteMessage(chatId, messageId));
+		}
+		clearBotMessages(ctx);
+		endStorySession(ctx);
 	}
 
 	const messageId = ctx.message?.message_id;
 	if (messageId != null) {
-		await ctx.api.deleteMessage(chatId, messageId);
+		await tAsync(ctx.api.deleteMessage(chatId, messageId));
 	}
 
-	storySession.start(userId, storyId);
+	startStorySession(ctx, storyId);
 
-	await ctx.reply(`
+	const reply = await ctx.reply(`
 📖 Story started: ${storyId}
 
 Type your first message to begin the conversation.
-Use /story:end to stop.
+Use /storyend to stop.
 
 Ready?
 `);
+
+	if (reply.message_id != null) {
+		addBotMessage(ctx, reply.message_id);
+	}
 });
 
-bot.command('story:end', async (ctx) => {
-	const userId = ctx.from?.id;
-	if (userId == null) {
-		return;
-	}
-
-	const userSession = storySession.get(userId);
+bot.command('storyend', async (ctx) => {
+	const userSession = getStorySession(ctx);
 	if (userSession == null) {
 		await ctx.reply('No active story session.');
 		return;
 	}
 
-	storySession.end(userId);
-	await ctx.reply('Story session ended.');
+	endStorySession(ctx);
+	const reply = await ctx.reply('Story session ended.');
+	if (reply.message_id != null) {
+		addBotMessage(ctx, reply.message_id);
+	}
 });

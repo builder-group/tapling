@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { join } from 'path';
+import * as path from 'path';
 import { Err, mapErr, Ok, t, type TResult } from 'tuple-result';
 import { storyConfig } from '../environment';
 
@@ -12,7 +12,7 @@ export class StoryLoader {
 			return Ok(cached);
 		}
 
-		const jsonPath = join(storyConfig.dataDir, `${storyId}.json`);
+		const jsonPath = path.join(storyConfig.storiesDir, `${storyId}.json`);
 
 		if (!fs.existsSync(jsonPath)) {
 			return Err(new Error(`Story file not found: ${storyId}.json`));
@@ -29,7 +29,7 @@ export class StoryLoader {
 	}
 
 	public getAllIds(): TResult<string[], Error> {
-		const readResult = t(() => fs.readdirSync(storyConfig.dataDir));
+		const readResult = t(() => fs.readdirSync(storyConfig.storiesDir));
 		if (readResult[0] === false) {
 			return mapErr(readResult, (err) => (err instanceof Error ? err : new Error(String(err))));
 		}
@@ -59,7 +59,7 @@ function parseJsonMessage(msg: TStoryMessage): TStoryMessage {
 }
 
 function loadStoryFromJson(storyId: string): TResult<TStoryTemplate, Error> {
-	const filePath = join(storyConfig.dataDir, `${storyId}.json`);
+	const filePath = path.join(storyConfig.storiesDir, `${storyId}.json`);
 
 	const readResult = t(() => fs.readFileSync(filePath, 'utf-8'));
 	if (readResult[0] === false) {

@@ -1,35 +1,39 @@
-import { storyLoader, storySession } from '@/features/chat-story';
+import {
+	addBotMessage,
+	advanceMessage,
+	endStorySession,
+	getStorySession,
+	storyLoader
+} from '@/features/story';
 import { sendWithTypingIndicator } from '@/lib';
 import { bot } from '../bot';
 
 bot.on('message:text', async (ctx) => {
-	const userId = ctx.from?.id;
-	if (userId == null) {
-		return;
-	}
-
-	const userSession = storySession.get(userId);
+	const userSession = getStorySession(ctx);
 	if (userSession == null) {
 		return;
 	}
 
-	storySession.advanceMessage(userId);
+	advanceMessage(ctx);
 
-	const updatedSession = storySession.get(userId);
+	const updatedSession = getStorySession(ctx);
 	if (updatedSession == null) {
 		return;
 	}
 
 	const [isTemplateOk, , template] = storyLoader.getTemplate(userSession.storyId);
 	if (!isTemplateOk) {
-		storySession.end(userId);
+		endStorySession(ctx);
 		await ctx.reply('Error loading story. Session ended.');
 		return;
 	}
 
 	if (updatedSession.messageIndex >= template.messages.length) {
-		storySession.end(userId);
-		await ctx.reply('✨ Story complete! Use /story:start to start a new one.');
+		endStorySession(ctx);
+		const reply = await ctx.reply('✨ Story complete! Use /storystart to start a new one.');
+		if (reply.message_id != null) {
+			addBotMessage(ctx, reply.message_id);
+		}
 		return;
 	}
 
@@ -40,7 +44,10 @@ bot.on('message:text', async (ctx) => {
 
 	if (nextMessage.role === 'bot') {
 		const delay = nextMessage.delay ?? 0;
-		await sendWithTypingIndicator(ctx, nextMessage.text, delay);
-		storySession.advanceMessage(userId);
+		const reply = await sendWithTypingIndicator(ctx, nextMessage.text, delay);
+		if (reply?.message_id != null) {
+			addBotMessage(ctx, reply.message_id);
+		}
+		advanceMessage(ctx);
 	}
 });
