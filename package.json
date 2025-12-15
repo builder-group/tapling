@@ -25,6 +25,7 @@
 	},
 	"devDependencies": {
 		"@blgc/config": "^0.0.39",
+		"dotenv": "^17.2.3",
 		"eslint": "^9.39.2",
 		"prettier": "^3.7.4",
 		"rollup": "^4.53.3",
