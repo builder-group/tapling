@@ -1,4 +1,3 @@
-import { tAsync } from 'tuple-result';
 import { bot } from '../bot';
 
 bot.command('storystart', async (ctx) => {
@@ -32,25 +31,21 @@ Usage: /storystart [${validIds.join('|')}]
 
 	const existingSession = ctx.story.session.getSession(ctx);
 	if (existingSession != null) {
-		await ctx.history.deleteAll(ctx);
 		ctx.story.session.end(ctx);
-	}
-
-	const messageId = ctx.message?.message_id;
-	if (messageId != null) {
-		await tAsync(ctx.api.deleteMessage(chatId, messageId));
 	}
 
 	ctx.story.session.start(ctx, storyId);
 
-	await ctx.reply(`
+	const message = await ctx.reply(`
 📖 Story started: ${storyId}
+
+The chat will be cleared after the first message (yours or the bot's).
 
 Type your first message to begin the conversation.
 Use /storyend to stop.
-
-Ready?
 `);
+
+	await ctx.history.deleteAll(ctx, [message.message_id]);
 });
 
 bot.command('storyend', async (ctx) => {

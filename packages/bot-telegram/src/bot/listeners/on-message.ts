@@ -32,6 +32,15 @@ bot.on('message:text', async (ctx) => {
 		return;
 	}
 
+	// Clear chat after first message is sent and visible
+	// We can't clear before because Telegram shows Start button for bots if history is empty (not text input)
+	if (updatedSession.messageIndex === 1) {
+		await ctx.history.deleteAll(
+			ctx,
+			ctx.message?.message_id != null ? [ctx.message?.message_id] : undefined
+		);
+	}
+
 	if (nextMessage.role === 'bot') {
 		const delay = nextMessage.delay ?? 0;
 		await sendWithTypingIndicator(ctx, nextMessage.text, delay);
