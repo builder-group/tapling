@@ -1,0 +1,13 @@
+{
+	"messages": [
+		{ "role": "user", "text": "are you home" },
+		{ "role": "bot", "text": "yes", "delay": 1000 },
+		{ "role": "user", "text": "..." },
+		{ "role": "bot", "text": "what's wrong", "delay": 2000 },
+		{ "role": "user", "text": "I saw it" },
+		{ "role": "bot", "text": "saw what", "delay": 1500 },
+		{ "role": "user", "text": "why didn't you tell me" },
+		{ "role": "bot", "text": "I didn't know how", "delay": 2000 },
+		{ "role": "user", "text": "don't lie" }
+	]
+}
