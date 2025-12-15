@@ -23,7 +23,11 @@ bot.on('message:text', async (ctx) => {
 
 	if (updatedSession.messageIndex >= template.messages.length) {
 		ctx.story.session.end(ctx);
-		await ctx.reply('✨ Story complete! Use /storystart to start a new one.');
+		await sendWithTypingIndicator(
+			ctx,
+			'✨ Story complete! Use /storystart to start a new one.',
+			5000
+		);
 		return;
 	}
 

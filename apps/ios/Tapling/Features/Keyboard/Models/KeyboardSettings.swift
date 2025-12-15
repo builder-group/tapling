@@ -15,8 +15,8 @@ final class KeyboardSettings: SingletonModel {
     var isPreviewMode: Bool
 
     var language: KeyboardLanguage
-    var autocorrectEnabled: Bool
     var autocompleteEnabled: Bool
+    var autocorrectEnabled: Bool
     var emojiPickerEnabled: Bool
 
     var trackSessions: Bool
@@ -30,8 +30,8 @@ final class KeyboardSettings: SingletonModel {
         debug: Bool = false,
         isPreviewMode: Bool = false,
         language: KeyboardLanguage = .system,
-        autocorrectEnabled: Bool = true,
         autocompleteEnabled: Bool = true,
+        autocorrectEnabled: Bool = false,
         emojiPickerEnabled: Bool = false,
         taplingScale: Double = 1.5,
         taplingBottomOffset: Double = 4.0,
@@ -42,8 +42,8 @@ final class KeyboardSettings: SingletonModel {
         self.debug = debug
         self.isPreviewMode = isPreviewMode
         self.language = language
-        self.autocorrectEnabled = autocorrectEnabled
         self.autocompleteEnabled = autocompleteEnabled
+        self.autocorrectEnabled = autocorrectEnabled
         self.emojiPickerEnabled = emojiPickerEnabled
         self.taplingScale = taplingScale
         self.taplingBottomOffset = taplingBottomOffset
