@@ -32,11 +32,7 @@ Usage: /storystart [${validIds.join('|')}]
 
 	const existingSession = ctx.story.session.getSession(ctx);
 	if (existingSession != null) {
-		const previousBotMessageIds = ctx.story.session.getBotMessageIds(ctx);
-		for (const messageId of previousBotMessageIds) {
-			await tAsync(ctx.api.deleteMessage(chatId, messageId));
-		}
-		ctx.story.session.clearBotMessages(ctx);
+		await ctx.history.deleteAll(ctx);
 		ctx.story.session.end(ctx);
 	}
 
@@ -47,7 +43,7 @@ Usage: /storystart [${validIds.join('|')}]
 
 	ctx.story.session.start(ctx, storyId);
 
-	const reply = await ctx.reply(`
+	await ctx.reply(`
 📖 Story started: ${storyId}
 
 Type your first message to begin the conversation.
@@ -55,10 +51,6 @@ Use /storyend to stop.
 
 Ready?
 `);
-
-	if (reply.message_id != null) {
-		ctx.story.session.addBotMessage(ctx, reply.message_id);
-	}
 });
 
 bot.command('storyend', async (ctx) => {
@@ -69,8 +61,5 @@ bot.command('storyend', async (ctx) => {
 	}
 
 	ctx.story.session.end(ctx);
-	const reply = await ctx.reply('Story session ended.');
-	if (reply.message_id != null) {
-		ctx.story.session.addBotMessage(ctx, reply.message_id);
-	}
+	await ctx.reply('Story session ended.');
 });

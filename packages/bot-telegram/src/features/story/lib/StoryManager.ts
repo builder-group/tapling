@@ -26,16 +26,4 @@ export class StoryManager {
 
 		session.messageIndex += 1;
 	}
-
-	addBotMessage(ctx: TBotContext, messageId: number): void {
-		ctx.session.botMessageIds.push(messageId);
-	}
-
-	getBotMessageIds(ctx: TBotContext): number[] {
-		return ctx.session.botMessageIds;
-	}
-
-	clearBotMessages(ctx: TBotContext): void {
-		ctx.session.botMessageIds = [];
-	}
 }

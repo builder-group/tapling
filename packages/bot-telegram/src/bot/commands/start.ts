@@ -11,6 +11,7 @@ Available commands:
 /storystart [id] - Start a chat story
   Available: ${storyList}
 /storyend - End current story session
+/clear - Clear all messages
 /version - Show bot version
 `);
 });

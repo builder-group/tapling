@@ -23,10 +23,7 @@ bot.on('message:text', async (ctx) => {
 
 	if (updatedSession.messageIndex >= template.messages.length) {
 		ctx.story.session.end(ctx);
-		const reply = await ctx.reply('✨ Story complete! Use /storystart to start a new one.');
-		if (reply.message_id != null) {
-			ctx.story.session.addBotMessage(ctx, reply.message_id);
-		}
+		await ctx.reply('✨ Story complete! Use /storystart to start a new one.');
 		return;
 	}
 
@@ -37,10 +34,7 @@ bot.on('message:text', async (ctx) => {
 
 	if (nextMessage.role === 'bot') {
 		const delay = nextMessage.delay ?? 0;
-		const reply = await sendWithTypingIndicator(ctx, nextMessage.text, delay);
-		if (reply?.message_id != null) {
-			ctx.story.session.addBotMessage(ctx, reply.message_id);
-		}
+		await sendWithTypingIndicator(ctx, nextMessage.text, delay);
 		ctx.story.session.advanceMessage(ctx);
 	}
 });
