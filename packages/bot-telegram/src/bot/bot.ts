@@ -1,9 +1,10 @@
 import { FileAdapter } from '@grammyjs/storage-file';
 import { Bot, session } from 'grammy';
 import { logger, telegramConfig } from '@/environment';
-import { BotContext, TSessionData } from '../types';
+import { storyMiddleware } from '@/features/story';
+import { TBotContext, TSessionData } from '@/types';
 
-export const bot = new Bot<BotContext>(telegramConfig.token);
+export const bot = new Bot<TBotContext>(telegramConfig.token);
 
 bot.use(
 	session({
@@ -15,6 +16,8 @@ bot.use(
 		})
 	})
 );
+
+bot.use(storyMiddleware());
 
 bot.catch((err) => {
 	logger.error('Bot error:', err);

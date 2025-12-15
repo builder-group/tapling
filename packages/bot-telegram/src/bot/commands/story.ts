@@ -1,13 +1,4 @@
 import { tAsync } from 'tuple-result';
-import {
-	addBotMessage,
-	clearBotMessages,
-	endStorySession,
-	getBotMessageIds,
-	getStorySession,
-	startStorySession,
-	storyLoader
-} from '@/features/story';
 import { bot } from '../bot';
 
 bot.command('storystart', async (ctx) => {
@@ -18,7 +9,7 @@ bot.command('storystart', async (ctx) => {
 		return;
 	}
 
-	const [areIdsOk, , ids] = storyLoader.getAllIds();
+	const [areIdsOk, , ids] = ctx.story.loader.getAllIds();
 	if (!areIdsOk) {
 		await ctx.reply('Failed to load story IDs. Please try again later.');
 		return;
@@ -39,14 +30,14 @@ Usage: /storystart [${validIds.join('|')}]
 		return;
 	}
 
-	const existingSession = getStorySession(ctx);
+	const existingSession = ctx.story.session.getSession(ctx);
 	if (existingSession != null) {
-		const previousBotMessageIds = getBotMessageIds(ctx);
+		const previousBotMessageIds = ctx.story.session.getBotMessageIds(ctx);
 		for (const messageId of previousBotMessageIds) {
 			await tAsync(ctx.api.deleteMessage(chatId, messageId));
 		}
-		clearBotMessages(ctx);
-		endStorySession(ctx);
+		ctx.story.session.clearBotMessages(ctx);
+		ctx.story.session.end(ctx);
 	}
 
 	const messageId = ctx.message?.message_id;
@@ -54,7 +45,7 @@ Usage: /storystart [${validIds.join('|')}]
 		await tAsync(ctx.api.deleteMessage(chatId, messageId));
 	}
 
-	startStorySession(ctx, storyId);
+	ctx.story.session.start(ctx, storyId);
 
 	const reply = await ctx.reply(`
 📖 Story started: ${storyId}
@@ -66,20 +57,20 @@ Ready?
 `);
 
 	if (reply.message_id != null) {
-		addBotMessage(ctx, reply.message_id);
+		ctx.story.session.addBotMessage(ctx, reply.message_id);
 	}
 });
 
 bot.command('storyend', async (ctx) => {
-	const userSession = getStorySession(ctx);
+	const userSession = ctx.story.session.getSession(ctx);
 	if (userSession == null) {
 		await ctx.reply('No active story session.');
 		return;
 	}
 
-	endStorySession(ctx);
+	ctx.story.session.end(ctx);
 	const reply = await ctx.reply('Story session ended.');
 	if (reply.message_id != null) {
-		addBotMessage(ctx, reply.message_id);
+		ctx.story.session.addBotMessage(ctx, reply.message_id);
 	}
 });

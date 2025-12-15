@@ -1,10 +1,10 @@
-import type { BotContext } from '@/bot/bot';
+import type { TBotContext } from '@/types';
 
 // Telegram typing indicators expire after ~5 seconds, so we refresh every 4 seconds
 const TYPING_INTERVAL_MS = 4000;
 
 export async function sendWithTypingIndicator(
-	ctx: BotContext,
+	ctx: TBotContext,
 	text: string,
 	delayMs: number = 0
 ): Promise<{ message_id: number } | undefined> {

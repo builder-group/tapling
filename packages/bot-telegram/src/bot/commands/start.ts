@@ -1,8 +1,7 @@
-import { storyLoader } from '@/features/story';
 import { bot } from '../bot';
 
 bot.command('start', async (ctx) => {
-	const [areIdsOk, , ids] = storyLoader.getAllIds();
+	const [areIdsOk, , ids] = ctx.story.loader.getAllIds();
 	const storyList = areIdsOk && ids.length > 0 ? ids.join(', ') : 'story-1';
 
 	await ctx.reply(`

@@ -1,12 +1,9 @@
 import { Context, SessionFlavor } from 'grammy';
+import type { TStoryFlavor, TStorySession } from '@/features/story';
 
 export interface TSessionData {
-	storySession?: {
-		storyId: string;
-		messageIndex: number;
-		startedAt: string;
-	};
+	storySession?: TStorySession;
 	botMessageIds: number[];
 }
 
-export type BotContext = Context & SessionFlavor<TSessionData>;
+export type TBotContext = Context & SessionFlavor<TSessionData> & TStoryFlavor;
