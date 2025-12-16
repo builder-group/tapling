@@ -1,0 +1,29 @@
+{
+	"metadata": {
+		"model_version": "gemini-2.0-flash-thinking-exp",
+		"prompt_version": "system_v0-0-1"
+	},
+	"script": [
+		{ "speaker": "A", "text": "Hey... I have a serious problem 😰" },
+		{ "speaker": "B", "text": "Omg what happened?? Are you okay?" },
+		{ "speaker": "A", "text": "No, I'm stuck. I need the password." },
+		{ "speaker": "B", "text": "The password for what? 🤨" },
+		{ "speaker": "A", "text": "For the WiFi. I can't connect to anything." },
+		{ "speaker": "B", "text": "Stoppp you scared me! It's just 'Guest123' 🙄" },
+		{ "speaker": "A", "text": "That's not working." },
+		{ "speaker": "B", "text": "Try 'Guest1234' then?" },
+		{
+			"speaker": "A",
+			"text": "Still no... maybe it's because I'm looking for a different connection 😌"
+		},
+		{ "speaker": "B", "text": "Wait what? What are you talking about??" },
+		{ "speaker": "A", "text": "I think I need the password to your heart instead ❤️" },
+		{ "speaker": "B", "text": "BYE NO WAY 😭💀" },
+		{ "speaker": "A", "text": "Is it 'ILoveYou'? Or maybe 'Mine'? 😉" },
+		{ "speaker": "B", "text": "OMGG STOPPP 😤 my face is actually red rn" },
+		{ "speaker": "A", "text": "Just let me in, I promise I won't change the settings 🤭" },
+		{ "speaker": "B", "text": "I literally hate you so much for this but it worked 😩🥰" },
+		{ "speaker": "A", "text": "So... am I connected? 😎" },
+		{ "speaker": "B", "text": "5 bars. Full signal. Shut up 😭❤️" }
+	]
+}

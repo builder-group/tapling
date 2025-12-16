@@ -1,0 +1,27 @@
+{
+	"metadata": {
+		"model_version": "cursor-auto",
+		"prompt_version": "system_v0-0-1"
+	},
+	"script": [
+		{ "speaker": "A", "text": "Hey beautiful 😘" },
+		{ "speaker": "B", "text": "Hi babe 🥰" },
+		{ "speaker": "A", "text": "Wanna play a quick game?" },
+		{ "speaker": "B", "text": "Sure, what game? 🤗" },
+		{ "speaker": "A", "text": "I'll give you the first 3 letters of the alphabet" },
+		{ "speaker": "A", "text": "A, B, C" },
+		{ "speaker": "B", "text": "Okay... 😅" },
+		{ "speaker": "A", "text": "Now tell me what each letter stands for" },
+		{ "speaker": "B", "text": "Umm... Apple? Ball? Cat? 😂" },
+		{ "speaker": "A", "text": "Nah babe, think harder 😌" },
+		{ "speaker": "B", "text": "I don't know, what do they stand for? 🤔" },
+		{ "speaker": "A", "text": "A = Always" },
+		{ "speaker": "A", "text": "B = Be" },
+		{ "speaker": "A", "text": "C = Cute" },
+		{ "speaker": "B", "text": "Aww that's sweet 🥰" },
+		{ "speaker": "A", "text": "Always Be Cute... just like you ❤️" },
+		{ "speaker": "B", "text": "OMG stoppp 😭😭" },
+		{ "speaker": "B", "text": "You're making me blush so hard rn 😩" },
+		{ "speaker": "B", "text": "I hate you but I love you so much 😭❤️" }
+	]
+}
