@@ -25,7 +25,13 @@ Before writing the script, briefly plan the "Viral Mechanics":
 - **Visual Context:** (What is the background vibe?)
 
 Then, write the script in JSON format:
-[
-  { "speaker": "A", "text": "..." },
-  { "speaker": "B", "text": "..." }
-]
+{
+  "metadata": {
+    "model_version": "[version of the model used, e.g., 'gpt-4', 'claude-3-5-sonnet-20241022']",
+    "prompt_version": "system_v0-0-1"
+  },
+  "script": [
+    { "speaker": "A", "text": "..." },
+    { "speaker": "B", "text": "..." }
+  ]
+}

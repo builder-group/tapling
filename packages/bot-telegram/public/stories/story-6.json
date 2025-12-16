@@ -1,0 +1,27 @@
+{
+	"metadata": {
+		"model_version": "cursor-auto",
+		"prompt_version": "system_v0-0-1"
+	},
+	"script": [
+		{ "speaker": "A", "text": "Hey babe 😎" },
+		{ "speaker": "B", "text": "Hi, what's up?" },
+		{ "speaker": "A", "text": "I need your wifi password rn" },
+		{ "speaker": "B", "text": "Oh sure, it's..." },
+		{ "speaker": "A", "text": "Wait wait" },
+		{ "speaker": "A", "text": "Before you tell me" },
+		{ "speaker": "A", "text": "Can you spell it out letter by letter? 😌" },
+		{ "speaker": "B", "text": "Um okay? It's I-L-O-V-E-Y-O-U-2-0-2-4" },
+		{ "speaker": "A", "text": "Hmm let me check..." },
+		{ "speaker": "A", "text": "I... L... O... V... E... Y... O... U..." },
+		{ "speaker": "A", "text": "Wait, that's not a password 😂" },
+		{ "speaker": "B", "text": "What do you mean??" },
+		{
+			"speaker": "A",
+			"text": "That's exactly what I've been trying to tell you this whole time 🥰"
+		},
+		{ "speaker": "B", "text": "OMG 😭😭😭" },
+		{ "speaker": "B", "text": "You're so smooth I can't even 😩" },
+		{ "speaker": "B", "text": "I hate you but I love you more 🥹❤️" }
+	]
+}
