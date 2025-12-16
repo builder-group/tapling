@@ -9,20 +9,23 @@ A prototype bot that responds with predefined story segments to simulate convers
 ### Usage
 
 1. **Start the bot:**
+
    ```
    /start
    ```
+
    Shows all available commands
 
 2. **Start a story session:**
+
    ```
    /story [type]
    ```
-   
+
    Types:
    - `normal` - Slow-burn typing story with subtle tension
    - `missing-reply` - One-sided conversation story
-   
+
    **Note:** Starting a story clears the chat (deletes command message) so only story messages are visible
 
 3. **Type messages** - The bot will respond with the next story segment automatically (shows typing indicator during delays)
@@ -80,12 +83,12 @@ Stories are defined as JSON or XML files in `data/` folder (outside `src/`, like
 
 ```json
 {
-  "messages": [
-    { "role": "user", "text": "are you home" },
-    { "role": "bot", "text": "yes", "delay": 1000 },
-    { "role": "user", "text": "..." },
-    { "role": "bot", "text": "what's wrong", "delay": 2000 }
-  ]
+	"messages": [
+		{ "role": "user", "text": "are you home" },
+		{ "role": "bot", "text": "yes", "delay": 1000 },
+		{ "role": "user", "text": "..." },
+		{ "role": "bot", "text": "what's wrong", "delay": 2000 }
+	]
 }
 ```
 
