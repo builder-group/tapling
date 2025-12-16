@@ -1,0 +1,30 @@
+{
+	"metadata": {
+		"model_version": "gemini-2.0-flash",
+		"prompt_version": "system_v0-0-2"
+	},
+	"script": [
+		{ "speaker": "A", "text": "I'm finally letting go." },
+		{ "speaker": "B", "text": "what?" },
+		{ "speaker": "B", "text": "letting go of what? 🤨" },
+		{ "speaker": "A", "text": "everything." },
+		{ "speaker": "A", "text": "the noise." },
+		{ "speaker": "A", "text": "the hurting." },
+		{ "speaker": "A", "text": "and you." },
+		{ "speaker": "B", "text": "stop being dramatic 🙄" },
+		{ "speaker": "B", "text": "see u tomorrow at school" },
+		{ "speaker": "A", "text": "no you won't." },
+		{ "speaker": "B", "text": "...what does that mean?" },
+		{ "speaker": "A", "text": "i'm tired of fighting 😔" },
+		{ "speaker": "A", "text": "check your porch." },
+		{ "speaker": "B", "text": "why???" },
+		{ "speaker": "A", "text": "left my favorite hoodie." },
+		{ "speaker": "A", "text": "i want u to keep it." },
+		{ "speaker": "B", "text": "ur scaring me rn" },
+		{ "speaker": "B", "text": "pick up the phone." },
+		{ "speaker": "A", "text": "goodbye [Name]." },
+		{ "speaker": "A", "text": "i loved you most. 💔" },
+		{ "speaker": "B", "text": "A???" },
+		{ "speaker": "B", "text": "answer me pls 😭" }
+	]
+}

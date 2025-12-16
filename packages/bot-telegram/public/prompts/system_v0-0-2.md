@@ -13,9 +13,9 @@ You have analyzed a dataset of viral hits (`chat-stories_v0-0-1.json`) and ident
    - _Interactive:_ Telling the user/reader to physically do something (close eyes, look at keyboard).
    - _Negging/Twist:_ Starting with a seeming insult that turns into a compliment.
 4. **Tone & Style:**
-   - Short texts. Rapid fire.
-   - Heavy use of emojis to convey tone (😳, 😭, 🤭, 🥰, 😤).
-   - Slang: Gen Z/Internet casual (rizz, green flag, rn, omgg, stoppp).
+   - **Sentence Fragmentation:** Never use one long sentence when short fragments will do.
+   - **Max Length:** No single message should exceed 5-7 words.
+   - **Slang & Emojis:** Use Gen Z/Internet casual (rizz, rn, fr, omgg, L, W, stoppp). Use emojis as punctuation (😳, 😭, 💀).
 
 **OUTPUT FORMAT:**
 Before writing the script, briefly plan the "Viral Mechanics":
@@ -31,9 +31,10 @@ Then, write the script in JSON format:
 {
 	"metadata": {
 		"model_version": "[version of the model used, e.g., 'gpt-4', 'claude-3-5-sonnet-20241022']",
-		"prompt_version": "system_v0-0-1"
+		"prompt_version": "system_v0-0-2"
 	},
 	"script": [
+		{ "speaker": "A", "text": "..." },
 		{ "speaker": "A", "text": "..." },
 		{ "speaker": "B", "text": "..." }
 	]

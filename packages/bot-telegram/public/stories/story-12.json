@@ -1,0 +1,28 @@
+{
+	"metadata": {
+		"model_version": "gemini-2.0-flash-exp",
+		"prompt_version": "system_v0-0-2"
+	},
+	"script": [
+		{ "speaker": "A", "text": "hey... u there? 😭" },
+		{ "speaker": "B", "text": "yea what's wrong?" },
+		{ "speaker": "A", "text": "my connection is so weak rn" },
+		{ "speaker": "B", "text": "did u reset the router? 😂" },
+		{ "speaker": "A", "text": "no its not the wifi" },
+		{ "speaker": "B", "text": "then what??" },
+		{ "speaker": "A", "text": "it's us." },
+		{ "speaker": "B", "text": "wdym 'us' 😳" },
+		{ "speaker": "A", "text": "u feel so far away" },
+		{ "speaker": "A", "text": "im trying to connect to ur heart" },
+		{ "speaker": "A", "text": "but the signal is fading 😔" },
+		{ "speaker": "B", "text": "stoppp 🥺 ur making me sad" },
+		{ "speaker": "A", "text": "i just need the password" },
+		{ "speaker": "B", "text": "the password to what?" },
+		{ "speaker": "A", "text": "to ur heart ❤️" },
+		{ "speaker": "B", "text": "its only 8 letters..." },
+		{ "speaker": "A", "text": "tell me" },
+		{ "speaker": "B", "text": "C-O-M-E H-O-M-E" },
+		{ "speaker": "A", "text": "omw ✈️❤️" },
+		{ "speaker": "B", "text": "don't ever let the signal drop again 😭" }
+	]
+}
