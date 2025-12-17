@@ -40,7 +40,18 @@ struct SettingsDebugView: View {
                     Button {
                         unlockAllCollectibles()
                     } label: {
-                        Label("Unlock All Items", systemImage: "lock.open.fill")
+                        Label("Get All", systemImage: "tray.and.arrow.down")
+                    }
+                }
+
+                Section("Keycaps") {
+                    Button {
+                        addCardboardBoxCost()
+                    } label: {
+                        Label(
+                            "Add Cardbox Cost (+\(GameConfig.cardboardBoxCost))",
+                            systemImage: "dollarsign.circle"
+                        )
                     }
                 }
             #endif
@@ -62,6 +73,11 @@ struct SettingsDebugView: View {
                 modelContext.insert(ownedCollectible)
             }
 
+            try? modelContext.save()
+        }
+
+        private func addCardboardBoxCost() {
+            player.currentKeycaps += GameConfig.cardboardBoxCost
             try? modelContext.save()
         }
     #endif
