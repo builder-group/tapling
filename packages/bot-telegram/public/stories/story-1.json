@@ -1,13 +1,26 @@
 {
-	"messages": [
-		{ "role": "user", "text": "are you home" },
-		{ "role": "bot", "text": "yes", "delay": 1000 },
-		{ "role": "user", "text": "..." },
-		{ "role": "bot", "text": "what's wrong", "delay": 2000 },
-		{ "role": "user", "text": "I saw it" },
-		{ "role": "bot", "text": "saw what", "delay": 1500 },
-		{ "role": "user", "text": "why didn't you tell me" },
-		{ "role": "bot", "text": "I didn't know how", "delay": 2000 },
-		{ "role": "user", "text": "don't lie" }
+	"metadata": {
+		"model_version": "gemini-2.0-flash",
+		"prompt_version": "system_v0-0-2",
+		"bot_speaker": "B"
+	},
+	"script": [
+		{ "speaker": "A", "text": "hey" },
+		{ "speaker": "A", "text": "quick question 🫣" },
+		{ "speaker": "B", "text": "yea? whats up", "delay": 1500 },
+		{ "speaker": "A", "text": "whats your wifi password?" },
+		{ "speaker": "B", "text": "um why? 😂", "delay": 2000 },
+		{ "speaker": "B", "text": "ur literally at your house", "delay": 1000 },
+		{ "speaker": "A", "text": "just tell me lol" },
+		{ "speaker": "B", "text": "its: iloveyou123", "delay": 2500 },
+		{ "speaker": "A", "text": "wait fr??" },
+		{ "speaker": "B", "text": "yea why??", "delay": 1500 },
+		{ "speaker": "A", "text": "i love you too 😌❤️" },
+		{ "speaker": "B", "text": "WAIT 😳", "delay": 800 },
+		{ "speaker": "B", "text": "STOPPP 😭😭", "delay": 1000 },
+		{ "speaker": "A", "text": "caught u in 4k" },
+		{ "speaker": "B", "text": "i hate you actually 💀", "delay": 2000 },
+		{ "speaker": "A", "text": "no u dont" },
+		{ "speaker": "B", "text": "fine... i love you too 🙄🥰", "delay": 3000 }
 	]
 }
