@@ -64,9 +64,15 @@ private struct SessionRowView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Text("End: \(session.endDate!, style: .time)")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            if let endDate = session.endDate {
+                Text("End: \(endDate, style: .time)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("End: open")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
 
             if let processedAt = session.processedAt {
                 Text("Processed: \(processedAt, style: .time)")

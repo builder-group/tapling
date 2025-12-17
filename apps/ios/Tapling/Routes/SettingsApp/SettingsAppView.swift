@@ -19,7 +19,9 @@ struct SettingsAppView: View {
             get: { appSettings.debug },
             set: { newValue in
                 appSettings.debug = newValue
-                keyboardSettings.debug = newValue
+                if !newValue {
+                    keyboardSettings.debug = false
+                }
                 try? modelContext.save()
             }
         )

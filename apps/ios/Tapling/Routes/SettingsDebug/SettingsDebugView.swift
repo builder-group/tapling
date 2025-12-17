@@ -9,20 +9,62 @@ import SwiftData
 import SwiftUI
 
 struct SettingsDebugView: View {
+    @Environment(\.modelContext) private var modelContext
+    @QuerySingleton private var player: Player
+    @QuerySingleton private var keyboardSettings: KeyboardSettings
+
+    private var keyboardDebugBinding: Binding<Bool> {
+        Binding(
+            get: { keyboardSettings.debug },
+            set: { newValue in
+                keyboardSettings.debug = newValue
+                try? modelContext.save()
+            }
+        )
+    }
 
     var body: some View {
         Form {
-            Section("DEBUG") {
+            Section("Keyboard") {
+                Toggle("Debug", isOn: keyboardDebugBinding)
+
                 NavigationLink {
                     SettingsDebugSessionsView()
                 } label: {
                     Label("Sessions", systemImage: "keyboard")
                 }
             }
+
+            #if DEBUG
+                Section("Collectibles") {
+                    Button {
+                        unlockAllCollectibles()
+                    } label: {
+                        Label("Unlock All Items", systemImage: "lock.open.fill")
+                    }
+                }
+            #endif
         }
         .navigationTitle("Debug")
         .navigationBarTitleDisplayMode(.inline)
     }
+
+    #if DEBUG
+        private func unlockAllCollectibles() {
+            let allCollectibles = CollectibleRegistry.shared.allCollectibles
+
+            for collectible in allCollectibles {
+                let ownedCollectible = OwnedCollectible(
+                    collectibleId: collectible.id,
+                    unlockedAt: Date(),
+                    player: player
+                )
+                modelContext.insert(ownedCollectible)
+            }
+
+            try? modelContext.save()
+        }
+    #endif
 }
 
 #Preview {
