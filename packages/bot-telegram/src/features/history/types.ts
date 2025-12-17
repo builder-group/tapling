@@ -1,4 +1,4 @@
-import type { HistoryManager } from './lib/history-manager';
+import type { HistoryManager } from './lib/HistoryManager';
 
 export interface THistoryMessage {
 	messageId: number;

@@ -19,7 +19,7 @@ export function historyMiddleware(): Middleware<TBotContext> {
 				return responseResult;
 			}
 
-			if (!isMessageDto(responseResult.result)) {
+			if (!isTelegramMessageDto(responseResult.result)) {
 				return responseResult;
 			}
 			const messageDto = responseResult.result;
@@ -29,8 +29,12 @@ export function historyMiddleware(): Middleware<TBotContext> {
 			}
 			const chatId = payload.chat_id;
 
-			const existing = botMessagesByChat.get(chatId) ?? [];
-			botMessagesByChat.set(chatId, [...existing, messageDtoToHistoryMessage(messageDto)]);
+			let messages = botMessagesByChat.get(chatId);
+			if (messages == null) {
+				messages = [];
+				botMessagesByChat.set(chatId, messages);
+			}
+			messages.push(messageDtoToHistoryMessage(messageDto));
 
 			return responseResult;
 		});
@@ -57,7 +61,6 @@ export function historyMiddleware(): Middleware<TBotContext> {
 		}
 
 		const sessionMessageIds = new Set(ctx.session.messageHistory.map((m) => m.messageId));
-
 		for (const message of botMessages) {
 			if (!sessionMessageIds.has(message.messageId)) {
 				history.add(ctx, message);
@@ -80,34 +83,27 @@ function messageDtoToHistoryMessage(dto: TTelegramMessageDto): THistoryMessage {
 	};
 }
 
-function hasChatId(payload: unknown): payload is { chat_id: number } {
+function hasChatId(value: unknown): value is { chat_id: number } {
 	return (
-		payload != null &&
-		typeof payload === 'object' &&
-		'chat_id' in payload &&
-		typeof (payload as { chat_id: unknown }).chat_id === 'number'
+		value != null &&
+		typeof value === 'object' &&
+		'chat_id' in value &&
+		typeof value.chat_id === 'number'
 	);
 }
 
-function isMessageDto(value: unknown): value is TTelegramMessageDto {
-	if (value == null || typeof value !== 'object') {
-		return false;
-	}
-
-	const obj = value as Record<string, unknown>;
-	const messageId = obj['message_id'];
-	const from = obj['from'];
-
-	if (typeof messageId !== 'number') {
-		return false;
-	}
-
-	if (from == null || typeof from !== 'object') {
-		return false;
-	}
-
-	const fromObj = from as Record<string, unknown>;
-	return typeof fromObj['id'] === 'number';
+function isTelegramMessageDto(value: unknown): value is TTelegramMessageDto {
+	return (
+		value != null &&
+		typeof value === 'object' &&
+		'message_id' in value &&
+		typeof value['message_id'] === 'number' &&
+		'from' in value &&
+		value['from'] != null &&
+		typeof value['from'] === 'object' &&
+		'id' in value['from'] &&
+		typeof value['from']['id'] === 'number'
+	);
 }
 
 interface TTelegramMessageDto {
