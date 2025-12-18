@@ -39,7 +39,7 @@ export async function sendConsecutiveBotMessages(
 	// Check if story is complete
 	if (session.messageIndex >= template.messages.length) {
 		ctx.story.session.end(ctx);
-		await sleep(5000);
+		await sleep(10000);
 		await ctx.reply(`✨ Story complete!
 
 Use /storystart to start a new one.
