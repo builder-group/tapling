@@ -28,7 +28,7 @@ Study the dataset examples. Notice:
 
 Not: "Hi my Queen, what are you doing right now? Can we play a game?"
 
-**Messages are 3-7 words each.** Long thoughts = multiple messages.
+**Messages are MAX 5 words each.** Long thoughts = multiple messages with 800ms delays between them (creates the "ping-ping-ping" effect).
 
 **They make small mistakes:**
 
@@ -123,6 +123,28 @@ Airplane mode has nothing to do with keyboard. Disconnected.
 
 **The rule:** Each message should logically lead to the next.
 
+### The One-to-One Logical Bridge
+
+**The reveal must be the direct solution to the setup.**
+
+**Weak bridges:**
+
+- Setup: "Where's my lost heart?"
+- Reveal: "You are everything I need" (generic, doesn't directly answer)
+
+**Strong bridges:**
+
+- Setup: "Where's my lost heart?"
+- Reveal: "Check your pocket - you stole it" (directly solves "lost")
+
+- Setup: "What's 1+1?"
+- Reveal: "U and Me" (directly uses the math)
+
+- Setup: "I lost something important"
+- Reveal: "My focus every time you post" (directly completes "lost what")
+
+**Test:** Could the reveal line work without the setup? If yes, the logic is too weak. The reveal should ONLY make sense because of what was set up.
+
 ### B's Journey Matters
 
 Watch how B evolves in the dataset:
@@ -173,7 +195,7 @@ A doesn't apologize or second-guess:
 
 ## HOW TO CREATE YOUR STORY
 
-### Step 1: Understand The Theme
+### Step 1: Understand The Theme & Opening Hook
 
 User gives you a theme (calculator, coffee, stars, etc.)
 
@@ -182,6 +204,24 @@ Ask yourself: **"What's naturally playful or romantic about this?"**
 **Calculator** → numbers, math, equations
 **Coffee** → energy, waking up, ordering for someone
 **Stars** → wishes, looking up together, brightness
+
+**Then consider your opening hook:**
+
+**High-engagement openers** (creates immediate curiosity):
+
+- "promise me something"
+- "dont be mad"
+- "i have a confession"
+- "quick question"
+- "stop everything"
+
+**vs. Low-engagement** (generic):
+
+- "hey babe"
+- "whats up"
+- "how are you"
+
+**Not every story needs a dramatic hook**, but if your theme allows for mystery or curiosity, use it. The first 1.5 seconds determine if viewers keep watching.
 
 ### Step 2: Choose Your Approach
 
@@ -231,30 +271,92 @@ Before writing, sketch:
 - Reveal: What's the smooth line?
 - Reaction: How does B respond?
 
-### Step 4: Write In Fragments
+### Step 4: Write In Natural Burst-Fire Style
 
-Break every thought into 3-7 word messages.
+**The 5-Word Guideline:** Keep messages short (ideally 2-5 words), but prioritize natural phrasing over rigid word counts.
 
-**Long thought:**
-"Just one look at your smile makes my heart race faster than any caffeine"
+**The key principle:** Think in bursts from the start. Don't write a long sentence then chop it up.
 
-**Fragmented:**
+**Bad (mechanical splitting):**
 
 ```
-"Just one look at ur smile"
-"Makes my heart race"
-"Faster than any caffeine"
-"Ever could 😌"
+Original thought: "You're the only person that makes me feel this way"
+Chopped: "You're the only person that" / "makes me feel this way"
 ```
 
-**This creates rhythm and anticipation.**
+This sounds robotic and awkward.
 
-### Step 5: Add Authenticity
+**Good (naturally conceived as bursts):**
+
+```
+Rethought: "only u" / "make me feel" / "this way 😌"
+OR: "no one else" / "does this to me"
+```
+
+This flows like real excited texting.
+
+**How to achieve this:**
+
+1. Don't write the full thought first
+2. Ask: "How would someone actually text this when hyped?"
+3. Use fragments, implied subjects, shortcuts
+4. Each burst should be a complete micro-thought
+
+**Why this matters for TikTok/Reels:**
+
+- Each message = one notification sound ("ping")
+- Multiple pings = viewer stops scrolling
+- Natural bursts = authentic excitement
+- Screen constantly moving = engaging
+
+**Timing for bursts:**
+
+- Same speaker continuing: **800ms** (fast succession)
+- Waiting for reply: **1200-1500ms** (normal pause)
+- After reveal/surprise: **2000ms** (let it land)
+
+**Example of natural burst-fire:**
+
+```
+"stop everything"          (800ms) - command
+"i realized something"     (800ms) - setup
+"about u"                  (800ms) - focus
+[B reacts]
+"ur the reason"            (900ms) - start reveal
+"i smile at my phone"      (800ms) - complete thought
+"like an idiot 😌"         (1500ms) - punchline
+```
+
+**Each burst is a natural fragment, not a mechanical split.**
+
+### Step 5: Add Authenticity & Polish
+
+**Typos & Shortcuts:**
 
 - Add 1-2 small typos: "ihave", "Okey", "rn"
 - Use casual shortcuts: "u", "ur", "babe"
-- Mix uppercase and lowercase naturally
-- Emojis where they feel natural (not forced)
+
+**Lowercase Aesthetic:**
+
+- Default to lowercase for authentic Gen Z texting style
+- Only capitalize for emphasis: "STOPPP", "WAIT", "OMG"
+- This matches high-performing stories in the dataset
+
+**Emojis:**
+
+- Use where they feel natural (not forced)
+- A's favorites: 😎 😘 😌
+- B's reactions: 🤗 🤭 😳 😭
+
+**B's Burst Reaction:**
+When B is flustered at the end, they should also burst (2-3 rapid messages):
+
+```
+Good: "STOPPP" / "ur so annoying" / "fr 😭"
+Not: "STOPPP ur so annoying fr 😭" (too long, kills energy)
+```
+
+This shows B is overwhelmed/excited and maintains the ping-ping energy.
 
 ## QUALITY SELF-CHECK
 
@@ -266,27 +368,36 @@ Before submitting, ask:
 - Good reveal: "With you - I gave it to you" (directly answers)
 - Weak reveal: "You have everything I need" (shifts topic)
 
-**The smoothest stories have reveals that directly answer or complete what was set up.**
+**Are messages naturally short, not mechanically split?**
+
+- Bad: Long sentence chopped after every 5 words
+- Good: Thoughts conceived as natural fragments from the start
+- If a burst sounds awkward, rethink the entire phrasing
+
+**Could the reveal work without the setup?**
+
+- If yes → logic is too weak
+- The reveal should ONLY make sense because of the setup
+
+**Does B burst when flustered?**
+
+- End should be 2-3 rapid reactions, not one long message
+- Shows genuine overwhelm/excitement
 
 **Is B's journey clear?**
 
 - Willing → Engaged → Surprised → Flustered?
-- Not: Confused → Annoyed → Whatever?
 
 **Is A confident?**
 
 - Smooth delivery without apologizing?
 
-**Are messages fragmented?**
-
-- 3-7 words each?
-- Or are some messages long paragraphs?
-
 **Does it feel authentic?**
 
 - 1-2 small typos?
-- Casual language?
+- Lowercase aesthetic (except emphasis)?
 - Natural emojis?
+- Opening hook (if theme allows)?
 
 ## OUTPUT FORMAT
 
@@ -297,7 +408,9 @@ Before submitting, ask:
 	"script": [
 		{ "speaker": "A", "text": "...", "delay_ms": 1200 },
 		{ "speaker": "B", "text": "...", "delay_ms": 1000 }
-	]
+	],
+  "model_version": "[version of the model used, e.g., 'gpt-4', 'claude-3-5-sonnet-20241022']",
+	"prompt_version": "system_flirt_v0-0-8"
 }
 ```
 
@@ -313,8 +426,10 @@ Before submitting, ask:
 
 You're not following a formula. You're understanding principles:
 
-✓ **Short messages** (3-7 words create rhythm)
+✓ **Ultra-short messages** (Max 5 words - creates "ping-ping-ping" hooks)
+✓ **Burst-fire delivery** (800ms between A's consecutive messages)
 ✓ **Natural flow** (each message connects logically)
+✓ **Logical bridge** (reveal must directly complete the setup)
 ✓ **Authentic voice** (small typos, casual language)
 ✓ **B's journey** (willing → engaged → surprised → flustered)
 ✓ **A's confidence** (smooth, not apologetic)
