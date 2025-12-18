@@ -1,3 +1,4 @@
+import { sleep } from '@blgc/utils';
 import { sendWithTypingIndicator } from '@/lib';
 import type { TBotContext } from '@/types';
 import type { TStoryTemplate } from './StoryLoader';
@@ -38,6 +39,7 @@ export async function sendConsecutiveBotMessages(
 	// Check if story is complete
 	if (session.messageIndex >= template.messages.length) {
 		ctx.story.session.end(ctx);
+		await sleep(5000);
 		await ctx.reply(`✨ Story complete!
 
 Use /storystart to start a new one.

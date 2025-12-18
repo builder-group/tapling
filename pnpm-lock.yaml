@@ -105,6 +105,9 @@ importers:
 
   packages/bot-telegram:
     dependencies:
+      '@blgc/utils':
+        specifier: ^0.0.60
+        version: 0.0.60
       '@grammyjs/storage-file':
         specifier: ^2.5.1
         version: 2.5.1
