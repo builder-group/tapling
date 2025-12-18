@@ -1,0 +1,27 @@
+{
+	"metadata": {
+		"model_version": "gemini-2.0-flash",
+		"prompt_version": "system_v0-0-2",
+		"bot_speaker": "A"
+	},
+	"script": [
+		{ "speaker": "A", "text": "Quick math question 🤓", "delay": 1500 },
+		{ "speaker": "B", "text": "Oh god" },
+		{ "speaker": "B", "text": "I'm bad at math lol" },
+		{ "speaker": "A", "text": "It's easy trust", "delay": 1200 },
+		{ "speaker": "A", "text": "Solve for X:", "delay": 1000 },
+		{ "speaker": "A", "text": "X + U = ❤️", "delay": 1500 },
+		{ "speaker": "B", "text": "..." },
+		{ "speaker": "B", "text": "fr?" },
+		{ "speaker": "A", "text": "calculate the rizz 😮‍💨", "delay": 1800 },
+		{ "speaker": "B", "text": "it's off the charts 😭" },
+		{ "speaker": "A", "text": "Question 2:", "delay": 1000 },
+		{ "speaker": "A", "text": "You + Me = ?", "delay": 1200 },
+		{ "speaker": "B", "text": "what's the answer?" },
+		{ "speaker": "A", "text": "Friday at 8?", "delay": 2000 },
+		{ "speaker": "B", "text": "stoppp 💀" },
+		{ "speaker": "B", "text": "that was smooth" },
+		{ "speaker": "A", "text": "100% logic 😌", "delay": 1200 },
+		{ "speaker": "B", "text": "fine... see u then ❤️" }
+	]
+}
