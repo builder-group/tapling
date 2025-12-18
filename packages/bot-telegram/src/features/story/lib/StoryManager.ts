@@ -9,8 +9,7 @@ export class StoryManager {
 	public start(ctx: TBotContext, storyId: string): void {
 		ctx.session.storySession = {
 			storyId,
-			messageIndex: 0,
-			startedAt: new Date().toISOString()
+			messageIndex: 0
 		};
 	}
 

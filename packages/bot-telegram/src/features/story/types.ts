@@ -1,4 +1,3 @@
-import type { Context } from 'grammy';
 import type { StoryLoader, StoryManager } from './lib';
 
 export interface TStoryFlavor {
@@ -8,10 +7,7 @@ export interface TStoryFlavor {
 	};
 }
 
-export type TStoryContext = Context & TStoryFlavor;
-
 export interface TStorySession {
 	storyId: string;
 	messageIndex: number;
-	startedAt: string;
 }

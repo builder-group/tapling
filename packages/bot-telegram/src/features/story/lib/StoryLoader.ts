@@ -69,10 +69,13 @@ export class StoryLoader {
 	): TStoryMessage[] {
 		return script.map((item) => {
 			const role = item.speaker === botSpeaker ? 'bot' : 'user';
+			const baseDelay = role === 'bot' && item.delay != null ? item.delay : undefined;
+			const delay =
+				baseDelay != null ? Math.round(baseDelay / storyConfig.speedMultiplier) : undefined;
 			return {
 				role,
 				text: item.text ?? '',
-				delay: role === 'bot' && item.delay != null ? item.delay : undefined
+				delay
 			};
 		});
 	}

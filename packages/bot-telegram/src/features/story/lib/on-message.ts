@@ -1,76 +1,33 @@
-import { sendWithTypingIndicator } from '@/lib';
 import type { TBotContext } from '@/types';
-import type { TStoryTemplate } from '.';
+import { sendConsecutiveBotMessages } from './send-bot-messages';
 
 export async function handleStoryMessage(ctx: TBotContext): Promise<void> {
-	const userSession = ctx.story.session.getSession(ctx);
-	if (userSession == null) {
-		return;
-	}
-
-	ctx.story.session.advanceMessage(ctx);
-
 	const session = ctx.story.session.getSession(ctx);
 	if (session == null) {
 		return;
 	}
 
-	const [isTemplateOk, , template] = ctx.story.loader.getTemplate(userSession.storyId);
+	const [isTemplateOk, , template] = ctx.story.loader.getTemplate(session.storyId);
 	if (!isTemplateOk) {
 		ctx.story.session.end(ctx);
-		await ctx.reply('Error loading story. Session ended.');
-		return;
-	}
-	await clearChatIfFirstMessage(ctx, session.messageIndex);
-	await processConsecutiveBotMessages(ctx, template);
-
-	const finalSession = ctx.story.session.getSession(ctx);
-	if (finalSession != null && finalSession.messageIndex >= template.messages.length) {
-		await handleStoryComplete(ctx);
-	}
-}
-
-async function handleStoryComplete(ctx: TBotContext): Promise<void> {
-	ctx.story.session.end(ctx);
-	await sendWithTypingIndicator(
-		ctx,
-		'✨ Story complete! Use /storystart to start a new one.',
-		5000
-	);
-}
-
-async function processConsecutiveBotMessages(
-	ctx: TBotContext,
-	template: TStoryTemplate
-): Promise<void> {
-	let session = ctx.story.session.getSession(ctx);
-	if (session == null) {
+		await ctx.reply('Failed to load story. Session ended.');
 		return;
 	}
 
-	while (session.messageIndex < template.messages.length) {
-		const message = template.messages[session.messageIndex];
-		if (message?.role !== 'bot') {
-			break;
-		}
-
-		const delay = message.delay ?? 0;
-		await sendWithTypingIndicator(ctx, message.text, delay);
-		ctx.story.session.advanceMessage(ctx);
-
-		const nextSession = ctx.story.session.getSession(ctx);
-		if (nextSession == null) {
-			break;
-		}
-		session = nextSession;
-	}
-}
-
-async function clearChatIfFirstMessage(ctx: TBotContext, messageIndex: number): Promise<void> {
-	if (messageIndex !== 1) {
+	// Only advance if current position expects a user message
+	const expectedMessage = template.messages[session.messageIndex];
+	if (expectedMessage?.role !== 'user') {
 		return;
 	}
 
-	const messageId = ctx.message?.message_id;
-	await ctx.history.deleteAll(ctx, messageId != null ? [messageId] : undefined);
+	const isFirstMessage = session.messageIndex === 0;
+	ctx.story.session.advanceMessage(ctx);
+
+	// Clear chat on first message (user-first scenario)
+	if (isFirstMessage) {
+		const messageId = ctx.message?.message_id;
+		await ctx.history.deleteAll(ctx, messageId != null ? [messageId] : undefined);
+	}
+
+	await sendConsecutiveBotMessages(ctx, template);
 }
