@@ -40,13 +40,12 @@ Usage: /storystart [${ids.join('|')}]
 	// Start new session
 	ctx.story.session.start(ctx, storyId);
 
-	const message = await ctx.reply(`📖 Story started: ${storyId}
+	await ctx.reply(`📖 Story started: ${storyId}
 
 ${botStartsFirst ? 'Bot will start in a few seconds...' : 'Type your first message to begin.'}
 
 Use /storyend to stop.
 `);
-	await ctx.history.deleteAll(ctx, [message.message_id]);
 
 	if (botStartsFirst) {
 		await sendConsecutiveBotMessages(ctx, template, {

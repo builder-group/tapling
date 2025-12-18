@@ -8,6 +8,7 @@ export interface THistoryMessage {
 		firstName?: string;
 		username?: string;
 	};
+	content?: string;
 }
 
 export interface THistoryFlavor {

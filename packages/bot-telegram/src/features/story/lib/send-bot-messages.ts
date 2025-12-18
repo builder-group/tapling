@@ -14,17 +14,24 @@ export async function sendConsecutiveBotMessages(
 		return;
 	}
 
-	if (clear) {
-		await ctx.history.deleteAll(ctx);
-	}
-
+	let isFirstMessage = true;
 	while (session.messageIndex < template.messages.length) {
 		const message = template.messages[session.messageIndex];
 		if (message?.role !== 'bot') {
 			break;
 		}
 
-		await sendWithTypingIndicator(ctx, message.text, (message.delay ?? 0) + delay);
+		const sentMessage = await sendWithTypingIndicator(
+			ctx,
+			message.text,
+			(message.delay ?? 0) + delay
+		);
+
+		if (sentMessage != null && clear && isFirstMessage) {
+			await ctx.history.deleteAll(ctx, [sentMessage.message_id]);
+			isFirstMessage = false;
+		}
+
 		ctx.story.session.advanceMessage(ctx);
 	}
 

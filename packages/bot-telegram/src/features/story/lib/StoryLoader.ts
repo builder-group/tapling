@@ -33,7 +33,6 @@ export class StoryLoader {
 			files
 				.filter((file) => file.endsWith('.json'))
 				.map((file) => file.replace(/\.json$/, ''))
-				.filter((id) => id.startsWith('story-'))
 				.sort()
 		);
 	}
