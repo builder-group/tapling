@@ -1,0 +1,26 @@
+{
+	"approach": "Location Logic Trap",
+	"flow_summary": "A asks B where to find lost items to set up the reveal that their heart is physically with B.",
+	"script": [
+		{ "speaker": "A", "text": "hey babe", "delay_ms": 1200 },
+		{ "speaker": "B", "text": "heyy 🤗", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "random question", "delay_ms": 1100 },
+		{ "speaker": "A", "text": "if u lose ur keys where do u look?", "delay_ms": 1200 },
+		{ "speaker": "B", "text": "the counter or my bag ig lol", "delay_ms": 1100 },
+		{ "speaker": "A", "text": "and if u lose ur phone?", "delay_ms": 1300 },
+		{ "speaker": "B", "text": "under the pillows probably 😭", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "okey but what if i lost my heart?", "delay_ms": 1500 },
+		{ "speaker": "B", "text": "idk... where would u look? 😂", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "ihave no reason to look anywhere", "delay_ms": 1300 },
+		{ "speaker": "A", "text": "cuz i know exactly who has it 😌", "delay_ms": 1400 },
+		{ "speaker": "B", "text": "wait... who? 👀", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "check ur pocket", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "u stole it months ago 😎", "delay_ms": 1200 },
+		{ "speaker": "B", "text": "STOPPP 😭", "delay_ms": 2000 },
+		{ "speaker": "B", "text": "ur actually so smooth for that 🤭❤️", "delay_ms": 1100 },
+		{ "speaker": "A", "text": "i know right", "delay_ms": 1000 }
+	],
+	"model_version": "gemini-2.0-flash-001",
+	"prompt_version": "system_flirt_v0-0-7",
+	"bot_speaker": "A"
+}

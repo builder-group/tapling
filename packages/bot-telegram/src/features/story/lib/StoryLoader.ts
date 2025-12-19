@@ -58,17 +58,17 @@ export class StoryLoader {
 
 		return Ok({
 			id: storyId,
-			messages: this.convertScriptToMessages(parsed.script, parsed.metadata.bot_speaker)
+			messages: this.convertScriptToMessages(parsed.script, parsed.bot_speaker)
 		});
 	}
 
 	private convertScriptToMessages(
 		script: TStoryJsonScript[],
-		botSpeaker: TStoryJsonMetadata['bot_speaker']
+		botSpeaker: TStoryJson['bot_speaker']
 	): TStoryMessage[] {
 		return script.map((item) => {
 			const role = item.speaker === botSpeaker ? 'bot' : 'user';
-			const baseDelay = role === 'bot' && item.delay != null ? item.delay : undefined;
+			const baseDelay = role === 'bot' && item.delay_ms != null ? item.delay_ms : undefined;
 			const delay =
 				baseDelay != null ? Math.round(baseDelay / storyConfig.speedMultiplier) : undefined;
 			return {
@@ -92,11 +92,7 @@ export interface TStoryTemplate {
 }
 
 interface TStoryJson {
-	metadata: TStoryJsonMetadata;
 	script: TStoryJsonScript[];
-}
-
-interface TStoryJsonMetadata {
 	model_version: string;
 	prompt_version: string;
 	bot_speaker: 'A' | 'B';
@@ -105,9 +101,9 @@ interface TStoryJsonMetadata {
 interface TStoryJsonScript {
 	speaker: 'A' | 'B';
 	text: string;
-	delay?: number;
+	delay_ms?: number;
 }
 
 function isStoryJson(value: unknown): value is TStoryJson {
-	return typeof value === 'object' && value != null && 'metadata' in value && 'script' in value;
+	return typeof value === 'object' && value != null && 'script' in value;
 }
