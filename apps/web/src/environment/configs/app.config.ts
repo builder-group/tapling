@@ -6,5 +6,6 @@ export const appConfig = {
 	legal: {
 		privacy: 'https://tapling.app/legal/privacy',
 		terms: 'https://tapling.app/legal/terms'
-	}
+	},
+	testflight: 'https://testflight.apple.com/join/Zpx2P2n7'
 };

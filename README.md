@@ -18,8 +18,16 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/builder-group/tapling/blob/develop/LICENSE">
+ <a href="https://github.com/builder-group/tapling/blob/develop/LICENSE">
         <img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg" alt="GitHub License"/>
+    </a>
+     <a href="https://saku-v1.vercel.app/discord">
+        <img src="https://img.shields.io/discord/795291052897992724.svg?label=&logo=discord&logoColor=ffffff&color=293140&labelColor=3377FF" alt="Join Discord"/>
+    </a>
+    <br />
+    <br />
+     <a href="https://testflight.apple.com/join/Zpx2P2n7">
+        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1704067200" alt="Download on the App Store" height="40"/>
     </a>
 </p>
 
