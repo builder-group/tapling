@@ -1,0 +1,22 @@
+{
+	"approach": "The Visual Memory Trap",
+	"flow_summary": "A uses a psychological 'memory test' about eyes to trick B into a smooth confession about their beauty.",
+	"script": [
+		{ "speaker": "A", "text": "wait", "delay_ms": 800 },
+		{ "speaker": "A", "text": "quick question", "delay_ms": 600 },
+		{ "speaker": "B", "text": "yea?", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "close ur eyes rn", "delay_ms": 900 },
+		{ "speaker": "A", "text": "no cheating", "delay_ms": 500 },
+		{ "speaker": "B", "text": "ok done 🙄", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "what do u see?", "delay_ms": 1000 },
+		{ "speaker": "B", "text": "literally nothing", "delay_ms": 1200 },
+		{ "speaker": "B", "text": "just pitch black lol", "delay_ms": 400 },
+		{ "speaker": "A", "text": "exactly", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "thats my world without u in it", "delay_ms": 800 },
+		{ "speaker": "B", "text": "STOPPP 😭", "delay_ms": 1100 },
+		{ "speaker": "B", "text": "ur actually the worst 🤭🫶", "delay_ms": 500 }
+	],
+	"bot_speaker": "A",
+	"model_version": "Gemini 2.0 Flash",
+	"prompt_version": "system_flirt_v0-0-12"
+}
