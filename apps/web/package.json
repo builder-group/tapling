@@ -26,9 +26,9 @@
 		"update:latest": "pnpm update --latest"
 	},
 	"dependencies": {
-		"@tanstack/react-router": "^1.141.6",
-		"@tanstack/react-router-devtools": "^1.141.6",
-		"@tanstack/react-start": "^1.141.7",
+		"@tanstack/react-router": "^1.141.8",
+		"@tanstack/react-router-devtools": "^1.141.8",
+		"@tanstack/react-start": "^1.141.8",
 		"clsx": "^2.1.1",
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
@@ -46,6 +46,6 @@
 		"@vitejs/plugin-react": "^5.1.2",
 		"nitro": "3.0.1-alpha.1",
 		"tailwindcss": "^4.1.18",
-		"vite-tsconfig-paths": "^6.0.2"
+		"vite-tsconfig-paths": "^6.0.3"
 	}
 }
