@@ -1,0 +1,26 @@
+{
+	"archetype": "Green Flag Support",
+	"emotional_core": "Addressing emotional numbness and the fear of being 'broken' or a burden, met with radical patience and staying power.",
+	"target_caption": "POV: you finally told them you feel nothing inside 😔",
+	"script": [
+		{ "speaker": "A", "text": "hey", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "u haven've been yourself lately", "delay_ms": 800 },
+		{ "speaker": "B", "text": "...", "delay_ms": 2500 },
+		{ "speaker": "B", "text": "just tired ig", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "talk to me.", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "what's actually going on in that head of urs?", "delay_ms": 900 },
+		{ "speaker": "B", "text": "nothing makes me happy anymore", "delay_ms": 3000 },
+		{ "speaker": "B", "text": "i feel like i'm just... watching my life happen", "delay_ms": 1800 },
+		{ "speaker": "B", "text": "and i don't feel anything", "delay_ms": 1100 },
+		{ "speaker": "B", "text": "i don't want to ruin ur day with this", "delay_ms": 2000 },
+		{ "speaker": "A", "text": "hey", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "u could never ruin my day", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "we'll figure it out together", "delay_ms": 1400 },
+		{ "speaker": "A", "text": "i'm not going anywhere, okay? ❤️", "delay_ms": 1200 },
+		{ "speaker": "B", "text": "promise?", "delay_ms": 2200 },
+		{ "speaker": "A", "text": "pinky promise 🥹", "delay_ms": 800 }
+	],
+	"bot_speaker": "A",
+	"model_version": "gemini-2.0-pro-exp-02-05",
+	"prompt_version": "system_inmyheadtexts_v0-0-1"
+}

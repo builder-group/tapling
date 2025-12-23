@@ -1,0 +1,29 @@
+{
+	"approach": "The Confirmation Trap",
+	"flow_summary": "A uses a fake 'scheduling conflict' for their first date to trick B into admitting they are already thinking about it as 'their' date.",
+	"script": [
+		{ "speaker": "A", "text": "ihave a serious problem for friday", "delay_ms": 800 },
+		{ "speaker": "B", "text": "wait what?? 👀", "delay_ms": 1000 },
+		{ "speaker": "B", "text": "ur scaring me lol", "delay_ms": 800 },
+		{ "speaker": "A", "text": "so i was looking at my calendar", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "and i realized i messed up", "delay_ms": 800 },
+		{ "speaker": "B", "text": "nooo did u double book?? 😭", "delay_ms": 1000 },
+		{
+			"speaker": "A",
+			"text": "kinda... it says i have a date with the most beautiful girl i've ever met",
+			"delay_ms": 2000
+		},
+		{
+			"speaker": "A",
+			"text": "but i didn't ask for her permission to call it a 'date' yet",
+			"delay_ms": 1500
+		},
+		{ "speaker": "A", "text": "should i cancel it? 😌", "delay_ms": 1200 },
+		{ "speaker": "B", "text": "STOPPP", "delay_ms": 1500 },
+		{ "speaker": "B", "text": "i actually hate u so much 😭🫶", "delay_ms": 800 },
+		{ "speaker": "B", "text": "and dont u dare cancel... 😳", "delay_ms": 1000 }
+	],
+	"bot_speaker": "A",
+	"model_version": "Gemini 2.0 Flash",
+	"prompt_version": "system_flirt_v0-0-11"
+}

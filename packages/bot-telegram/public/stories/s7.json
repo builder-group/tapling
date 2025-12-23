@@ -1,0 +1,42 @@
+{
+	"archetype": "Green Flag Support",
+	"emotional_core": "Addressing the 'numbness' of depression and the fear of being a burden, met with unconditional presence.",
+	"target_caption": "POV: You finally found the person who doesn't leave when the 'fun' version of you disappears.",
+	"script": [
+		{ "speaker": "A", "text": "hey", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "u been quiet today", "delay_ms": 800 },
+		{ "speaker": "B", "text": "yea", "delay_ms": 2500 },
+		{ "speaker": "B", "text": "just staring at the ceiling ig", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "the 'bad' staring or just staring?", "delay_ms": 1500 },
+		{ "speaker": "B", "text": "...", "delay_ms": 3000 },
+		{ "speaker": "B", "text": "i just feel so numb rn", "delay_ms": 1800 },
+		{
+			"speaker": "B",
+			"text": "it's like i'm watching my life happen but i'm not really in it",
+			"delay_ms": 2000
+		},
+		{
+			"speaker": "B",
+			"text": "u should probably go do something fun instead of talking to me",
+			"delay_ms": 2200
+		},
+		{ "speaker": "B", "text": "i'm boring like this", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "stop.", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "i'm not here for the 'highlights' version of u", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "i want all of it", "delay_ms": 800 },
+		{ "speaker": "A", "text": "even the parts that feel like nothing", "delay_ms": 1100 },
+		{
+			"speaker": "A",
+			"text": "if u can't get up today then i'll just stay on the phone until u fall asleep",
+			"delay_ms": 2000
+		},
+		{ "speaker": "B", "text": "u don't have to do that", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "i know.", "delay_ms": 900 },
+		{ "speaker": "A", "text": "but i want to.", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "i'm stayign right here.", "delay_ms": 1200 },
+		{ "speaker": "B", "text": "🥹❤️", "delay_ms": 1500 }
+	],
+	"bot_speaker": "A",
+	"model_version": "gemini-2.0-flash-001",
+	"prompt_version": "system_inmyheadtexts_v0-0-1"
+}
