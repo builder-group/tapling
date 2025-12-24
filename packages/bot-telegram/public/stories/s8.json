@@ -1,0 +1,20 @@
+{
+	"approach": "The Navigation Ruse",
+	"flow_summary": "A uses a 'broken' Maps app glitch as a logic bridge to transition from a technical complaint to a high-level compliment about B's appearance.",
+	"script": [
+		{ "speaker": "A", "text": "yo", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "maps is bugging", "delay_ms": 800 },
+		{ "speaker": "B", "text": "wym?", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "i serched for", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "the best view", "delay_ms": 800 },
+		{ "speaker": "A", "text": "in the world", "delay_ms": 800 },
+		{ "speaker": "B", "text": "and??", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "it just gave me", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "ur address 😌", "delay_ms": 800 },
+		{ "speaker": "B", "text": "OMG 😳", "delay_ms": 1500 },
+		{ "speaker": "B", "text": "ur actually the worst 😭😭", "delay_ms": 1000 }
+	],
+	"bot_speaker": "A",
+	"model_version": "Gemini 2.0 Flash",
+	"prompt_version": "system_flirt_v0-0-12"
+}

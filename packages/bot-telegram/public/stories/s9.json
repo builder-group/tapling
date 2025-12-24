@@ -1,0 +1,23 @@
+{
+	"approach": "The Perspective Trap",
+	"flow_summary": "A uses a simple 'Opposite Game' to trick B into accidentally typing a confession. It relies on B's quick reflexes to create the viral moment.",
+	"script": [
+		{ "speaker": "A", "text": "yo", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "ihave a quick game", "delay_ms": 800 },
+		{ "speaker": "B", "text": "bet", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "say the opposite", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "of whatever i text", "delay_ms": 800 },
+		{ "speaker": "B", "text": "ok go", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "you", "delay_ms": 1000 },
+		{ "speaker": "B", "text": "i", "delay_ms": 800 },
+		{ "speaker": "A", "text": "hate", "delay_ms": 1000 },
+		{ "speaker": "B", "text": "love", "delay_ms": 800 },
+		{ "speaker": "A", "text": "no one", "delay_ms": 1000 },
+		{ "speaker": "B", "text": "u", "delay_ms": 800 },
+		{ "speaker": "B", "text": "WAIT NO 😭", "delay_ms": 1500 },
+		{ "speaker": "B", "text": "u actually got me 🤭", "delay_ms": 1000 }
+	],
+	"bot_speaker": "A",
+	"model_version": "Gemini 2.0 Flash",
+	"prompt_version": "system_flirt_v0-0-12"
+}
