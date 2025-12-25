@@ -1,0 +1,24 @@
+{
+	"archetype": "Confrontation/Reality Check",
+	"emotional_core": "The realization that the entire relationship was a placeholder for someone else.",
+	"target_caption": "POV: You were just a distraction.",
+	"script": [
+		{ "speaker": "A", "text": "we need to stop this", "delay_ms": 1000 },
+		{ "speaker": "B", "text": "stop what?", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "everything.", "delay_ms": 800 },
+		{ "speaker": "A", "text": "i realized i don't actually like u", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "i was just lonely", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "and u were there", "delay_ms": 900 },
+		{ "speaker": "A", "text": "i tried to force myself to feel something", "delay_ms": 1500 },
+		{ "speaker": "A", "text": "but i can't keep pretending", "delay_ms": 1200 },
+		{ "speaker": "A", "text": "it's exhausting having to text u back", "delay_ms": 1800 },
+		{ "speaker": "B", "text": "so all of it was a lie?", "delay_ms": 2500 },
+		{ "speaker": "A", "text": "pretty much.", "delay_ms": 1000 },
+		{ "speaker": "A", "text": "i'm sorry", "delay_ms": 800 },
+		{ "speaker": "A", "text": "say something", "delay_ms": 2000 },
+		{ "speaker": "B", "text": "Ok", "delay_ms": 3000 }
+	],
+	"bot_speaker": "A",
+	"model_version": "gemini-2.0-flash-exp",
+	"prompt_version": "system_inmyheadtexts_v0-0-1"
+}
