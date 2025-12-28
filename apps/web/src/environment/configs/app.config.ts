@@ -7,5 +7,5 @@ export const appConfig = {
 		privacy: 'https://tapling.app/legal/privacy',
 		terms: 'https://tapling.app/legal/terms'
 	},
-	testflight: 'https://testflight.apple.com/join/Zpx2P2n7'
+	appstore: 'https://apps.apple.com/us/app/tapling-type-with-bongo-cat/id6756097345'
 };

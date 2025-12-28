@@ -47,7 +47,7 @@ function RouteComponent() {
 				style={{ height: taplingConfig.size, width: taplingConfig.size }}
 			/>
 			<a
-				href={appConfig.testflight}
+				href={appConfig.appstore}
 				target="_blank"
 				rel="noopener noreferrer"
 				className="absolute bottom-12 left-1/2 -translate-x-1/2"
