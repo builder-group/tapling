@@ -39,12 +39,18 @@ enum AppConfig {
     }
 
     static var appStoreURL: URL? {
-        // TODO: Replace with actual App Store URL once published
-        URL(string: "https://apps.apple.com/app/tapling")
+        URL(
+            string:
+                "https://apps.apple.com/us/app/tapling-type-with-bongo-cat/id6756097345"
+        )
     }
 
     static var privacyPolicyURL: URL? {
         URL(string: "https://tapling.app/legal/privacy")
+    }
+
+    static var githubURL: URL? {
+        URL(string: "https://github.com/builder-group/tapling")
     }
 
     // MARK: - Feedback & Support

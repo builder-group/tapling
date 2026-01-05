@@ -13,28 +13,39 @@ struct LinkRowView: View {
     let title: String
     let subtitle: String?
     let url: URL
+    let isSystemIcon: Bool
 
     init(
         icon: String,
         iconColor: Color,
         title: String,
         subtitle: String? = nil,
-        url: URL
+        url: URL,
+        isSystemIcon: Bool = true
     ) {
         self.icon = icon
         self.iconColor = iconColor
         self.title = title
         self.subtitle = subtitle
         self.url = url
+        self.isSystemIcon = isSystemIcon
     }
 
     var body: some View {
         Link(destination: url) {
             HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundStyle(iconColor)
-                    .frame(width: 32)
+                Group {
+                    if isSystemIcon {
+                        Image(systemName: icon)
+                            .font(.title3)
+                            .foregroundStyle(iconColor)
+                    } else {
+                        Image(icon)
+                            .font(.title3)
+                            .foregroundStyle(iconColor)
+                    }
+                }
+                .frame(width: 32, height: 32)
 
                 if let subtitle = subtitle {
                     VStack(alignment: .leading, spacing: 4) {

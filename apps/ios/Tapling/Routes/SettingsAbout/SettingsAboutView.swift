@@ -101,6 +101,18 @@ struct SettingsAboutView: View {
                     title: "Website",
                     url: url
                 )
+
+                SectionDivider()
+            }
+
+            if let url = AppConfig.githubURL {
+                LinkRowView(
+                    icon: "github",
+                    iconColor: .primary,
+                    title: "GitHub",
+                    url: url,
+                    isSystemIcon: false
+                )
             }
         }
     }

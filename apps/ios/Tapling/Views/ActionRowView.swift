@@ -12,14 +12,37 @@ struct ActionRowView: View {
     let iconColor: Color
     let title: String
     let action: () -> Void
+    let isSystemIcon: Bool
+
+    init(
+        icon: String,
+        iconColor: Color,
+        title: String,
+        action: @escaping () -> Void,
+        isSystemIcon: Bool = true
+    ) {
+        self.icon = icon
+        self.iconColor = iconColor
+        self.title = title
+        self.action = action
+        self.isSystemIcon = isSystemIcon
+    }
 
     var body: some View {
         Button(action: action) {
             HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundStyle(iconColor)
-                    .frame(width: 32)
+                Group {
+                    if isSystemIcon {
+                        Image(systemName: icon)
+                            .font(.title3)
+                            .foregroundStyle(iconColor)
+                    } else {
+                        Image(icon)
+                            .font(.title3)
+                            .foregroundStyle(iconColor)
+                    }
+                }
+                .frame(width: 32, height: 32)
 
                 Text(title)
                     .font(.body)
