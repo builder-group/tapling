@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import SwiftData
 import SwiftUI
 
@@ -19,6 +20,37 @@ class DataContainer {
         modelContainer.mainContext
     }
     init(isStoredInMemoryOnly: Bool = false) {
+        do {
+            modelContainer = try Self.createContainer(
+                isStoredInMemoryOnly: isStoredInMemoryOnly
+            )
+        } catch {
+            // Fallback to in-memory if persistent storage fails
+            guard !isStoredInMemoryOnly else {
+                fatalError("Failed to create in-memory container: \(error)")
+            }
+            Logger(
+                subsystem: "com.buildergroup.Tapling",
+                category: "DataContainer"
+            ).error(
+                "Failed to create persistent container, using in-memory: \(error.localizedDescription)"
+            )
+            modelContainer = try! Self.createContainer(
+                isStoredInMemoryOnly: true
+            )
+        }
+
+        // Ensure defaults
+        DataContainer.ensureDefaults(in: modelContext)
+        KeyboardDataContainer.ensureDefaults(in: modelContext)
+
+        // Start monitors
+        KeyboardSessionMonitor.shared.start()
+    }
+
+    private static func createContainer(
+        isStoredInMemoryOnly: Bool
+    ) throws -> ModelContainer {
         let configurations: [ModelConfiguration]
         if isStoredInMemoryOnly {
             // For in-memory (previews), use a single configuration to avoid
@@ -26,7 +58,8 @@ class DataContainer {
             configurations = [
                 ModelConfiguration(
                     schema: Schema(
-                        DataContainer.schema() + KeyboardDataContainer.schema()
+                        DataContainer.schema()
+                            + KeyboardDataContainer.schema()
                     ),
                     isStoredInMemoryOnly: true
                 )
@@ -46,23 +79,12 @@ class DataContainer {
             ]
         }
 
-        do {
-            modelContainer = try ModelContainer(
-                for: Schema(
-                    DataContainer.schema() + KeyboardDataContainer.schema()
-                ),
-                configurations: configurations
-            )
-
-            // Ensure defaults
-            DataContainer.ensureDefaults(in: modelContext)
-            KeyboardDataContainer.ensureDefaults(in: modelContext)
-
-            // Start monitors
-            KeyboardSessionMonitor.shared.start()
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
+        return try ModelContainer(
+            for: Schema(
+                DataContainer.schema() + KeyboardDataContainer.schema()
+            ),
+            configurations: configurations
+        )
     }
 
     static func schema() -> [any PersistentModel.Type] {

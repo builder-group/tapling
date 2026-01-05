@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import SwiftData
 import SwiftUI
 
@@ -20,25 +21,46 @@ class KeyboardDataContainer {
     }
 
     init(isStoredInMemoryOnly: Bool = false) {
+        do {
+            modelContainer = try Self.createContainer(
+                isStoredInMemoryOnly: isStoredInMemoryOnly
+            )
+        } catch {
+            // Fallback to in-memory if persistent storage fails
+            guard !isStoredInMemoryOnly else {
+                fatalError("Failed to create in-memory container: \(error)")
+            }
+            Logger(
+                subsystem: "com.buildergroup.Tapling",
+                category: "KeyboardDataContainer"
+            ).error(
+                "Failed to create persistent container, using in-memory: \(error.localizedDescription)"
+            )
+            modelContainer = try! Self.createContainer(
+                isStoredInMemoryOnly: true
+            )
+        }
+
+        // Ensure defaults
+        KeyboardDataContainer.ensureDefaults(in: modelContext)
+    }
+
+    private static func createContainer(
+        isStoredInMemoryOnly: Bool
+    ) throws -> ModelContainer {
         let configurations = [
             KeyboardDataContainer.configuration(
                 isStoredInMemoryOnly: isStoredInMemoryOnly
             )
         ]
 
-        do {
-            modelContainer = try ModelContainer(
-                // Note: ModelContainer requires full schema even if configuration only uses subset
-                for: Schema(
-                    KeyboardDataContainer.schema() + DataContainer.schema()
-                ),
-                configurations: configurations
-            )
-
-            KeyboardDataContainer.ensureDefaults(in: modelContext)
-        } catch {
-            fatalError("Could not create KeyboardDataContainer: \(error)")
-        }
+        return try ModelContainer(
+            // Note: ModelContainer requires full schema even if configuration only uses subset
+            for: Schema(
+                KeyboardDataContainer.schema() + DataContainer.schema()
+            ),
+            configurations: configurations
+        )
     }
 
     static func schema() -> [any PersistentModel.Type] {

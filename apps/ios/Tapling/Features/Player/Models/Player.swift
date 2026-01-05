@@ -31,7 +31,6 @@ final class Player: SingletonModel {
         lastActiveDate: Date? = nil,
         onboardingCompletedAt: Date? = nil,
         onboardingStep: Int? = nil,
-        ownedCollectibles: [OwnedCollectible] = []
     ) {
         self.currentKeycaps = currentKeycaps
         self.totalKeycapsEarned = totalKeycapsEarned
@@ -40,7 +39,6 @@ final class Player: SingletonModel {
         self.lastActiveDate = lastActiveDate
         self.onboardingCompletedAt = onboardingCompletedAt
         self.onboardingStep = onboardingStep
-        self.ownedCollectibles = ownedCollectibles
     }
 
     static var `default`: Player {
