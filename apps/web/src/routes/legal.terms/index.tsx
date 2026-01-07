@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { mdxComponents } from '@/components';
 import Content from './content.mdx';
 
-export const Route = createFileRoute('/legal/terms')({
+export const Route = createFileRoute('/legal/terms/')({
 	component: RouteComponent
 });
 
@@ -11,5 +11,5 @@ function RouteComponent() {
 		<article className="prose prose-base max-w-none">
 			<Content components={mdxComponents} />
 		</article>
-	);
+	)
 }
