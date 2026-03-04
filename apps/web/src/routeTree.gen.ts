@@ -37,9 +37,9 @@ const LegalPrivacyIndexRoute = LegalPrivacyIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/help': typeof HelpIndexRoute
-  '/legal/privacy': typeof LegalPrivacyIndexRoute
-  '/legal/terms': typeof LegalTermsIndexRoute
+  '/help/': typeof HelpIndexRoute
+  '/legal/privacy/': typeof LegalPrivacyIndexRoute
+  '/legal/terms/': typeof LegalTermsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -56,7 +56,7 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/help' | '/legal/privacy' | '/legal/terms'
+  fullPaths: '/' | '/help/' | '/legal/privacy/' | '/legal/terms/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/help' | '/legal/privacy' | '/legal/terms'
   id: '__root__' | '/' | '/help/' | '/legal/privacy/' | '/legal/terms/'
@@ -81,21 +81,21 @@ declare module '@tanstack/react-router' {
     '/help/': {
       id: '/help/'
       path: '/help'
-      fullPath: '/help'
+      fullPath: '/help/'
       preLoaderRoute: typeof HelpIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/terms/': {
       id: '/legal/terms/'
       path: '/legal/terms'
-      fullPath: '/legal/terms'
+      fullPath: '/legal/terms/'
       preLoaderRoute: typeof LegalTermsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/privacy/': {
       id: '/legal/privacy/'
       path: '/legal/privacy'
-      fullPath: '/legal/privacy'
+      fullPath: '/legal/privacy/'
       preLoaderRoute: typeof LegalPrivacyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
