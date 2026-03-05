@@ -1,5 +1,5 @@
 export const taplingConfig = {
-	size: 248,
+	size: 150,
 	parts: {
 		fur: {
 			available: ['white'] satisfies TTaplingFur[],
