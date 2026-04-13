@@ -27,6 +27,7 @@ struct CardCollectionView: View {
     @State private var visibleIds: Set<String> = []
 
     // MARK: - UI
+
     private var collectibles: [AnyCollectible] {
         let grouped = Dictionary(grouping: ownedCollectibles) {
             $0.collectibleId
