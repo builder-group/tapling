@@ -38,12 +38,31 @@ struct OnboardingFullAccessView: View {
 
     private var subtitleSection: some View {
         let keycapIcon = Text(Image("keycap_inline"))
-        return Text(
-            "Enable full access to earn keycaps (\(keycapIcon)) everywhere you type. You can also tap your Tapling on Home for a few extra keycaps. Tapling never reads what you type and all data stays on your device."
+        return VStack(alignment: .leading, spacing: 8) {
+            Text(
+                "Enable Full Access so Tapling can count keystrokes in any app and earn keycaps (\(keycapIcon)) wherever you type. You can also tap your Tapling on Home for a few extra keycaps."
+            )
+            .font(.body)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.leading)
+
+            Text(privacyText)
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.leading)
+        }
+    }
+
+    private var privacyText: AttributedString {
+        var text = AttributedString(
+            "Tapling never reads what you type and all data stays on your device. Verify on GitHub."
         )
-        .font(.body)
-        .foregroundStyle(.secondary)
-        .multilineTextAlignment(.leading)
+        if let range = text.range(of: "Verify on GitHub"),
+            let url = AppConfig.githubURL
+        {
+            text[range].link = url
+        }
+        return text
     }
 
     private var nextButton: some View {

@@ -19,7 +19,7 @@ struct SettingsGettingStartedView: View {
                     showOnboarding = true
                 } label: {
                     HStack {
-                        Label("Redo Onboarding", systemImage: "arrow.clockwise")
+                        Label("Replay Introduction", systemImage: "arrow.clockwise")
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.caption)

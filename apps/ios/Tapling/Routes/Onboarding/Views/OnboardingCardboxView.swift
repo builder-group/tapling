@@ -58,7 +58,7 @@ struct OnboardingCardboxView: View {
             .foregroundStyle(Color.brown)
         let keycapIcon = Text(Image("keycap_inline"))
         return Text(
-            "Your Tapling loves surprises. Open cardboxes (\(cardboxIcon)) to find new furs, hats, and faces. Use the keycaps (\(keycapIcon)) you earn from typing to buy more cardboxes and unlock cosmetics."
+            "Your Tapling loves surprises. Open cardboxes (\(cardboxIcon)) to find new furs, hats, and faces. Use the keycaps (\(keycapIcon)) you earn from typing to open more cardboxes and unlock cosmetics."
         )
         .font(.body)
         .foregroundStyle(.secondary)

@@ -143,7 +143,7 @@ struct CardCollectionView: View {
                 .font(.title3)
                 .fontWeight(.semibold)
                 .foregroundStyle(.primary)
-            Text("Open cardboxes to start collecting taplings")
+            Text("Open cardboxes to collect hats, faces, and furs")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

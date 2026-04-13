@@ -169,7 +169,7 @@ struct SettingsTaplingView: View {
                 }
 
                 Section("EARNINGS") {
-                    Toggle("Enable Earnings", isOn: trackSessionsBinding)
+                    Toggle("Earn Keycaps While Typing", isOn: trackSessionsBinding)
                         .disabled(!hasFullAccess)
 
                     if !hasFullAccess {
@@ -179,7 +179,7 @@ struct SettingsTaplingView: View {
                                 .font(.caption)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Full Access required for typing keycaps")
+                                Text("Full Access required to earn typing keycaps")
                                     .font(.caption)
                                     .fontWeight(.medium)
                                     .foregroundStyle(.primary)

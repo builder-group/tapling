@@ -35,7 +35,7 @@ struct OnboardingSelectKeyboardView: View {
             nextButton
         }
         .padding()
-        .navigationTitle("Start typing")
+        .navigationTitle("Switch & try it out")
         .navigationBarTitleDisplayMode(.large)
         .contentShape(Rectangle())
         .onTapGesture {
@@ -115,7 +115,7 @@ struct OnboardingSelectKeyboardView: View {
                 if canProceed {
                     Text("Next")
                 } else {
-                    Text("Type a bit to continue (\(remainingKeystrokes))")
+                    Text("Type \(remainingKeystrokes) more to continue")
                 }
             }
             .font(.headline)
