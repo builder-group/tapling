@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SplashView: View {
-    var scale: CGFloat = 0.75
+    var scale: CGFloat = 0.5
 
     @State private var leftHand: HandPosition = .up
     @State private var rightHand: HandPosition = .down
