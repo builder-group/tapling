@@ -46,6 +46,7 @@ struct HomeView: View {
                     .padding(.top, 8)
                     .padding(.leading, 16)
                 }
+                .zIndex(10)
 
                 if #available(iOS 18.0, *) {
                     scrollViewModern
@@ -113,14 +114,15 @@ struct HomeView: View {
                     selectedCollectibleForDetail = collectible
                 }
             )
-            .zIndex(5)
+            .zIndex(2)
             CardCollectionView(
                 selectedCardId: $selectedCardId,
                 onShowDetail: { collectible in
                     selectedCollectibleForDetail = collectible
                 }
             )
-            .zIndex(0)
+            .zIndex(1)
+            HomeStatsView()
         }
         .padding()
         .contentShape(Rectangle())

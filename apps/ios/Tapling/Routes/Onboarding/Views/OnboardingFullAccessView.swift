@@ -39,7 +39,7 @@ struct OnboardingFullAccessView: View {
     private var subtitleSection: some View {
         let keycapIcon = Text(Image("keycap_inline"))
         return Text(
-            "Enable full access to earn keycaps (\(keycapIcon)) everywhere you type. Tapling never reads what you type and all data stays on your device."
+            "Enable full access to earn keycaps (\(keycapIcon)) everywhere you type. You can also tap your Tapling on Home for a few extra keycaps. Tapling never reads what you type and all data stays on your device."
         )
         .font(.body)
         .foregroundStyle(.secondary)
@@ -68,7 +68,7 @@ struct OnboardingFullAccessView: View {
             Button(action: onNext) {
                 Text(
                     isFullAccessEnabled
-                        ? "Next" : "Continue without earning keycaps"
+                        ? "Next" : "Continue without Full Access"
                 )
                 .font(.headline)
                 .foregroundStyle(.white)

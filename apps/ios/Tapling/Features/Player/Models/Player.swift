@@ -25,7 +25,7 @@ final class Player: SingletonModel {
 
     init(
         currentKeycaps: Int = GameConfig.initialKeycaps,
-        totalKeycapsEarned: Int = 0,
+        totalKeycapsEarned: Int = GameConfig.initialKeycaps,
         totalKeystrokes: Int = 0,
         firstActiveDate: Date? = nil,
         lastActiveDate: Date? = nil,

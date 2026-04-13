@@ -179,13 +179,13 @@ struct SettingsTaplingView: View {
                                 .font(.caption)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Full Access required to earn keycaps")
+                                Text("Full Access required for typing keycaps")
                                     .font(.caption)
                                     .fontWeight(.medium)
                                     .foregroundStyle(.primary)
 
                                 Text(
-                                    "We only count keystrokes—never read what you type."
+                                    "You can still tap Tapling on Home for a few extra keycaps. We only count keystrokes—never read what you type."
                                 )
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
@@ -194,7 +194,7 @@ struct SettingsTaplingView: View {
                         .padding(.vertical, 4)
                     } else {
                         Text(
-                            "Earn keycaps by typing. We only count keystrokes—never read what you type."
+                            "Earn keycaps by typing with Full Access, or by tapping Tapling on Home. We only count keystrokes—never read what you type."
                         )
                         .font(.caption)
                         .foregroundStyle(.secondary)

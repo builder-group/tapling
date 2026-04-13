@@ -27,7 +27,6 @@ struct CardCollectionView: View {
     @State private var visibleIds: Set<String> = []
 
     // MARK: - UI
-
     private var collectibles: [AnyCollectible] {
         let grouped = Dictionary(grouping: ownedCollectibles) {
             $0.collectibleId
@@ -103,7 +102,8 @@ struct CardCollectionView: View {
             // Actual visible cards in ZStack (zIndex works here)
             // Only render items whose placeholders are mounted
             ZStack {
-                ForEach(collectibles.filter { visibleIds.contains($0.id) }) { collectible in
+                ForEach(collectibles.filter { visibleIds.contains($0.id) }) {
+                    collectible in
                     let isSelected = selectedCardId == collectible.id
 
                     SelectableCollectibleCardView(
@@ -131,7 +131,6 @@ struct CardCollectionView: View {
                 }
             }
         }
-        .padding(.bottom, 100)
     }
 
     private var emptyStateView: some View {
@@ -154,7 +153,7 @@ struct CardCollectionView: View {
 
     private var headerSection: some View {
         Text("Collection")
-            .font(.title)
+            .font(.title2)
             .fontWeight(.semibold)
             .foregroundStyle(.primary)
     }

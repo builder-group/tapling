@@ -78,6 +78,7 @@ struct HomeHeaderView: View {
 
         // Increment keycaps
         player.currentKeycaps += 1
+        player.totalKeycapsEarned += 1
         try? modelContext.save()
     }
 }
