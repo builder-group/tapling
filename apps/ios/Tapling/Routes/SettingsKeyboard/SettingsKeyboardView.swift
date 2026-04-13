@@ -61,23 +61,34 @@ struct SettingsKeyboardView: View {
     }
 
     private var settingsForm: some View {
-        Form {
-            Section("GENERAL") {
-                NavigationLink {
-                    SettingsKeyboardLanguageView()
-                } label: {
-                    HStack {
-                        Text("Language")
-                        Spacer()
-                        Text(currentLanguageName)
-                            .foregroundStyle(.secondary)
+        VStack(spacing: 0) {
+            BannerView(
+                icon: "info.circle.fill",
+                message: autocompleteInfoText,
+                style: .info
+            )
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .background(Color(.systemGroupedBackground))
+
+            Form {
+                Section("GENERAL") {
+                    NavigationLink {
+                        SettingsKeyboardLanguageView()
+                    } label: {
+                        HStack {
+                            Text("Language")
+                            Spacer()
+                            Text(currentLanguageName)
+                                .foregroundStyle(.secondary)
+                        }
                     }
+                    Toggle("Autocomplete", isOn: autocompleteEnabledBinding)
+                    if keyboardSettings.autocompleteEnabled {
+                        Toggle("Autocorrect", isOn: autocorrectEnabledBinding)
+                    }
+                    Toggle("Emoji Picker", isOn: emojiPickerEnabledBinding)
                 }
-                Toggle("Autocomplete", isOn: autocompleteEnabledBinding)
-                if keyboardSettings.autocompleteEnabled {
-                    Toggle("Autocorrect", isOn: autocorrectEnabledBinding)
-                }
-                Toggle("Emoji Picker", isOn: emojiPickerEnabledBinding)
             }
         }
         .navigationTitle("Keyboard")
@@ -87,6 +98,18 @@ struct SettingsKeyboardView: View {
                 keyboardToggleButton
             }
         }
+    }
+
+    private var autocompleteInfoText: Text {
+        var string = AttributedString(
+            "Autocomplete and autocorrect are basic. A proper upgrade requires a third-party SDK that costs $500/month, which is not viable for a free app. If you would pay for Tapling, let us know."
+        )
+        if let range = string.range(of: "let us know"),
+            let url = AppConfig.mailtoURL(subject: "I'd pay for Tapling")
+        {
+            string[range].link = url
+        }
+        return Text(string)
     }
 
     private var keyboardToggleButton: some View {
