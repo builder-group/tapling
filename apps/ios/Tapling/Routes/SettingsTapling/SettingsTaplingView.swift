@@ -29,7 +29,7 @@ struct SettingsTaplingView: View {
         let keyboardIcon = Text(Image(systemName: "keyboard.fill"))
             .foregroundStyle(.blue)
         return Text(
-            "Full Keyboard Access required for live preview. Settings work without it—just reopen (\(keyboardIcon)) to see changes."
+            "Full Keyboard Access required for live preview. Your settings still save, just reopen (\(keyboardIcon)) to see the changes."
         )
     }
 
@@ -179,13 +179,13 @@ struct SettingsTaplingView: View {
                                 .font(.caption)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Full Access required to earn typing keycaps")
+                                Text("Full Access is required to earn keycaps while typing")
                                     .font(.caption)
                                     .fontWeight(.medium)
                                     .foregroundStyle(.primary)
 
                                 Text(
-                                    "You can still tap Tapling on Home for a few extra keycaps. We only count keystrokes—never read what you type."
+                                    "You can still tap Tapling on Home for a few extra keycaps. We only count keystrokes and never read what you type."
                                 )
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
@@ -194,7 +194,7 @@ struct SettingsTaplingView: View {
                         .padding(.vertical, 4)
                     } else {
                         Text(
-                            "Earn keycaps by typing with Full Access, or by tapping Tapling on Home. We only count keystrokes—never read what you type."
+                            "Earn keycaps by typing with Full Access, or by tapping Tapling on Home. We only count keystrokes and never read what you type."
                         )
                         .font(.caption)
                         .foregroundStyle(.secondary)
