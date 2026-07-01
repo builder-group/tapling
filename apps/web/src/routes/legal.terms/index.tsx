@@ -1,15 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { mdxComponents } from '@/components';
-import Content from './content.mdx';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { appConfig } from '@/environment';
 
 export const Route = createFileRoute('/legal/terms/')({
-	component: RouteComponent
+	beforeLoad: () => {
+		throw redirect({ href: appConfig.legal.terms });
+	}
 });
-
-function RouteComponent() {
-	return (
-		<article className="prose prose-base max-w-none">
-			<Content components={mdxComponents} />
-		</article>
-	)
-}

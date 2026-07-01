@@ -46,7 +46,7 @@ enum AppConfig {
     }
 
     static var privacyPolicyURL: URL? {
-        URL(string: "https://tapling.app/legal/privacy")
+        URL(string: "https://builder.group/apps/tapling/legal/privacy")
     }
 
     static var githubURL: URL? {
@@ -56,14 +56,16 @@ enum AppConfig {
     // MARK: - Feedback & Support
 
     static var feedbackEmail: String {
-        "feedback@tapling.app"
+        "support@builder.group"
     }
 
     static func mailtoURL(subject: String) -> URL? {
-        let encodedSubject =
-            subject.addingPercentEncoding(
-                withAllowedCharacters: .urlQueryAllowed
-            ) ?? subject
-        return URL(string: "mailto:\(feedbackEmail)?subject=\(encodedSubject)")
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = feedbackEmail
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: "[Tapling] \(subject)")
+        ]
+        return components.url
     }
 }
