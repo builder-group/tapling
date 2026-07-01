@@ -18,7 +18,7 @@ function RouteComponent() {
 				</a>
 				<a
 					href={appConfig.help.discord}
-					target='_blank'
+					target="_blank"
 					rel="noopener noreferrer"
 					className="rounded-lg bg-[#5865F2] px-6 py-3 text-center text-white transition-colors hover:bg-[#4752C4]"
 				>
@@ -26,5 +26,5 @@ function RouteComponent() {
 				</a>
 			</div>
 		</div>
-	)
+	);
 }

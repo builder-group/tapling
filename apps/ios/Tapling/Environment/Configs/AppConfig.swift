@@ -45,12 +45,27 @@ enum AppConfig {
         )
     }
 
+    static var appStoreReviewURL: URL? {
+        URL(
+            string:
+                "https://apps.apple.com/us/app/tapling-type-with-bongo-cat/id6756097345?action=write-review"
+        )
+    }
+
     static var privacyPolicyURL: URL? {
         URL(string: "https://builder.group/apps/tapling/legal/privacy")
     }
 
     static var githubURL: URL? {
         URL(string: "https://github.com/builder-group/tapling")
+    }
+
+    static var figmaURL: URL? {
+        URL(string: "https://www.figma.com/community/file/1632645156337158294")
+    }
+
+    static var discordURL: URL? {
+        URL(string: "https://discord.com/invite/w4xE3bSjhQ")
     }
 
     // MARK: - Feedback & Support

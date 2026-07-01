@@ -123,6 +123,7 @@ struct HomeView: View {
             )
             .zIndex(1)
             HomeStatsView()
+            HomeCommunityView()
         }
         .padding()
         .contentShape(Rectangle())
